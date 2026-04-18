@@ -1,0 +1,5941 @@
+{
+  "version": 1,
+  "app": "ennahedron-builder",
+  "description": "Built-in well-known shapes. Each preset is a sequence of place instructions starting from a single piece at the origin. targetPiece is the index in the placement order (0 = the initial piece). Faces: 0=Left, 1=LowerLeftFront, 2=UpperFront, 3=UpperBack, 4=LowerLeftBack, 5=Bottom, 6=LowerRightFront, 7=LowerRightBack, 8=Right.",
+  "presets": [
+    {
+      "name": "Single Module",
+      "category": "Basic",
+      "edgeMeters": 12,
+      "instructions": []
+    },
+    {
+      "name": "Square Pair",
+      "category": "Basic",
+      "description": "Two modules joined on their right square faces (mirrored).",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 8,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Bottom Stack",
+      "category": "Basic",
+      "description": "Two modules joined on their bottom square faces.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Kite Pair (Front)",
+      "category": "Basic",
+      "description": "Two modules joined on Upper Front kite faces.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Triple Row",
+      "category": "Linear",
+      "description": "Three modules in a row, joined on Left\u2194Right square faces.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "L-Shape",
+      "category": "Composite",
+      "description": "Three modules forming an L on the ground.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 6",
+      "category": "Walls",
+      "description": "Six modules in a single row, joined Left\u2194Right \u2014 long living-room wall.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 8",
+      "category": "Walls",
+      "description": "Eight modules in a row \u2014 long hall or barn-style structure.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 10",
+      "category": "Walls",
+      "description": "Ten modules in a row \u2014 extra-long bunkhouse or workshop wall.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Triplex (6)",
+      "category": "Vertical",
+      "description": "Three side-by-side two-storey units \u2014 classic triplex.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Cathedral Row (6)",
+      "category": "Architecture",
+      "description": "Three modules in a row with three more peaked on top via Upper-Front kites \u2014 chapel/cathedral silhouette.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Greenhouse Row (8)",
+      "category": "Architecture",
+      "description": "Four-module ground floor with peaked Upper-Front and Upper-Back kite roofs \u2014 long-span glasshouse.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Bungalow Plus (6)",
+      "category": "Architecture",
+      "description": "Five modules wide, single floor, with one stacked over the centre as a loft.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Courtyard Home (8)",
+      "category": "Architecture",
+      "description": "Two parallel walls of three with a connecting roof piece on each end \u2014 open central courtyard.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "L-Wing Home (5)",
+      "category": "Architecture",
+      "description": "Three-module main wing with a perpendicular two-module wing branching off the bottom \u2014 classic L-plan.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Barracks (12)",
+      "category": "Military",
+      "description": "Six-module row \u00d7 two storeys \u2014 standard troop barracks for a squad of 12 bunks.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Long Barracks (16)",
+      "category": "Military",
+      "description": "Eight-module row \u00d7 two storeys \u2014 full platoon barracks block.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Hangar (12)",
+      "category": "Military",
+      "description": "Six-module ground floor with peaked Upper-Front kite roofs along the length \u2014 aircraft / vehicle hangar.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Victorian Home (10)",
+      "category": "Military",
+      "description": "Five modules wide \u00d7 two storeys \u2014 Victorian-style family residence with substantial footprint.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Fortified Wall (14)",
+      "category": "Military",
+      "description": "Seven-module curtain wall with seven peaked battlement modules cresting the top \u2014 castle-style rampart.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Fortress Keep (20)",
+      "category": "Military",
+      "description": "Five-module wall \u00d7 four storeys \u2014 massive square keep, the heart of a castle complex.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Mess Hall (10)",
+      "category": "Military",
+      "description": "Five-module ground floor with five Upper-Back kite roof modules \u2014 long open mess hall with sloped roof.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Forward Operating Base (18)",
+      "category": "Military",
+      "description": "Six-module barrack row with twin three-storey watchtowers at the ends and three centred command modules above.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Quonset Hut Row (12)",
+      "category": "Military",
+      "description": "Six-module ground floor with twin Upper-Front and Upper-Back peaked roofs \u2014 long arched supply hut.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Couples Pod (2)",
+      "category": "Tiny Homes",
+      "description": "Two modules joined Left\u2194Right \u2014 main room and a separate sleeping module.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Tiny A-Frame (3)",
+      "category": "Tiny Homes",
+      "description": "Single base module with twin Upper-Front and Upper-Back kite peaks \u2014 classic A-frame silhouette.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Cottage (3)",
+      "category": "Cottages",
+      "description": "Two-module ground floor with a single Upper-Front peak roof \u2014 quintessential cottage.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Saltbox Cottage (4)",
+      "category": "Cottages",
+      "description": "Two-module ground floor with two Upper-Front peak roofs \u2014 double-pitched saltbox profile.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Storybook Cottage (5)",
+      "category": "Cottages",
+      "description": "Two-module ground with peaks on both Upper-Front and Upper-Back of one side \u2014 asymmetric storybook silhouette.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Stone Cottage (5)",
+      "category": "Cottages",
+      "description": "Three-module ground floor with two stacked above one end \u2014 heavy-set stone-built look.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Country Cottage (4)",
+      "category": "Cottages",
+      "description": "Three modules wide with a single peaked dormer in the middle.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Log Cabin (4)",
+      "category": "Cabins",
+      "description": "Four modules in a row \u2014 classic log-cabin floorplan along a single ridge line.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Lake Cabin (5)",
+      "category": "Cabins",
+      "description": "Three-module ground floor with a centered loft module above \u2014 gabled lakeside retreat.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Ski Chalet (6)",
+      "category": "Cabins",
+      "description": "Two-module ground \u00d7 two-storey with twin peaked roofs \u2014 alpine chalet with steep pitched roof.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Family Bungalow (5)",
+      "category": "Family Homes",
+      "description": "Five modules in a single row \u2014 roomy single-storey family bungalow.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Suburban Home (7)",
+      "category": "Family Homes",
+      "description": "Three-module ground floor with three stacked above and a peaked attic in the centre.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Colonial Home (8)",
+      "category": "Family Homes",
+      "description": "Four-module ground floor \u00d7 two storeys \u2014 symmetrical Colonial-style house.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Farmhouse (9)",
+      "category": "Family Homes",
+      "description": "Five-module ground floor with four-module upper storey \u2014 substantial rural farmhouse.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Ranch House (6)",
+      "category": "Family Homes",
+      "description": "Five-module ground floor with one stacked module forming a single bedroom suite above.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Tudor Home (8)",
+      "category": "Family Homes",
+      "description": "Three-wide \u00d7 two-storey home with three peaked dormers across the front \u2014 classic Tudor.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Mansion (15)",
+      "category": "Family Homes",
+      "description": "Five-wide \u00d7 three-storey grand mansion \u2014 substantial multi-family residence.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Duplex (4)",
+      "category": "Multi-Family",
+      "description": "Two side-by-side two-storey units \u2014 classic duplex housing.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "High-Rise (24)",
+      "category": "Apartments",
+      "description": "Three-wide \u00d7 eight-storey high-rise apartment block.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Mountain Lodge (8)",
+      "category": "Lodges",
+      "description": "Four-wide ground floor with four peaked roof modules \u2014 alpine timber lodge.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Co-Housing Cluster (10)",
+      "category": "Compounds",
+      "description": "Two parallel rows of five \u2014 pedestrian-oriented co-housing community.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Eco Village (16)",
+      "category": "Compounds",
+      "description": "Four homes of 4 modules each \u2014 sustainable village layout sharing edges.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Kite Pair (Back)",
+      "category": "Basic",
+      "description": "Two modules joined Upper-Back kite to Upper-Back kite \u2014 back-leaning twin tent.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 3,
+          "sourceFace": 3,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Kite Pair (Lower-Front)",
+      "category": "Basic",
+      "description": "Two modules joined on their Lower-Left-Front kite faces \u2014 slanted side-by-side pair.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 1,
+          "sourceFace": 1,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Kite Pair (Lower-Back)",
+      "category": "Basic",
+      "description": "Two modules joined on their Lower-Right-Back kite faces \u2014 slanted twin pods.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 7,
+          "sourceFace": 7,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Diagonal Tent",
+      "category": "Basic",
+      "description": "Two modules with one's Upper-Front kite joined to the other's Upper-Back kite \u2014 diagonal tent structure.",
+      "edgeMeters": 12,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 3,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 7",
+      "category": "Walls",
+      "description": "7-module row joined Left\u2194Right \u2014 single-storey wall 7 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 9",
+      "category": "Walls",
+      "description": "9-module row joined Left\u2194Right \u2014 single-storey wall 9 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 11",
+      "category": "Walls",
+      "description": "11-module row joined Left\u2194Right \u2014 single-storey wall 11 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 12",
+      "category": "Walls",
+      "description": "12-module row joined Left\u2194Right \u2014 single-storey wall 12 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 14",
+      "category": "Walls",
+      "description": "14-module row joined Left\u2194Right \u2014 single-storey wall 14 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 16",
+      "category": "Walls",
+      "description": "16-module row joined Left\u2194Right \u2014 single-storey wall 16 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 18",
+      "category": "Walls",
+      "description": "18-module row joined Left\u2194Right \u2014 single-storey wall 18 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 20",
+      "category": "Walls",
+      "description": "20-module row joined Left\u2194Right \u2014 single-storey wall 20 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 25",
+      "category": "Walls",
+      "description": "25-module row joined Left\u2194Right \u2014 single-storey wall 25 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Wall of 30",
+      "category": "Walls",
+      "description": "30-module row joined Left\u2194Right \u2014 single-storey wall 30 units long.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 24,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 25,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 26,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 27,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 28,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Two-Storey Row (14)",
+      "category": "Architecture",
+      "description": "Seven wide \u00d7 two storeys. Total 14 modules.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Skyscraper (60)",
+      "category": "Apartments",
+      "description": "Four wide \u00d7 fifteen storeys. Total 60 modules.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 24,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 25,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 26,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 27,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 28,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 24,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 25,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 26,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 27,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 28,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 29,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Cathedral Hall (16)",
+      "category": "Architecture",
+      "description": "8-module ground floor with 8 Upper-Front kite peaks running the full length \u2014 vaulted hall, 16 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Cathedral Hall (20)",
+      "category": "Architecture",
+      "description": "10-module ground floor with 10 Upper-Front kite peaks running the full length \u2014 vaulted hall, 20 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Cathedral Hall (30)",
+      "category": "Architecture",
+      "description": "15-module ground floor with 15 Upper-Front kite peaks running the full length \u2014 vaulted hall, 30 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Peaked Two-Storey (12)",
+      "category": "Architecture",
+      "description": "4-wide \u00d7 2 storeys with 4 kite peaks atop \u2014 long pitched-roof building, 12 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Peaked Two-Storey (18)",
+      "category": "Architecture",
+      "description": "6-wide \u00d7 2 storeys with 6 kite peaks atop \u2014 long pitched-roof building, 18 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Peaked Two-Storey (24)",
+      "category": "Architecture",
+      "description": "8-wide \u00d7 2 storeys with 8 kite peaks atop \u2014 long pitched-roof building, 24 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Peaked Two-Storey (30)",
+      "category": "Architecture",
+      "description": "10-wide \u00d7 2 storeys with 10 kite peaks atop \u2014 long pitched-roof building, 30 modules total.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Promenade (40)",
+      "category": "Walls",
+      "description": "Forty-module row \u2014 extreme-length colonnade or boundary wall.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 24,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 25,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 26,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 27,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 28,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 29,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 30,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 31,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 32,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 33,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 34,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 35,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 36,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 37,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 38,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Boundary Wall (50)",
+      "category": "Walls",
+      "description": "Fifty-module continuous wall.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 20,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 21,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 22,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 23,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 24,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 25,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 26,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 27,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 28,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 29,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 30,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 31,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 32,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 33,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 34,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 35,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 36,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 37,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 38,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 39,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 40,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 41,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 42,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 43,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 44,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 45,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 46,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 47,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 48,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Grand Arcade (24)",
+      "category": "Architecture",
+      "description": "Twelve wide ground with twelve kite peaks \u2014 long covered arcade.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Mega Garrison (40)",
+      "category": "Military",
+      "description": "Ten wide \u00d7 four storeys \u2014 huge multi-storey garrison, 40 modules.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 6,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 7,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 8,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 9,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 10,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 11,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 12,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 13,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 14,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 15,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 16,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 17,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 18,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 19,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "L-Shape Container (5)",
+      "category": "Container Homes",
+      "description": "L-plan container home: 3-container ground floor plus 2 below one end \u2014 separation of living and sleeping zones.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "L-Shape Container (6)",
+      "category": "Container Homes",
+      "description": "Larger L: 4-wide ground + 2 below the short arm.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "U-Shape Container (6)",
+      "category": "Container Homes",
+      "description": "U-plan container home: 4-wide ground with arm extensions below each end \u2014 enclosed courtyard design.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "U-Shape Container (8)",
+      "category": "Container Homes",
+      "description": "Larger U-plan: 6-wide ground with bottom-stacks at both ends.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 5,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "T-Shape Container (6)",
+      "category": "Container Homes",
+      "description": "T-plan container home: 4-wide main wing with 2 containers below the middle.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Plus Container (4)",
+      "category": "Container Homes",
+      "description": "Plus-shape: 3-wide with one extension below the centre \u2014 small modular family home.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Stepped Container (7)",
+      "category": "Container Homes",
+      "description": "Staggered 4-wide ground with 3 offset below: 0, 2, 3 \u2014 asymmetric dramatic container layout.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Container Studio (3)",
+      "category": "Container Homes",
+      "description": "Base container with loft above and side extension \u2014 compact studio container setup.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 5,
+          "sourceFace": 5,
+          "rot": 0
+        }
+      ]
+    },
+    {
+      "name": "Terraced Containers (8)",
+      "category": "Container Homes",
+      "description": "6-container row with 2 alternating clerestory peaks \u2014 long terraced container homes.",
+      "edgeMeters": 6,
+      "instructions": [
+        {
+          "targetPiece": 0,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 1,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 2,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 4,
+          "targetFace": 8,
+          "sourceFace": 0,
+          "rot": 0
+        },
+        {
+          "targetPiece": 0,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        },
+        {
+          "targetPiece": 3,
+          "targetFace": 2,
+          "sourceFace": 2,
+          "rot": 0
+        }
+      ]
+    }
+  ]
+}

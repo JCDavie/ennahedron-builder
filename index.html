@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ennahedron Builder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      background: radial-gradient(circle at 50% 30%, #1f2233 0%, #0a0c14 80%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      color: #e6edf3;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #canvas { width: 100vw; height: 100vh; display: block; cursor: grab; }
+    #canvas:active { cursor: grabbing; }
+    #canvas.hovering { cursor: pointer; }
+
+    .panel {
+      position: fixed;
+      background: rgba(18, 22, 34, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(120, 140, 180, 0.15);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    #topbar {
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+    }
+    #topbar h1 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #fff;
+      white-space: nowrap;
+    }
+    #topbar h1 span { color: #58a6ff; }
+    #count {
+      font-size: 12px;
+      opacity: 0.75;
+      padding: 0 10px;
+      border-left: 1px solid rgba(255,255,255,0.1);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+
+    button {
+      background: rgba(56, 139, 253, 0.12);
+      color: #79b8ff;
+      border: 1px solid rgba(88, 166, 255, 0.35);
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    button:hover:not(:disabled) {
+      background: rgba(56, 139, 253, 0.25);
+      border-color: rgba(88, 166, 255, 0.6);
+      transform: translateY(-1px);
+    }
+    button:active:not(:disabled) { transform: translateY(0); }
+    button:disabled { opacity: 0.35; cursor: default; }
+    button.danger { color: #ff7b7b; border-color: rgba(255,123,123,0.35); background: rgba(255,123,123,0.1); }
+    button.danger:hover:not(:disabled) { background: rgba(255,123,123,0.22); }
+
+    #bottombar {
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 720px;
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+    #bottombar .primary { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #fff; }
+    #bottombar .secondary { font-size: 12px; opacity: 0.6; line-height: 1.55; }
+    .key {
+      display: inline-block;
+      padding: 1px 6px;
+      margin: 0 2px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 4px;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 11px;
+      color: #fff;
+    }
+
+    #info {
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      max-width: 220px;
+      font-size: 11px;
+      line-height: 1.55;
+      opacity: 0.55;
+      padding: 8px 12px;
+    }
+    #info h2 { font-size: 11px; margin-bottom: 3px; color: #79b8ff; }
+    #info p { font-size: 10.5px; opacity: 0.85; }
+    @media (max-width: 900px) { #info { display: none; } }
+
+    #stats {
+      position: fixed;
+      top: 80px;
+      right: 18px;
+      width: 290px;
+      padding: 14px 16px;
+      font-size: 12px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    #stats::-webkit-scrollbar { width: 6px; }
+    #stats::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+    #stats h2 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: #79b8ff;
+      margin-bottom: 10px;
+    }
+    #stats h3 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #8e9aaa;
+      margin: 12px 0 6px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    #stats h3:first-of-type { border-top: none; padding-top: 0; }
+    .scale-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .scale-input label {
+      flex: 1;
+      font-size: 11.5px;
+      opacity: 0.85;
+    }
+    .scale-input input {
+      width: 78px;
+      padding: 5px 8px;
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      border: 1px solid rgba(120,140,180,0.25);
+      border-radius: 6px;
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      text-align: right;
+    }
+    .scale-input input:focus {
+      outline: none;
+      border-color: rgba(88, 166, 255, 0.7);
+      background: rgba(0,0,0,0.5);
+    }
+    .scale-input .unit {
+      color: #8e9aaa;
+      font-size: 11px;
+    }
+    .preset-row {
+      display: flex;
+      gap: 4px;
+      margin: 6px 0 4px;
+    }
+    .preset-row button {
+      flex: 1;
+      padding: 4px 0;
+      font-size: 10.5px;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 3px 0;
+      gap: 6px;
+    }
+    .stat-row .label { opacity: 0.65; font-size: 11px; flex-shrink: 0; }
+    .stat-row .val {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 11.5px;
+      color: #fff;
+      font-weight: 500;
+      text-align: right;
+    }
+    .stat-row .val .u { opacity: 0.55; font-size: 10.5px; margin-left: 2px; }
+    #sMultLabel #sMultCount { color: #79b8ff; font-weight: 700; }
+    @media (max-width: 600px) {
+      #stats { top: auto; bottom: 18px; right: 8px; left: 8px; width: auto; }
+    }
+
+    #presets {
+      position: fixed;
+      top: 80px;
+      left: 18px;
+      width: 250px;
+      padding: 12px 14px;
+    }
+    #presets h2 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: #79b8ff;
+      margin-bottom: 8px;
+    }
+    #presets h3 {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #8e9aaa;
+      margin: 10px 0 4px;
+    }
+    #presets select {
+      width: 100%;
+      padding: 6px 8px;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      border: 1px solid rgba(120,140,180,0.25);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    #presets select:focus { outline: none; border-color: rgba(88,166,255,0.7); }
+    #presets select option { background: #1a1f2c; }
+    .save-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .save-row input {
+      flex: 1;
+      min-width: 0;
+      padding: 6px 8px;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      border: 1px solid rgba(120,140,180,0.25);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .save-row input:focus { outline: none; border-color: rgba(88,166,255,0.7); }
+    .save-row button { padding: 6px 12px; font-size: 12px; }
+    #favList {
+      margin-top: 6px;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .fav-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 5px;
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .fav-item:hover { background: rgba(88,166,255,0.12); }
+    .fav-item .fav-name { flex: 1; color: #e6edf3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .fav-item .fav-count { color: #8e9aaa; font-size: 10.5px; margin-right: 4px; }
+    .fav-item .fav-del {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      font-size: 13px;
+      line-height: 1;
+      background: transparent;
+      border: none;
+      color: #8e9aaa;
+      opacity: 0;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .fav-item:hover .fav-del { opacity: 1; }
+    .fav-item .fav-del:hover { color: #ff7b7b; background: transparent; }
+    .empty-favs { font-size: 11px; opacity: 0.5; padding: 6px 0; text-align: center; }
+
+    #zoom {
+      position: fixed;
+      right: 18px;
+      bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px;
+    }
+    #zoom button {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #zoom .zoom-fit {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    #mirror {
+      position: fixed;
+      right: 74px;      /* sit to the left of the zoom column */
+      bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px;
+      align-items: stretch;
+      min-width: 52px;
+    }
+    #mirror .mirror-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #9aa3b6;
+      text-align: center;
+      padding: 2px 0;
+    }
+    #mirror button {
+      width: 100%;
+      height: 32px;
+      padding: 0;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    #mirror .mirror-sep {
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+      margin: 2px 0;
+    }
+    #mirror #swapFaceBtn {
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    #facebadge {
+      position: fixed;
+      pointer-events: none;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      transform: translate(-50%, -130%);
+      opacity: 0;
+      transition: opacity 0.12s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div id="topbar" class="panel">
+    <h1>Enneahedron <span>Builder</span></h1>
+    <span id="count">1 piece</span>
+    <button id="undoBtn" disabled>Undo</button>
+    <button id="saveBtn">Save…</button>
+    <button id="loadBtn">Load…</button>
+    <button id="exportObjBtn" title="Export as .obj mesh (Blender, SketchUp, Fusion 360, Rhino, etc.)">OBJ</button>
+    <button id="exportStlBtn" title="Export as .stl mesh (3D printing, CAD)">STL</button>
+    <button id="resetBtn" class="danger">Reset</button>
+  </div>
+  <input id="loadFileInput" type="file" accept="application/json,.json" style="display:none">
+
+  <div id="info" class="panel">
+    <h2>9-sided Enneahedron</h2>
+    <p>3 square faces &middot; 6 kite faces. Connect any two compatible faces (square↔square, kite↔kite) for realistic snap-fit assembly.</p>
+  </div>
+
+  <div id="presets" class="panel">
+    <h2>Presets &amp; Favorites</h2>
+    <select id="presetSelect">
+      <option value="">— Load a preset —</option>
+    </select>
+
+    <h3>Save current as favorite</h3>
+    <div class="save-row">
+      <input id="favName" type="text" placeholder="Name your shape…" maxlength="40">
+      <button id="favSave">★ Save</button>
+    </div>
+    <div id="favList"><div class="empty-favs">No favorites yet</div></div>
+  </div>
+
+  <div id="stats" class="panel">
+    <h2>Scale &amp; Dimensions</h2>
+
+    <div class="scale-input">
+      <label for="edgeInput">Longest edge</label>
+      <input id="edgeInput" type="number" step="0.1" min="0.05" value="6">
+      <span class="unit">m</span>
+    </div>
+    <div class="preset-row">
+      <button data-preset="1">1 m</button>
+      <button data-preset="6">6 m</button>
+      <button data-preset="12">12 m</button>
+    </div>
+
+    <h3>Per Module</h3>
+    <div class="stat-row"><span class="label">Long edge</span><span class="val" id="sLongEdge">–</span></div>
+    <div class="stat-row"><span class="label">Short edge</span><span class="val" id="sShortEdge">–</span></div>
+    <div class="stat-row"><span class="label">Module height</span><span class="val" id="sHeight">–</span></div>
+    <div class="stat-row"><span class="label">Square face</span><span class="val" id="sSquareArea">–</span></div>
+    <div class="stat-row"><span class="label">Surface area</span><span class="val" id="sSurfArea">–</span></div>
+    <div class="stat-row"><span class="label">Volume</span><span class="val" id="sVolume">–</span></div>
+
+    <h3 id="sMultLabel">× <span id="sMultCount">1</span> Modules (raw sum)</h3>
+    <div class="stat-row"><span class="label">Total volume</span><span class="val" id="sSumVolume">–</span></div>
+    <div class="stat-row"><span class="label">Total surface</span><span class="val" id="sSumSurface">–</span></div>
+
+    <h3>Assembled Structure</h3>
+    <div class="stat-row"><span class="label">Modules</span><span class="val" id="sModules">–</span></div>
+    <div class="stat-row"><span class="label">Connections</span><span class="val" id="sConn">–</span></div>
+    <div class="stat-row"><span class="label">Width &times; Depth</span><span class="val" id="sWD">–</span></div>
+    <div class="stat-row"><span class="label">Height</span><span class="val" id="sTotHeight">–</span></div>
+    <div class="stat-row"><span class="label">Bbox footprint</span><span class="val" id="sFootprint">–</span></div>
+    <div class="stat-row"><span class="label">Floor area</span><span class="val" id="sFloorArea">–</span></div>
+    <div class="stat-row"><span class="label">Enclosed vol.</span><span class="val" id="sTotVolume">–</span></div>
+    <div class="stat-row"><span class="label">Exterior surface</span><span class="val" id="sExtSurf">–</span></div>
+
+    <h3>Ground Contact</h3>
+    <div class="stat-row">
+      <span class="label">Snap to floor</span>
+      <span class="val">
+        <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+          <input type="checkbox" id="snapFloorToggle" checked style="vertical-align:middle;" />
+          <span id="snapFloorLabel" style="font-size:11px; color:#9aa3b6;">on</span>
+        </label>
+      </span>
+    </div>
+    <div class="stat-row"><span class="label">Lowest face type</span><span class="val" id="sFloorFace">–</span></div>
+    <div class="stat-row"><span class="label">Contact points</span><span class="val" id="sFloorContacts">–</span></div>
+    <div class="stat-row"><span class="label">Flushness</span><span class="val" id="sFlushness">–</span></div>
+    <div class="stat-row"><span class="label">Tilt from level</span><span class="val" id="sTilt">–</span></div>
+  </div>
+
+  <div id="bottombar" class="panel">
+    <div class="primary" id="msgPrimary">Click a face to attach a new piece</div>
+    <div class="secondary" id="msgSecondary">
+      Drag to orbit &middot; Scroll to zoom &middot; Right-drag to pan
+    </div>
+  </div>
+
+  <div id="facebadge"></div>
+
+  <div id="zoom" class="panel">
+    <button id="zoomInBtn"  title="Zoom in (+ or =)">+</button>
+    <button id="zoomFitBtn" class="zoom-fit" title="Fit to view (0)">FIT</button>
+    <button id="zoomOutBtn" title="Zoom out (-)">−</button>
+  </div>
+
+  <div id="mirror" class="panel">
+    <div class="mirror-label">Mirror</div>
+    <button id="mirrorXBtn" title="Mirror across X=0 plane (left ↔ right)">X</button>
+    <button id="mirrorYBtn" title="Mirror across Y=0 plane (up ↔ down)">Y</button>
+    <button id="mirrorZBtn" title="Mirror across Z=0 plane (front ↔ back)">Z</button>
+    <div class="mirror-sep"></div>
+    <button id="swapFaceBtn" title="While placing: cycle connector face (F). Idle: re-bond the last piece via a different face.">SWAP</button>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  // ============================================================
+  // GEOMETRY DATA (centered at vertex centroid)
+  // ============================================================
+  const V = [
+    [0, 4.147803, 0],                      // 0  - top apex
+    [-1.796051, 1.036951, -3.592102],      // 1
+    [-3.592102, -2.073901, 0],             // 2
+    [-1.796051, 1.036951, 3.592103],       // 3
+    [0, 0, -4.789469],                     // 4
+    [0, -2.073901, -3.592102],             // 5
+    [1.796051, 1.036951, -3.592102],       // 6
+    [0, 0, 4.789470],                      // 7
+    [1.796051, 1.036951, 3.592103],        // 8
+    [0, -2.073901, 3.592103],              // 9
+    [3.592103, -2.073901, 0]               // 10
+  ];
+
+  // Each face is a quadrilateral, vertices in CCW order when viewed from outside
+  const QUADS = [
+    [1, 2, 3, 0],    // 0: Left          (square)
+    [1, 4, 5, 2],    // 1: Lower-L Front (kite)
+    [1, 0, 6, 4],    // 2: Upper Front   (kite)
+    [3, 7, 8, 0],    // 3: Upper Back    (kite)
+    [3, 2, 9, 7],    // 4: Lower-L Back  (kite)
+    [5, 10, 9, 2],   // 5: Bottom        (square)
+    [6, 10, 5, 4],   // 6: Lower-R Front (kite)
+    [8, 7, 9, 10],   // 7: Lower-R Back  (kite)
+    [6, 0, 8, 10]    // 8: Right         (square)
+  ];
+
+  const NORMALS = [
+    [-0.866025,  0.500000,  0.000000],
+    [-0.654654, -0.377964, -0.654654],
+    [ 0.000000,  0.755929, -0.654654],
+    [ 0.000000,  0.755929,  0.654654],
+    [-0.654654, -0.377964,  0.654654],
+    [ 0.000000, -1.000000,  0.000000],
+    [ 0.654654, -0.377964, -0.654654],
+    [ 0.654654, -0.377964,  0.654654],
+    [ 0.866025,  0.500000,  0.000000]
+  ];
+
+  const FACE_NAMES = [
+    'Left', 'Lower-Left Front', 'Upper Front',
+    'Upper Back', 'Lower-Left Back', 'Bottom',
+    'Lower-Right Front', 'Lower-Right Back', 'Right'
+  ];
+
+  const SQUARE_FACES = [0, 5, 8];
+  const KITE_FACES = [1, 2, 3, 4, 6, 7];
+
+  const PALETTE = [
+    0x4a9eff, 0xff6b6b, 0x51cf66, 0xffd43b, 0xcc5de8,
+    0xff922b, 0x20c997, 0xf06595, 0x94d82d, 0x748ffc,
+    0xfa5252, 0x22b8cf, 0xfcc419, 0xae3ec9
+  ];
+
+  // ============================================================
+  // UTILITIES
+  // ============================================================
+  const v3 = a => new THREE.Vector3(a[0], a[1], a[2]);
+  const faceVerts = idx => QUADS[idx].map(i => v3(V[i]));
+  const isSquare = idx => SQUARE_FACES.includes(idx);
+  const compatibleFaces = idx => isSquare(idx) ? SQUARE_FACES : KITE_FACES;
+
+  // ============================================================
+  // GEOMETRIC CONSTANTS (in native units; longest edge ≈ 5.080)
+  // Computed once from vertex data so they stay numerically exact.
+  // ============================================================
+  const LONG_EDGE_U  = v3(V[0]).distanceTo(v3(V[1]));   // square edges & 2 of every kite's edges
+  const SHORT_EDGE_U = v3(V[1]).distanceTo(v3(V[4]));   // the 2 short edges of every kite
+  const SQUARE_AREA_U = LONG_EDGE_U * LONG_EDGE_U;
+
+  // Kite area = ½ · d1 · d2  (diagonals of a kite are perpendicular)
+  function kiteAreaUnits(faceIdx) {
+    const q = QUADS[faceIdx];
+    const d1 = v3(V[q[0]]).distanceTo(v3(V[q[2]]));
+    const d2 = v3(V[q[1]]).distanceTo(v3(V[q[3]]));
+    return 0.5 * d1 * d2;
+  }
+  const KITE_AREA_U = kiteAreaUnits(2);
+
+  const PIECE_AREA_U = 3 * SQUARE_AREA_U + 6 * KITE_AREA_U;
+
+  // Volume via divergence theorem: V = (1/6) | Σ vᵢ · (vⱼ × vₖ) | over outward-oriented triangles
+  const PIECE_VOLUME_U = (() => {
+    let sum = 0;
+    for (let f = 0; f < 9; f++) {
+      const q = QUADS[f];
+      const a = v3(V[q[0]]), b = v3(V[q[1]]), c = v3(V[q[2]]), d = v3(V[q[3]]);
+      sum += a.dot(new THREE.Vector3().crossVectors(b, c));
+      sum += a.dot(new THREE.Vector3().crossVectors(c, d));
+    }
+    return Math.abs(sum) / 6;
+  })();
+
+  // Native-unit height (vertical extent of one piece in default orientation)
+  const PIECE_HEIGHT_U = (() => {
+    let lo = Infinity, hi = -Infinity;
+    for (const v of V) { lo = Math.min(lo, v[1]); hi = Math.max(hi, v[1]); }
+    return hi - lo;
+  })();
+
+  // metersPerUnit ↔ longest-edge-in-meters
+  let longestEdgeMeters = 6.0;
+  let metersPerUnit = longestEdgeMeters / LONG_EDGE_U;
+
+  function faceCentroid(idx) {
+    const verts = faceVerts(idx);
+    const c = new THREE.Vector3();
+    verts.forEach(v => c.add(v));
+    return c.divideScalar(4);
+  }
+
+  // For each (target, source) face pair, find rotation steps (0-3) that produce
+  // a valid edge-length match (i.e. the faces actually fit together perfectly).
+  function getValidRotations(targetFaceIdx, sourceFaceIdx) {
+    const tQuad = QUADS[targetFaceIdx];
+    const sQuad = QUADS[sourceFaceIdx];
+    const flipped = [sQuad[3], sQuad[2], sQuad[1], sQuad[0]];
+
+    const tLens = [];
+    for (let i = 0; i < 4; i++) {
+      tLens.push(v3(V[tQuad[i]]).distanceTo(v3(V[tQuad[(i + 1) % 4]])));
+    }
+
+    const valid = [];
+    for (let k = 0; k < 4; k++) {
+      let ok = true;
+      for (let i = 0; i < 4; i++) {
+        const sLen = v3(V[flipped[(k + i) % 4]]).distanceTo(v3(V[flipped[(k + i + 1) % 4]]));
+        if (Math.abs(sLen - tLens[i]) > 0.01) { ok = false; break; }
+      }
+      if (ok) valid.push(k);
+    }
+    return valid;
+  }
+
+  // ============================================================
+  // SNAP MATH
+  // Compute the world matrix for a new piece such that its `sourceFaceIdx`
+  // face is flush with the `targetFaceIdx` face of an existing piece.
+  // rotStep ∈ {0,1,2,3} selects which discrete vertex alignment to use.
+  // ============================================================
+  function computeSnapMatrix(targetMatrix, targetFaceIdx, sourceFaceIdx, rotStep) {
+    // Target face in WORLD coords
+    const tVerts = faceVerts(targetFaceIdx).map(v => v.applyMatrix4(targetMatrix));
+    const tCentroid = new THREE.Vector3();
+    tVerts.forEach(v => tCentroid.add(v));
+    tCentroid.divideScalar(4);
+
+    const Nt = v3(NORMALS[targetFaceIdx]).transformDirection(targetMatrix).normalize();
+    const Tt = new THREE.Vector3().subVectors(tVerts[1], tVerts[0]).normalize();
+    const Bt = new THREE.Vector3().crossVectors(Nt, Tt).normalize();
+
+    // Source face in LOCAL coords
+    const sVerts = faceVerts(sourceFaceIdx);
+    const sCentroid = new THREE.Vector3();
+    sVerts.forEach(v => sCentroid.add(v));
+    sCentroid.divideScalar(4);
+
+    const Ns = v3(NORMALS[sourceFaceIdx]).normalize();
+
+    // Reverse the source vertex order (face-down placement)
+    const flipped = [sVerts[3].clone(), sVerts[2].clone(), sVerts[1].clone(), sVerts[0].clone()];
+
+    // The source edge that should align with target's first edge,
+    // depending on rotation step
+    const Ts = new THREE.Vector3()
+      .subVectors(flipped[(rotStep + 1) % 4], flipped[rotStep % 4])
+      .normalize();
+    const Bs = new THREE.Vector3().crossVectors(Ns, Ts).normalize();
+
+    // Build rotation R such that:
+    //   R * Ns  = -Nt   (normals point opposite — faces face each other)
+    //   R * Ts  =  Tt   (tangents align)
+    //   R * Bs  = -Bt   (bitangent flips, preserving handedness)
+    const srcBasis = new THREE.Matrix4().makeBasis(Ts, Bs, Ns);
+    const tgtBasis = new THREE.Matrix4().makeBasis(
+      Tt,
+      Bt.clone().negate(),
+      Nt.clone().negate()
+    );
+    const R = tgtBasis.clone().multiply(srcBasis.clone().transpose());
+
+    // Translation: target centroid - R * source centroid
+    const rotatedCenter = sCentroid.clone().applyMatrix4(R);
+    const t = tCentroid.clone().sub(rotatedCenter);
+
+    R.setPosition(t);
+    return R;
+  }
+
+  // ============================================================
+  // GEOMETRY CREATION
+  // Non-indexed BufferGeometry so faceIndex from raycasting maps directly
+  // to triangle index → /2 = quad face index.
+  // ============================================================
+  function createEnnahedronGeometry() {
+    const positions = [];
+    const normals = [];
+    for (let f = 0; f < 9; f++) {
+      const q = QUADS[f];
+      const n = NORMALS[f];
+      const v0 = V[q[0]], v1 = V[q[1]], v2 = V[q[2]], v3p = V[q[3]];
+      // Triangle 1: v0 v1 v2
+      positions.push(v0[0], v0[1], v0[2], v1[0], v1[1], v1[2], v2[0], v2[1], v2[2]);
+      normals.push(n[0], n[1], n[2], n[0], n[1], n[2], n[0], n[1], n[2]);
+      // Triangle 2: v0 v2 v3
+      positions.push(v0[0], v0[1], v0[2], v2[0], v2[1], v2[2], v3p[0], v3p[1], v3p[2]);
+      normals.push(n[0], n[1], n[2], n[0], n[1], n[2], n[0], n[1], n[2]);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geo.computeBoundingSphere();
+    return geo;
+  }
+
+  function createEdgeGeometry() {
+    const positions = [];
+    // Each edge appears twice (shared between adjacent faces) but that's fine.
+    const seen = new Set();
+    for (const q of QUADS) {
+      for (let i = 0; i < 4; i++) {
+        const a = q[i], b = q[(i + 1) % 4];
+        const key = a < b ? `${a}_${b}` : `${b}_${a}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        positions.push(V[a][0], V[a][1], V[a][2], V[b][0], V[b][1], V[b][2]);
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    return geo;
+  }
+
+  const SHARED_GEOMETRY = createEnnahedronGeometry();
+  const SHARED_EDGES = createEdgeGeometry();
+
+  function createPiece(color, opacity = 1.0) {
+    const group = new THREE.Group();
+    group.matrixAutoUpdate = false;
+
+    const mat = new THREE.MeshStandardMaterial({
+      color,
+      metalness: 0.25,
+      roughness: 0.45,
+      transparent: opacity < 1,
+      opacity,
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
+      flatShading: true
+    });
+    const mesh = new THREE.Mesh(SHARED_GEOMETRY, mat);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    group.add(mesh);
+
+    const edgeMat = new THREE.LineBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: opacity * 0.55
+    });
+    const edges = new THREE.LineSegments(SHARED_EDGES, edgeMat);
+    group.add(edges);
+
+    return { group, mesh, edges, mat, edgeMat };
+  }
+
+  function createHighlight(color, opacity) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(18), 3));
+    const mat = new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity,
+      side: THREE.DoubleSide, depthWrite: false
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.visible = false;
+    mesh.renderOrder = 999;
+    return mesh;
+  }
+
+  function updateHighlight(hl, pieceMatrix, faceIdx, color) {
+    const verts = faceVerts(faceIdx).map(v => v.applyMatrix4(pieceMatrix));
+    const normal = v3(NORMALS[faceIdx]).transformDirection(pieceMatrix).normalize();
+    verts.forEach(v => v.addScaledVector(normal, 0.015));
+    // Honor the visual floor-snap shift applied to every piece.
+    if (currentFloorShiftU !== 0) verts.forEach(v => { v.y += currentFloorShiftU; });
+
+    const pos = hl.geometry.attributes.position;
+    pos.setXYZ(0, verts[0].x, verts[0].y, verts[0].z);
+    pos.setXYZ(1, verts[1].x, verts[1].y, verts[1].z);
+    pos.setXYZ(2, verts[2].x, verts[2].y, verts[2].z);
+    pos.setXYZ(3, verts[0].x, verts[0].y, verts[0].z);
+    pos.setXYZ(4, verts[2].x, verts[2].y, verts[2].z);
+    pos.setXYZ(5, verts[3].x, verts[3].y, verts[3].z);
+    pos.needsUpdate = true;
+    hl.geometry.computeBoundingSphere();
+    if (color !== undefined) hl.material.color.setHex(color);
+    hl.visible = true;
+  }
+
+  // ============================================================
+  // SCENE SETUP
+  // ============================================================
+  const canvas = document.getElementById('canvas');
+  const renderer = new THREE.WebGLRenderer({
+    canvas, antialias: true, alpha: true, powerPreference: 'high-performance'
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0a0c14, 35, 110);
+
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.set(14, 11, 16);
+  camera.lookAt(0, 0, 0);
+
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 6;
+  controls.maxDistance = 70;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.4;
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+  scene.add(new THREE.HemisphereLight(0xb1c5ff, 0x202840, 0.35));
+
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  keyLight.position.set(12, 22, 10);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.set(2048, 2048);
+  keyLight.shadow.camera.near = 1;
+  keyLight.shadow.camera.far = 80;
+  keyLight.shadow.camera.left = -25;
+  keyLight.shadow.camera.right = 25;
+  keyLight.shadow.camera.top = 25;
+  keyLight.shadow.camera.bottom = -25;
+  keyLight.shadow.bias = -0.0005;
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0x88aaff, 0.35);
+  fillLight.position.set(-10, 8, -8);
+  scene.add(fillLight);
+
+  // Ground & grid
+  const groundY = -7;
+  const groundMat = new THREE.MeshStandardMaterial({
+    color: 0x111419, roughness: 0.95, metalness: 0
+  });
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(60, 64), groundMat);
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = groundY;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const grid = new THREE.GridHelper(60, 60, 0x2a3142, 0x1a1f2c);
+  grid.position.y = groundY + 0.01;
+  grid.material.transparent = true;
+  grid.material.opacity = 0.5;
+  scene.add(grid);
+
+  // Highlights
+  const hoverHL = createHighlight(0xffe066, 0.35);
+  scene.add(hoverHL);
+  const targetHL = createHighlight(0xff6b6b, 0.45);
+  scene.add(targetHL);
+  const sourceHL = createHighlight(0x69db7c, 0.5);
+  scene.add(sourceHL);
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  const pieces = []; // { id, group, mesh, mat, edgeMat, matrix, color, connectedFaces:Set }
+  let nextId = 0;
+  let snapToFloor = true; // toggle — when true the whole assembly is shifted vertically so its lowest vertex rests on the ground plane
+  let currentFloorShiftU = 0; // the Y shift (in mesh units) applied to every piece this frame, used by ghost/highlight/fitView
+  let mode = 'idle'; // 'idle' | 'placing'
+  let placement = null;
+  /* placement = {
+       targetPieceId, targetFaceIdx,
+       compatList:        [faceIdx,...],
+       compatIdx:         number,        // index into compatList (= source face)
+       validRots:         [0..3,...],
+       rotIdx:            number,
+       ghost:             { group, mesh, mat, edgeMat },
+       ghostMatrix:       Matrix4,
+       color:             number
+     } */
+  let hovered = null;            // { pieceId, faceIdx }
+  let undoStack = [];            // stack of pieceIds (most recently placed last)
+
+  // ============================================================
+  // PIECE MANAGEMENT
+  // ============================================================
+  function addPiece(matrix, color) {
+    const id = nextId++;
+    const { group, mesh, mat, edgeMat } = createPiece(color);
+    group.matrix.copy(matrix);
+    group.matrixWorld.copy(matrix);
+    scene.add(group);
+    const piece = { id, group, mesh, mat, edgeMat, matrix: matrix.clone(), color, connectedFaces: new Set() };
+    pieces.push(piece);
+    return piece;
+  }
+
+  function getPiece(id) { return pieces.find(p => p.id === id); }
+
+  function removePiece(id) {
+    const idx = pieces.findIndex(p => p.id === id);
+    if (idx < 0) return;
+    const p = pieces[idx];
+    scene.remove(p.group);
+    p.mat.dispose();
+    p.edgeMat.dispose();
+    pieces.splice(idx, 1);
+  }
+
+  // ============================================================
+  // STATS (real-world dimensions based on longest-edge scale)
+  // ============================================================
+  function fmt(n, dp = 2) {
+    if (!isFinite(n)) return '–';
+    if (n >= 1000) return n.toFixed(0);
+    if (n >= 100) return n.toFixed(1);
+    return n.toFixed(dp);
+  }
+  function setStat(id, value, unitHTML) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value + (unitHTML ? `<span class="u">${unitHTML}</span>` : '');
+  }
+
+  function updateStats() {
+    const m  = metersPerUnit;
+    const m2 = m * m;
+    const m3 = m * m * m;
+
+    // ----- Per module (single piece) -----
+    const pieceVol  = PIECE_VOLUME_U * m3;
+    const pieceSurf = PIECE_AREA_U   * m2;
+    const sqArea    = SQUARE_AREA_U  * m2;
+    const ktArea    = KITE_AREA_U    * m2;
+
+    setStat('sLongEdge',   fmt(LONG_EDGE_U   * m),  ' m');
+    setStat('sShortEdge',  fmt(SHORT_EDGE_U  * m),  ' m');
+    setStat('sHeight',     fmt(PIECE_HEIGHT_U * m), ' m');
+    setStat('sSquareArea', fmt(sqArea),             ' m²');
+    setStat('sSurfArea',   fmt(pieceSurf),          ' m²');
+    setStat('sVolume',     fmt(pieceVol),           ' m³');
+
+    // ----- N × per-module (raw sum, ignoring shared faces) -----
+    const N = pieces.length;
+    document.getElementById('sMultCount').textContent = String(N);
+    setStat('sSumVolume',  `${N} × ${fmt(pieceVol)}  = ${fmt(N * pieceVol)}`,  ' m³');
+    setStat('sSumSurface', `${N} × ${fmt(pieceSurf)} = ${fmt(N * pieceSurf)}`, ' m²');
+
+    // ----- Assembled structure (geometry-aware) -----
+    // Bounding box over all transformed vertices
+    const bbox = new THREE.Box3();
+    const tmp  = new THREE.Vector3();
+    for (const p of pieces) {
+      for (let i = 0; i < V.length; i++) {
+        tmp.set(V[i][0], V[i][1], V[i][2]).applyMatrix4(p.matrix);
+        bbox.expandByPoint(tmp);
+      }
+    }
+    const size = new THREE.Vector3();
+    bbox.getSize(size);
+    const W = size.x * m, H = size.y * m, D = size.z * m;
+
+    // Floor area: any face whose world-normal points ~straight down
+    let floorArea = 0;
+    for (const p of pieces) {
+      for (let f = 0; f < 9; f++) {
+        const wn = v3(NORMALS[f]).transformDirection(p.matrix).normalize();
+        if (wn.y < -0.95) floorArea += isSquare(f) ? sqArea : ktArea;
+      }
+    }
+
+    // Connections (shared faces between pieces)
+    let sharedSquare = 0, sharedKite = 0;
+    for (const c of undoStack) {
+      if (isSquare(c.targetFaceIdx)) sharedSquare++;
+      else sharedKite++;
+    }
+    const sharedFaces = sharedSquare + sharedKite;
+    const totalSurface = N * pieceSurf;
+    const sharedAreaTotal = 2 * (sharedSquare * sqArea + sharedKite * ktArea);
+    const exteriorSurface = totalSurface - sharedAreaTotal;
+    const totalVolume = N * pieceVol;
+
+    setStat('sModules',   `${N}`);
+    setStat('sConn',      sharedFaces === 0
+                          ? '0'
+                          : `${sharedFaces} (${sharedSquare}sq + ${sharedKite}kt)`);
+    setStat('sWD',        `${fmt(W)} × ${fmt(D)}`, ' m');
+    setStat('sTotHeight', fmt(H), ' m');
+    setStat('sFootprint', fmt(W * D), ' m²');
+    setStat('sFloorArea', fmt(floorArea), ' m²');
+    setStat('sTotVolume', `${fmt(totalVolume)}`, ' m³');
+    setStat('sExtSurf',   sharedFaces === 0
+                          ? fmt(exteriorSurface)
+                          : `${fmt(totalSurface)} − ${fmt(sharedAreaTotal)} = ${fmt(exteriorSurface)}`, ' m²');
+
+    // ----- Ground contact + snap-to-floor -----
+    // Walk every vertex of every piece in canonical space, find the lowest
+    // world-Y, then compute a uniform Y-shift that puts that minimum at
+    // groundY. Because each piece's group has matrixAutoUpdate = false, we
+    // have to bake the shift into group.matrix / group.matrixWorld directly
+    // (setting group.position.y wouldn't propagate). The piece's canonical
+    // `matrix` field is left untouched so undo/save/load/connections still
+    // reference the unshifted origin.
+    if (pieces.length > 0) {
+      let minY = Infinity, maxY = -Infinity;
+      for (const p of pieces) {
+        for (let i = 0; i < V.length; i++) {
+          tmp.set(V[i][0], V[i][1], V[i][2]).applyMatrix4(p.matrix);
+          if (tmp.y < minY) minY = tmp.y;
+          if (tmp.y > maxY) maxY = tmp.y;
+        }
+      }
+      const shiftY = snapToFloor ? (groundY - minY) : 0;
+      currentFloorShiftU = shiftY;
+      // Column-major 4x4: elements[13] is the Y component of the translation
+      // in the last column. Rebuild group.matrix = canonical matrix + extra
+      // Y translation, then copy to matrixWorld (piece is a direct child of
+      // scene, whose matrixWorld is identity, so parent * local = local).
+      for (const p of pieces) {
+        p.group.matrix.copy(p.matrix);
+        p.group.matrix.elements[13] += shiftY;
+        p.group.matrixWorld.copy(p.group.matrix);
+      }
+
+      // --- "Flushness" analysis: how many vertices sit on the floor, what
+      // type of face they belong to, and how level the resting face is. ---
+      const EPS_U = 0.02; // tolerance in local units (~1cm at 5m edges)
+      let contactVerts = 0;
+      const contactFaceSet = new Set(); // key: `${pieceId}:${faceIdx}`
+      for (const p of pieces) {
+        for (let i = 0; i < V.length; i++) {
+          tmp.set(V[i][0], V[i][1], V[i][2]).applyMatrix4(p.matrix);
+          if (Math.abs(tmp.y - minY) < EPS_U) contactVerts++;
+        }
+      }
+
+      // Which face(s) are actually flat on the ground? A face sits flush iff
+      // its world-normal points straight down AND its centroid Y matches minY.
+      let flushSquareCount = 0, flushKiteCount = 0;
+      let worstNormalTilt = 0; // radians between down-vector and best lowest-face normal
+      let bestLowestFaceNormal = null;
+      for (const p of pieces) {
+        for (let f = 0; f < 9; f++) {
+          // Centroid in world space
+          const fv = QUADS[f];
+          let cx=0, cy=0, cz=0;
+          for (const vi of fv) {
+            tmp.set(V[vi][0], V[vi][1], V[vi][2]).applyMatrix4(p.matrix);
+            cx += tmp.x; cy += tmp.y; cz += tmp.z;
+          }
+          cx/=4; cy/=4; cz/=4;
+          if (Math.abs(cy - minY) > 0.15) continue; // only faces near the floor
+          const wn = v3(NORMALS[f]).transformDirection(p.matrix).normalize();
+          if (wn.y < -0.95) {
+            if (isSquare(f)) flushSquareCount++; else flushKiteCount++;
+          }
+        }
+      }
+
+      // If nothing is perfectly flush, compute the min tilt of the
+      // lowest-vertex-adjacent face normal(s) from straight-down.
+      if (flushSquareCount + flushKiteCount === 0) {
+        let bestDot = -Infinity; // cos(angle) vs (0,-1,0); nearest to 1 wins
+        for (const p of pieces) {
+          for (let f = 0; f < 9; f++) {
+            const fv = QUADS[f];
+            let minFy = Infinity;
+            for (const vi of fv) {
+              tmp.set(V[vi][0], V[vi][1], V[vi][2]).applyMatrix4(p.matrix);
+              if (tmp.y < minFy) minFy = tmp.y;
+            }
+            if (Math.abs(minFy - minY) > EPS_U) continue;
+            const wn = v3(NORMALS[f]).transformDirection(p.matrix).normalize();
+            const dotDown = -wn.y; // cos(angle between -wn and (0,-1,0))
+            if (dotDown > bestDot) {
+              bestDot = dotDown;
+              bestLowestFaceNormal = wn.clone();
+            }
+          }
+        }
+        worstNormalTilt = bestDot !== -Infinity ? Math.acos(Math.max(-1, Math.min(1, bestDot))) : 0;
+      }
+
+      const flushCount = flushSquareCount + flushKiteCount;
+      let flushLabel = '–';
+      if (flushSquareCount > 0 && flushKiteCount === 0)       flushLabel = `${flushSquareCount} square ✓`;
+      else if (flushSquareCount === 0 && flushKiteCount > 0)  flushLabel = `${flushKiteCount} kite ⚠`;
+      else if (flushSquareCount > 0 && flushKiteCount > 0)    flushLabel = `${flushSquareCount}sq + ${flushKiteCount}kt`;
+      else flushLabel = `point/edge ✗`;
+
+      // Subjective flushness score: 100% if any square face is flat on the
+      // ground, 70% if only kite face(s) are flat, scaled by normal tilt
+      // otherwise.
+      let flushnessPct;
+      if (flushSquareCount > 0) flushnessPct = 100;
+      else if (flushKiteCount > 0) flushnessPct = 70;
+      else flushnessPct = Math.max(0, 100 * (1 - worstNormalTilt / (Math.PI / 2)));
+
+      setStat('sFloorFace',
+        flushSquareCount > 0 ? 'Square (flat)'
+        : flushKiteCount > 0 ? 'Kite (tilted)'
+        : 'Edge / vertex only');
+      setStat('sFloorContacts',
+        `${contactVerts} vert${contactVerts === 1 ? '' : 's'} · ${flushLabel}`);
+      setStat('sFlushness', `${flushnessPct.toFixed(0)}%`);
+      setStat('sTilt', `${(worstNormalTilt * 180 / Math.PI).toFixed(1)}°`);
+
+      // Visual cue: color the flushness readout green/amber/red.
+      const flushEl = document.getElementById('sFlushness');
+      if (flushEl) {
+        flushEl.style.color =
+          flushnessPct >= 95 ? '#69db7c'
+          : flushnessPct >= 65 ? '#ffd866'
+          : '#ff8787';
+      }
+    } else {
+      setStat('sFloorFace', '–');
+      setStat('sFloorContacts', '–');
+      setStat('sFlushness', '–');
+      setStat('sTilt', '–');
+    }
+  }
+
+  function updateUI() {
+    document.getElementById('count').textContent =
+      pieces.length === 1 ? '1 piece' : `${pieces.length} pieces`;
+    document.getElementById('undoBtn').disabled = undoStack.length === 0;
+    const swapBtn = document.getElementById('swapFaceBtn');
+    if (swapBtn) {
+      // Enabled when:
+      //   - placing a ghost piece with >1 compatible source faces, OR
+      //   - idle with at least one placement on the undo stack (so we can
+      //     re-bond the most recent piece via a different face pair).
+      const placingSwap = mode === 'placing' && placement &&
+                          placement.compatList && placement.compatList.length > 1;
+      const idleSwap = mode === 'idle' && undoStack.length > 0;
+      swapBtn.disabled = !(placingSwap || idleSwap);
+    }
+
+    const primary = document.getElementById('msgPrimary');
+    const secondary = document.getElementById('msgSecondary');
+
+    if (mode === 'placing' && placement) {
+      const tName = FACE_NAMES[placement.targetFaceIdx];
+      const sFace = placement.compatList[placement.compatIdx];
+      const sName = FACE_NAMES[sFace];
+      primary.innerHTML = `Attaching <b style="color:#69db7c">${sName}</b> face → <b style="color:#ff8787">${tName}</b> face`;
+      const rotInfo = placement.validRots.length > 1
+        ? `<span class="key">R</span> rotate (${placement.rotIdx + 1}/${placement.validRots.length})`
+        : '';
+      const faceInfo = placement.compatList.length > 1
+        ? `<span class="key">F</span> change connector face (${placement.compatIdx + 1}/${placement.compatList.length})`
+        : '';
+      secondary.innerHTML = `${rotInfo} &middot; ${faceInfo} &middot; <span class="key">Click</span> place &middot; <span class="key">Esc</span> cancel`;
+    } else {
+      primary.textContent = 'Click any face to attach a new ennahedron';
+      secondary.innerHTML = 'Drag to orbit &middot; Scroll or <span class="key">+</span>/<span class="key">−</span> zoom &middot; <span class="key">0</span> fit &middot; <span class="key">Z</span> undo';
+    }
+
+    updateStats();
+  }
+
+  // ============================================================
+  // PLACEMENT MODE
+  // ============================================================
+  function startPlacement(targetPieceId, targetFaceIdx) {
+    const target = getPiece(targetPieceId);
+    if (!target || target.connectedFaces.has(targetFaceIdx)) return;
+
+    const compatList = compatibleFaces(targetFaceIdx).slice();
+    const color = PALETTE[(undoStack.length + 1) % PALETTE.length];
+
+    // Default: try same face index first if compatible, else first compatible
+    let compatIdx = compatList.indexOf(targetFaceIdx);
+    if (compatIdx < 0) compatIdx = 0;
+
+    const sourceFaceIdx = compatList[compatIdx];
+    const validRots = getValidRotations(targetFaceIdx, sourceFaceIdx);
+    if (validRots.length === 0) return; // shouldn't happen
+
+    const ghost = createPiece(color, 0.55);
+    ghost.mat.emissive.setHex(color);
+    ghost.mat.emissiveIntensity = 0.15;
+    scene.add(ghost.group);
+
+    placement = {
+      targetPieceId, targetFaceIdx,
+      compatList, compatIdx,
+      validRots, rotIdx: 0,
+      ghost, ghostMatrix: new THREE.Matrix4(),
+      color
+    };
+    mode = 'placing';
+    controls.autoRotate = false;
+    updateGhost();
+    updateUI();
+  }
+
+  function updateGhost() {
+    if (!placement) return;
+    const target = getPiece(placement.targetPieceId);
+    const sourceFaceIdx = placement.compatList[placement.compatIdx];
+    const rotStep = placement.validRots[placement.rotIdx];
+
+    const M = computeSnapMatrix(target.matrix, placement.targetFaceIdx, sourceFaceIdx, rotStep);
+    placement.ghostMatrix.copy(M);
+    // Apply the same visual floor-snap offset that real pieces have so the
+    // ghost sits at the correct altitude during preview. Bake it directly
+    // into the matrix since the ghost group has matrixAutoUpdate=false too.
+    placement.ghost.group.matrix.copy(M);
+    placement.ghost.group.matrix.elements[13] += currentFloorShiftU;
+    placement.ghost.group.matrixWorld.copy(placement.ghost.group.matrix);
+
+    updateHighlight(targetHL, target.matrix, placement.targetFaceIdx, 0xff6b6b);
+    updateHighlight(sourceHL, placement.ghostMatrix, sourceFaceIdx, 0x69db7c);
+    hoverHL.visible = false;
+  }
+
+  function rotatePlacement(delta = 1) {
+    if (!placement) return;
+    placement.rotIdx = (placement.rotIdx + delta + placement.validRots.length) % placement.validRots.length;
+    updateGhost();
+    updateUI();
+  }
+
+  function cycleSourceFace(delta = 1) {
+    if (!placement) return;
+    placement.compatIdx = (placement.compatIdx + delta + placement.compatList.length) % placement.compatList.length;
+    const sFace = placement.compatList[placement.compatIdx];
+    placement.validRots = getValidRotations(placement.targetFaceIdx, sFace);
+    placement.rotIdx = 0;
+    updateGhost();
+    updateUI();
+  }
+
+  function confirmPlacement() {
+    if (!placement) return;
+    const target = getPiece(placement.targetPieceId);
+    const sourceFaceIdx = placement.compatList[placement.compatIdx];
+
+    // Add the real piece
+    const newPiece = addPiece(placement.ghostMatrix, placement.color);
+    newPiece.connectedFaces.add(sourceFaceIdx);
+    target.connectedFaces.add(placement.targetFaceIdx);
+
+    undoStack.push({
+      newPieceId: newPiece.id,
+      targetPieceId: target.id,
+      targetFaceIdx: placement.targetFaceIdx,
+      sourceFaceIdx
+    });
+
+    // If this placement replaced a swap, consume the restore so the cancel
+    // below doesn't resurrect the old piece and double-place.
+    if (placement.swapRestore) placement.swapRestore = null;
+    cancelPlacement();
+  }
+
+  // Programmatic placement (used by presets / loaded configs)
+  function placePiece(targetPieceId, targetFaceIdx, sourceFaceIdx, rotStep, color) {
+    const target = getPiece(targetPieceId);
+    if (!target) return null;
+    if (target.connectedFaces.has(targetFaceIdx)) return null;
+    // Validate face compatibility
+    const validRots = getValidRotations(targetFaceIdx, sourceFaceIdx);
+    if (validRots.length === 0) return null;
+    const r = validRots.includes(rotStep) ? rotStep : validRots[0];
+    const M = computeSnapMatrix(target.matrix, targetFaceIdx, sourceFaceIdx, r);
+    const piece = addPiece(M, color);
+    piece.connectedFaces.add(sourceFaceIdx);
+    target.connectedFaces.add(targetFaceIdx);
+    undoStack.push({
+      newPieceId: piece.id,
+      targetPieceId: target.id,
+      targetFaceIdx,
+      sourceFaceIdx
+    });
+    return piece;
+  }
+
+  function cancelPlacement() {
+    // If we were in the middle of a SWAP (user escaped out), restore the
+    // original bond that swapLastBond() rolled back so nothing is lost.
+    const restore = placement && placement.swapRestore;
+    if (placement) {
+      scene.remove(placement.ghost.group);
+      placement.ghost.mat.dispose();
+      placement.ghost.edgeMat.dispose();
+    }
+    placement = null;
+    mode = 'idle';
+    targetHL.visible = false;
+    sourceHL.visible = false;
+    if (restore) {
+      // Rebuild the exact piece that swapLastBond rolled back.
+      const target = getPiece(restore.targetPieceId);
+      if (target) {
+        const p = addPiece(restore.matrix, restore.color);
+        restore.connectedFaces.forEach(f => p.connectedFaces.add(f));
+        target.connectedFaces.add(restore.targetFaceIdx);
+        undoStack.push({
+          newPieceId: p.id,
+          targetPieceId: restore.targetPieceId,
+          targetFaceIdx: restore.targetFaceIdx,
+          sourceFaceIdx: restore.sourceFaceIdx
+        });
+      }
+    }
+    updateUI();
+  }
+
+  function undo() {
+    if (undoStack.length === 0) return;
+    if (mode === 'placing') cancelPlacement();
+    const last = undoStack.pop();
+    const target = getPiece(last.targetPieceId);
+    if (target) target.connectedFaces.delete(last.targetFaceIdx);
+    removePiece(last.newPieceId);
+    updateUI();
+  }
+
+  // Re-bond the most recently placed piece via a DIFFERENT face pair.
+  // Undoes the last placement then opens a fresh ghost preview on the same
+  // target face, pre-advanced one step in the compatibility cycle so the
+  // first click lands a visibly different bond. User can R/F to keep cycling.
+  // If the user escapes out, the original bond is restored (see cancelPlacement).
+  function swapLastBond() {
+    if (undoStack.length === 0 || mode !== 'idle') return;
+    const last = undoStack[undoStack.length - 1];
+    const target = getPiece(last.targetPieceId);
+    const oldPiece = getPiece(last.newPieceId);
+    if (!target || !oldPiece) return;
+
+    // Snapshot the exact state we're about to tear down so cancel can undo it.
+    const restore = {
+      targetPieceId: last.targetPieceId,
+      targetFaceIdx: last.targetFaceIdx,
+      sourceFaceIdx: last.sourceFaceIdx,
+      matrix: oldPiece.matrix.clone(),
+      color: oldPiece.color,
+      connectedFaces: Array.from(oldPiece.connectedFaces)
+    };
+
+    // Roll back the last placement (don't touch earlier history).
+    undoStack.pop();
+    target.connectedFaces.delete(last.targetFaceIdx);
+    removePiece(last.newPieceId);
+
+    // Reopen placement on the same target face.
+    startPlacement(last.targetPieceId, last.targetFaceIdx);
+    if (!placement) {
+      // Couldn't reopen — restore and bail.
+      const p = addPiece(restore.matrix, restore.color);
+      restore.connectedFaces.forEach(f => p.connectedFaces.add(f));
+      target.connectedFaces.add(restore.targetFaceIdx);
+      undoStack.push({
+        newPieceId: p.id,
+        targetPieceId: restore.targetPieceId,
+        targetFaceIdx: restore.targetFaceIdx,
+        sourceFaceIdx: restore.sourceFaceIdx
+      });
+      updateUI();
+      return;
+    }
+
+    // Stash restore info on the placement so Esc can bring the piece back.
+    placement.swapRestore = restore;
+
+    // Advance one step past whatever face/rot combination just got undone,
+    // so the ghost is visibly different from what was there before.
+    const prevSource = restore.sourceFaceIdx;
+    const sameFaceIdx = placement.compatList.indexOf(prevSource);
+    if (sameFaceIdx >= 0) {
+      placement.compatIdx = sameFaceIdx;
+      const sFace = placement.compatList[placement.compatIdx];
+      placement.validRots = getValidRotations(placement.targetFaceIdx, sFace);
+      placement.rotIdx = 0;
+      if (placement.compatList.length > 1) {
+        cycleSourceFace(1);
+      } else if (placement.validRots.length > 1) {
+        rotatePlacement(1);
+      } else {
+        updateGhost();
+        updateUI();
+      }
+    }
+  }
+
+  function reset() {
+    if (mode === 'placing') cancelPlacement();
+    while (pieces.length > 1) {
+      removePiece(pieces[pieces.length - 1].id);
+    }
+    if (pieces[0]) pieces[0].connectedFaces.clear();
+    undoStack = [];
+    controls.autoRotate = true;
+    updateUI();
+  }
+
+  // ============================================================
+  // INTERACTION (raycasting + events)
+  // ============================================================
+  const raycaster = new THREE.Raycaster();
+  const mouseNDC = new THREE.Vector2();
+  const badge = document.getElementById('facebadge');
+
+  function pickFace(clientX, clientY) {
+    mouseNDC.x = (clientX / window.innerWidth) * 2 - 1;
+    mouseNDC.y = -(clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouseNDC, camera);
+
+    const meshes = pieces.map(p => p.mesh);
+    const hits = raycaster.intersectObjects(meshes, false);
+    if (hits.length === 0) return null;
+
+    const hit = hits[0];
+    const piece = pieces.find(p => p.mesh === hit.object);
+    if (!piece) return null;
+
+    const faceIdx = Math.floor(hit.faceIndex / 2);
+    return { pieceId: piece.id, faceIdx, point: hit.point };
+  }
+
+  function onPointerMove(e) {
+    if (mode === 'placing') return; // Disable hover while placing
+
+    const pick = pickFace(e.clientX, e.clientY);
+    if (pick) {
+      const piece = getPiece(pick.pieceId);
+      const isFree = !piece.connectedFaces.has(pick.faceIdx);
+      hovered = isFree ? pick : null;
+      canvas.classList.toggle('hovering', isFree);
+
+      if (isFree) {
+        updateHighlight(hoverHL, piece.matrix, pick.faceIdx, 0xffe066);
+        badge.textContent = FACE_NAMES[pick.faceIdx];
+        badge.style.left = e.clientX + 'px';
+        badge.style.top = e.clientY + 'px';
+        badge.style.opacity = '1';
+      } else {
+        hoverHL.visible = false;
+        badge.style.opacity = '0';
+      }
+    } else {
+      hovered = null;
+      hoverHL.visible = false;
+      canvas.classList.remove('hovering');
+      badge.style.opacity = '0';
+    }
+  }
+
+  function onPointerDown(e) {
+    if (e.button !== 0) return;
+    // Stash position to detect click vs drag
+    canvas._downX = e.clientX;
+    canvas._downY = e.clientY;
+  }
+
+  function onPointerUp(e) {
+    if (e.button !== 0) return;
+    const dx = (canvas._downX ?? e.clientX) - e.clientX;
+    const dy = (canvas._downY ?? e.clientY) - e.clientY;
+    if (Math.hypot(dx, dy) > 4) return; // dragged, not clicked
+
+    if (mode === 'placing') {
+      confirmPlacement();
+      return;
+    }
+
+    const pick = pickFace(e.clientX, e.clientY);
+    if (pick) {
+      const piece = getPiece(pick.pieceId);
+      if (!piece.connectedFaces.has(pick.faceIdx)) {
+        controls.autoRotate = false;
+        startPlacement(pick.pieceId, pick.faceIdx);
+      }
+    }
+  }
+
+  // ==== Zoom ====
+  function zoom(factor) {
+    // factor < 1 → zoom in (camera closer), > 1 → zoom out
+    const offset = camera.position.clone().sub(controls.target);
+    let dist = offset.length() * factor;
+    dist = Math.max(controls.minDistance, Math.min(controls.maxDistance, dist));
+    offset.setLength(dist);
+    camera.position.copy(controls.target).add(offset);
+    controls.update();
+  }
+
+  function fitView() {
+    if (pieces.length === 0) return;
+    const bbox = new THREE.Box3();
+    const tmp = new THREE.Vector3();
+    for (const p of pieces) {
+      for (let i = 0; i < V.length; i++) {
+        tmp.set(V[i][0], V[i][1], V[i][2]).applyMatrix4(p.matrix);
+        // Account for the visual floor-snap offset so camera fits the
+        // shifted assembly (not its canonical origin).
+        tmp.y += currentFloorShiftU;
+        bbox.expandByPoint(tmp);
+      }
+    }
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    bbox.getCenter(center);
+    bbox.getSize(size);
+    const radius = Math.max(size.x, size.y, size.z) * 0.6 + 0.5;
+    const fitDist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const dir = camera.position.clone().sub(controls.target).normalize();
+    if (dir.lengthSq() < 1e-6) dir.set(0.7, 0.55, 0.8).normalize();
+    controls.target.copy(center);
+    camera.position.copy(center).addScaledVector(dir, fitDist * 1.25);
+    controls.update();
+  }
+
+  function onKeyDown(e) {
+    // Ignore when typing in an input field
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+    if (e.key === 'Escape') { if (mode === 'placing') cancelPlacement(); }
+    else if (e.key === 'r' || e.key === 'R') { rotatePlacement(e.shiftKey ? -1 : 1); }
+    else if (e.key === 'f' || e.key === 'F') { cycleSourceFace(e.shiftKey ? -1 : 1); }
+    else if (e.key === '+' || e.key === '=') { zoom(0.85); }
+    else if (e.key === '-' || e.key === '_') { zoom(1.18); }
+    else if (e.key === '0') { fitView(); }
+    else if ((e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey || true)) {
+      // plain 'z' triggers undo too, for convenience
+      if (mode === 'idle') undo();
+    }
+  }
+
+  canvas.addEventListener('pointermove', onPointerMove);
+  canvas.addEventListener('pointerdown', onPointerDown);
+  canvas.addEventListener('pointerup', onPointerUp);
+  canvas.addEventListener('pointerleave', () => {
+    hovered = null;
+    if (mode !== 'placing') hoverHL.visible = false;
+    badge.style.opacity = '0';
+  });
+  window.addEventListener('keydown', onKeyDown);
+
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (confirm('Remove all pieces and start over?')) reset();
+  });
+  document.getElementById('zoomInBtn').addEventListener('click', () => { controls.autoRotate = false; zoom(0.82); });
+  document.getElementById('zoomOutBtn').addEventListener('click', () => { controls.autoRotate = false; zoom(1.22); });
+  document.getElementById('zoomFitBtn').addEventListener('click', () => { controls.autoRotate = false; fitView(); });
+
+  // ==== Floor-snap toggle ====
+  document.getElementById('snapFloorToggle').addEventListener('change', (e) => {
+    snapToFloor = e.target.checked;
+    document.getElementById('snapFloorLabel').textContent = snapToFloor ? 'on' : 'off';
+    updateStats();
+    fitView();
+  });
+
+  // ==== Mirror tool ====
+  // For each axis, mirroring across the plane axis=0 gives M' = S·M where S
+  // is diag(-1,1,1) / (1,-1,1) / (1,1,-1). We skip pieces whose world-space
+  // body centroid lies near the mirror plane (|coord| < skipThresh in mesh
+  // units), since those pieces already straddle the axis of symmetry and
+  // their reflected copy would overlap the original.
+  function mirrorAlong(axis /* 'x' | 'y' | 'z' */) {
+    if (pieces.length === 0) return;
+    if (mode === 'placing') cancelPlacement();
+
+    // Body centroid of the canonical (untransformed) ennahedron.
+    const bodyCenter = new THREE.Vector3();
+    for (let i = 0; i < V.length; i++) {
+      bodyCenter.x += V[i][0]; bodyCenter.y += V[i][1]; bodyCenter.z += V[i][2];
+    }
+    bodyCenter.divideScalar(V.length);
+
+    // Pieces whose transformed body-centroid axis-coordinate is within this
+    // threshold of the mirror plane are considered "on the axis" and skipped.
+    const skipThresh = 1.5;
+    // Reflection matrix (pre-multiplier) for the chosen axis
+    const S = new THREE.Matrix4().makeScale(
+      axis === 'x' ? -1 : 1,
+      axis === 'y' ? -1 : 1,
+      axis === 'z' ? -1 : 1
+    );
+    const palette = PALETTE; // fall back to palette for new pieces
+
+    const toMirror = pieces.slice(); // snapshot: don't mirror the mirrors
+    let added = 0;
+    for (const p of toMirror) {
+      const c = bodyCenter.clone().applyMatrix4(p.matrix);
+      const axisVal = axis === 'x' ? c.x : (axis === 'y' ? c.y : c.z);
+      if (Math.abs(axisVal) < skipThresh) continue;
+
+      const M = new THREE.Matrix4().multiplyMatrices(S, p.matrix);
+      // Create a mirror twin. Because S has det=-1, the resulting matrix has
+      // negative determinant; Three.js's renderer detects this at draw time
+      // and flips front-face winding automatically so the mesh looks correct.
+      const col = palette[added % palette.length];
+      addPiece(M, col);
+      added++;
+    }
+
+    controls.autoRotate = false;
+    updateUI();
+    fitView();
+  }
+  document.getElementById('mirrorXBtn').addEventListener('click', () => mirrorAlong('x'));
+  document.getElementById('mirrorYBtn').addEventListener('click', () => mirrorAlong('y'));
+  document.getElementById('mirrorZBtn').addEventListener('click', () => mirrorAlong('z'));
+
+  // ==== Swap connector face button ====
+  // During placement: cycle the ghost's source face (same as F key).
+  // Idle: undo the last placement and reopen it pre-advanced so the last
+  // piece re-bonds to its target via a different face/rotation.
+  document.getElementById('swapFaceBtn').addEventListener('click', () => {
+    if (mode === 'placing') {
+      cycleSourceFace(1);
+    } else if (mode === 'idle' && undoStack.length > 0) {
+      swapLastBond();
+    }
+    // Move focus back off the button so subsequent spacebar/enter doesn't
+    // re-click it, and R/F keyboard shortcuts work immediately.
+    document.getElementById('swapFaceBtn').blur();
+  });
+
+  // ==== Scale input + presets ====
+  const edgeInput = document.getElementById('edgeInput');
+  function applyScale(meters) {
+    if (!isFinite(meters) || meters <= 0) return;
+    longestEdgeMeters = meters;
+    metersPerUnit = meters / LONG_EDGE_U;
+    edgeInput.value = String(meters);
+    updateStats();
+  }
+  edgeInput.value = String(longestEdgeMeters);
+  edgeInput.addEventListener('input', () => {
+    const v = parseFloat(edgeInput.value);
+    if (isFinite(v) && v > 0) {
+      longestEdgeMeters = v;
+      metersPerUnit = v / LONG_EDGE_U;
+      updateStats();
+    }
+  });
+  document.querySelectorAll('.preset-row button').forEach(b => {
+    b.addEventListener('click', () => applyScale(parseFloat(b.dataset.preset)));
+  });
+
+  // ==== Save / Load configurations ====
+  function serializeConfig() {
+    return {
+      version: 1,
+      app: 'ennahedron-builder',
+      longestEdgeMeters,
+      pieces: pieces.map(p => ({
+        id: p.id,
+        color: p.color,
+        matrix: p.matrix.elements.slice(),
+        connectedFaces: Array.from(p.connectedFaces)
+      })),
+      undoStack: undoStack.slice(),
+      nextId
+    };
+  }
+
+  function downloadConfig() {
+    const data = serializeConfig();
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    a.href = url;
+    a.download = `enneahedron-build-${pieces.length}p-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function loadConfig(data) {
+    if (!data || data.app !== 'ennahedron-builder' || !Array.isArray(data.pieces) || data.pieces.length === 0) {
+      alert('Not a valid Enneahedron Builder file.');
+      return;
+    }
+    if (mode === 'placing') cancelPlacement();
+    // Clear existing pieces
+    while (pieces.length > 0) removePiece(pieces[0].id);
+    undoStack = [];
+    nextId = 0;
+
+    // Map saved ids → freshly assigned ids
+    const idMap = new Map();
+    for (const pd of data.pieces) {
+      const M = new THREE.Matrix4().fromArray(pd.matrix);
+      const piece = addPiece(M, pd.color);
+      idMap.set(pd.id, piece.id);
+      if (Array.isArray(pd.connectedFaces)) {
+        for (const f of pd.connectedFaces) piece.connectedFaces.add(f);
+      }
+    }
+    if (Array.isArray(data.undoStack)) {
+      undoStack = data.undoStack
+        .filter(e => idMap.has(e.newPieceId) && idMap.has(e.targetPieceId))
+        .map(e => ({
+          newPieceId:    idMap.get(e.newPieceId),
+          targetPieceId: idMap.get(e.targetPieceId),
+          targetFaceIdx: e.targetFaceIdx,
+          sourceFaceIdx: e.sourceFaceIdx
+        }));
+    }
+
+    if (typeof data.longestEdgeMeters === 'number' && data.longestEdgeMeters > 0) {
+      applyScale(data.longestEdgeMeters);
+    }
+    controls.autoRotate = false;
+    // updateUI() before fitView() — the floor-snap shift runs inside
+    // updateStats() and must be applied before framing the camera.
+    updateUI();
+    fitView();
+  }
+
+  // ==== Engineering-format export (.obj, .stl) =====================
+  // Emits a single mesh with one group per enneahedron piece.
+  // Coordinates are in METERS, using the current longestEdgeMeters scale
+  // and the current floor-snap offset so "what you see is what you export".
+  // Quads are triangulated (two triangles per quad, CCW from outside) so
+  // Blender, Fusion 360, Rhino, SketchUp, etc. can consume the file directly.
+
+  function buildExportGeometry() {
+    // Returns { vertices: Vector3[] in meters, tris: [[i,i,i], ...],
+    //          groups: [{ name, triStart, triEnd }] }
+    const vertices = [];
+    const tris = [];
+    const groups = [];
+    const yShift = currentFloorShiftU;
+
+    pieces.forEach((p, pieceIdx) => {
+      const triStart = tris.length;
+      const baseIdx = vertices.length;
+      // Transform the 11 canonical vertices into world-meters.
+      const M = p.matrix;
+      for (let i = 0; i < V.length; i++) {
+        const v = new THREE.Vector3(V[i][0], V[i][1], V[i][2])
+          .applyMatrix4(M);
+        v.y += yShift;
+        v.multiplyScalar(metersPerUnit);
+        vertices.push(v);
+      }
+      // Triangulate each quad face as (a,b,c) + (a,c,d) — matches the
+      // CCW-from-outside winding used by the on-screen BufferGeometry.
+      for (let f = 0; f < QUADS.length; f++) {
+        const q = QUADS[f];
+        const a = baseIdx + q[0], b = baseIdx + q[1],
+              c = baseIdx + q[2], d = baseIdx + q[3];
+        tris.push([a, b, c]);
+        tris.push([a, c, d]);
+      }
+      groups.push({
+        name: `piece_${String(pieceIdx + 1).padStart(2, '0')}`,
+        triStart,
+        triEnd: tris.length
+      });
+    });
+    return { vertices, tris, groups };
+  }
+
+  function buildObjText() {
+    if (pieces.length === 0) return null;
+    const { vertices, tris, groups } = buildExportGeometry();
+    const lines = [];
+    lines.push('# Enneahedron Builder — OBJ export');
+    lines.push(`# generated: ${new Date().toISOString()}`);
+    lines.push(`# pieces: ${pieces.length}`);
+    lines.push(`# longest edge: ${longestEdgeMeters.toFixed(4)} m`);
+    lines.push('# units: meters');
+    lines.push('');
+    // Vertices
+    for (const v of vertices) {
+      lines.push(`v ${v.x.toFixed(6)} ${v.y.toFixed(6)} ${v.z.toFixed(6)}`);
+    }
+    lines.push('');
+    // Groups + faces (OBJ is 1-indexed)
+    let tCursor = 0;
+    for (const g of groups) {
+      lines.push(`g ${g.name}`);
+      lines.push(`o ${g.name}`);
+      while (tCursor < g.triEnd) {
+        const t = tris[tCursor++];
+        lines.push(`f ${t[0] + 1} ${t[1] + 1} ${t[2] + 1}`);
+      }
+    }
+    return lines.join('\n') + '\n';
+  }
+
+  function buildStlText() {
+    // ASCII STL — one solid, all triangles in world-meter coordinates,
+    // with a per-face normal computed from the triangle (right-hand rule).
+    if (pieces.length === 0) return null;
+    const { vertices, tris } = buildExportGeometry();
+    const lines = [];
+    lines.push('solid enneahedron_build');
+    const ab = new THREE.Vector3(), ac = new THREE.Vector3(), n = new THREE.Vector3();
+    for (const t of tris) {
+      const a = vertices[t[0]], b = vertices[t[1]], c = vertices[t[2]];
+      ab.subVectors(b, a);
+      ac.subVectors(c, a);
+      n.crossVectors(ab, ac);
+      if (n.lengthSq() > 0) n.normalize();
+      lines.push(`  facet normal ${n.x.toFixed(6)} ${n.y.toFixed(6)} ${n.z.toFixed(6)}`);
+      lines.push('    outer loop');
+      lines.push(`      vertex ${a.x.toFixed(6)} ${a.y.toFixed(6)} ${a.z.toFixed(6)}`);
+      lines.push(`      vertex ${b.x.toFixed(6)} ${b.y.toFixed(6)} ${b.z.toFixed(6)}`);
+      lines.push(`      vertex ${c.x.toFixed(6)} ${c.y.toFixed(6)} ${c.z.toFixed(6)}`);
+      lines.push('    endloop');
+      lines.push('  endfacet');
+    }
+    lines.push('endsolid enneahedron_build');
+    return lines.join('\n') + '\n';
+  }
+
+  function triggerDownload(text, filename, mime) {
+    const blob = new Blob([text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function exportObj() {
+    const text = buildObjText();
+    if (!text) { alert('Nothing to export — add some pieces first.'); return; }
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    triggerDownload(text, `enneahedron-build-${pieces.length}p-${stamp}.obj`, 'text/plain');
+  }
+
+  function exportStl() {
+    const text = buildStlText();
+    if (!text) { alert('Nothing to export — add some pieces first.'); return; }
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    triggerDownload(text, `enneahedron-build-${pieces.length}p-${stamp}.stl`, 'model/stl');
+  }
+
+  document.getElementById('exportObjBtn').addEventListener('click', exportObj);
+  document.getElementById('exportStlBtn').addEventListener('click', exportStl);
+
+  document.getElementById('saveBtn').addEventListener('click', downloadConfig);
+  const loadFileInput = document.getElementById('loadFileInput');
+  document.getElementById('loadBtn').addEventListener('click', () => loadFileInput.click());
+  loadFileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try { loadConfig(JSON.parse(reader.result)); }
+      catch (err) { alert('Could not parse file: ' + err.message); }
+    };
+    reader.readAsText(file);
+    loadFileInput.value = ''; // allow re-selecting same file
+  });
+
+  // ============================================================
+  // PRESETS & FAVORITES
+  // ============================================================
+  const FAVORITES_KEY = 'enneahedron-builder-favorites-v1';
+  let builtinPresets = [];
+
+  function loadFavorites() {
+    try { return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function persistFavorites(favs) {
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+  }
+
+  // Apply a preset defined as an instruction sequence (compact form)
+  function applyInstructions(instructions, edgeMeters) {
+    if (mode === 'placing') cancelPlacement();
+    while (pieces.length > 0) removePiece(pieces[0].id);
+    undoStack = [];
+    nextId = 0;
+
+    addPiece(new THREE.Matrix4(), PALETTE[0]);
+
+    let skipped = 0;
+    for (let i = 0; i < (instructions || []).length; i++) {
+      const inst = instructions[i];
+      const targetPiece = pieces[inst.targetPiece];
+      if (!targetPiece) { skipped++; continue; }
+      const result = placePiece(
+        targetPiece.id,
+        inst.targetFace,
+        inst.sourceFace,
+        inst.rot || 0,
+        PALETTE[(i + 1) % PALETTE.length]
+      );
+      if (!result) skipped++;
+    }
+    if (typeof edgeMeters === 'number' && edgeMeters > 0) applyScale(edgeMeters);
+    controls.autoRotate = false;
+    // updateUI() must run BEFORE fitView(): it triggers updateStats(), which
+    // computes and applies the floor-snap Y-shift to every piece's matrix.
+    // If we fit first, the camera frames the unshifted canonical positions
+    // and ends up looking at the wrong place once the shift lands.
+    updateUI();
+    fitView();
+    if (skipped > 0) console.warn(`${skipped} preset instruction(s) were invalid and skipped.`);
+  }
+
+  // Preset entries can be either { instructions: [...] } or { config: {...full save...} }
+  function applyPreset(preset) {
+    if (!preset) return;
+    if (preset.config) loadConfig(preset.config);
+    else applyInstructions(preset.instructions, preset.edgeMeters);
+  }
+
+  // Two-level grouping: each category belongs to a higher-level group, and the
+  // dropdown shows them as consecutive optgroups with hierarchical labels.
+  const CATEGORY_GROUPS = {
+    'Basic':         { group: 'Building Blocks', order: 1 },
+    'Linear':        { group: 'Building Blocks', order: 2 },
+    'Walls':         { group: 'Building Blocks', order: 3 },
+    'Vertical':      { group: 'Building Blocks', order: 4 },
+    'Composite':     { group: 'Building Blocks', order: 5 },
+    'Rings':         { group: 'Building Blocks', order: 6 },
+
+    'Tiny Homes':    { group: 'Homes',           order: 1 },
+    'Cottages':      { group: 'Homes',           order: 2 },
+    'Cabins':        { group: 'Homes',           order: 3 },
+    'Family Homes':  { group: 'Homes',           order: 4 },
+    'Multi-Family':  { group: 'Homes',           order: 5 },
+    'Apartments':    { group: 'Homes',           order: 6 },
+    'Lodges':        { group: 'Homes',           order: 7 },
+    'Tower Homes':   { group: 'Homes',           order: 8 },
+    'Earth Homes':   { group: 'Homes',           order: 9 },
+    'Special Homes': { group: 'Homes',           order: 10 },
+    'Architecture':  { group: 'Homes',           order: 11 },
+    'Compounds':     { group: 'Homes',           order: 12 },
+
+    'Shelters':      { group: 'Shelters',        order: 1 },
+
+    'Military':      { group: 'Military',        order: 1 }
+  };
+  const GROUP_ORDER = ['Building Blocks', 'Homes', 'Shelters', 'Military', 'Other'];
+
+  function rebuildPresetDropdown() {
+    const sel = document.getElementById('presetSelect');
+    const favs = loadFavorites();
+    sel.innerHTML = '';
+    sel.appendChild(new Option('— Load a preset —', ''));
+
+    // Bucket built-ins by category
+    const cats = {};
+    for (let i = 0; i < builtinPresets.length; i++) {
+      const cat = builtinPresets[i].category || 'Other';
+      (cats[cat] ||= []).push({ p: builtinPresets[i], idx: i });
+    }
+
+    // Build a sorted list of [group, category] pairs honoring GROUP_ORDER
+    // and the per-group `order` field above. Unknown categories fall into
+    // "Other" with a default order at the end.
+    const sortedCats = Object.keys(cats).sort((a, b) => {
+      const ga = CATEGORY_GROUPS[a] || { group: 'Other', order: 999 };
+      const gb = CATEGORY_GROUPS[b] || { group: 'Other', order: 999 };
+      const gi = GROUP_ORDER.indexOf(ga.group);
+      const gj = GROUP_ORDER.indexOf(gb.group);
+      if (gi !== gj) return gi - gj;
+      if (ga.order !== gb.order) return ga.order - gb.order;
+      return a.localeCompare(b);
+    });
+
+    let lastGroup = null;
+    for (const cat of sortedCats) {
+      const meta = CATEGORY_GROUPS[cat] || { group: 'Other' };
+      // Insert a disabled separator option whenever the parent group changes,
+      // so users can visually scan the hierarchy in the open dropdown.
+      if (meta.group !== lastGroup) {
+        const sep = new Option(`━━━  ${meta.group.toUpperCase()}  ━━━`, '');
+        sep.disabled = true;
+        sel.appendChild(sep);
+        lastGroup = meta.group;
+      }
+      const og = document.createElement('optgroup');
+      og.label = `${meta.group} \u25B8 ${cat}`;
+      for (const { p, idx } of cats[cat]) {
+        og.appendChild(new Option(p.name, `b:${idx}`));
+      }
+      sel.appendChild(og);
+    }
+
+    // Favorites group sits at the very bottom under its own header.
+    if (favs.length > 0) {
+      const sep = new Option('━━━  FAVORITES  ━━━', '');
+      sep.disabled = true;
+      sel.appendChild(sep);
+      const og = document.createElement('optgroup');
+      og.label = '\u2605 Favorites';
+      for (let i = 0; i < favs.length; i++) {
+        og.appendChild(new Option(favs[i].name, `f:${i}`));
+      }
+      sel.appendChild(og);
+    }
+  }
+
+  function rebuildFavoritesList() {
+    const favs = loadFavorites();
+    const list = document.getElementById('favList');
+    list.innerHTML = '';
+    if (favs.length === 0) {
+      const e = document.createElement('div');
+      e.className = 'empty-favs';
+      e.textContent = 'No favorites yet';
+      list.appendChild(e);
+      return;
+    }
+    for (let i = 0; i < favs.length; i++) {
+      const fav = favs[i];
+      const row = document.createElement('div');
+      row.className = 'fav-item';
+      row.title = `${fav.name} — ${fav.config?.pieces?.length || 0} module(s) @ ${fav.config?.longestEdgeMeters || '?'} m`;
+      const name = document.createElement('span');
+      name.className = 'fav-name';
+      name.textContent = fav.name;
+      const count = document.createElement('span');
+      count.className = 'fav-count';
+      count.textContent = `(${fav.config?.pieces?.length || 0})`;
+      const del = document.createElement('button');
+      del.className = 'fav-del';
+      del.textContent = '×';
+      del.title = 'Delete favorite';
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm(`Delete favorite "${fav.name}"?`)) {
+          const favs2 = loadFavorites();
+          favs2.splice(i, 1);
+          persistFavorites(favs2);
+          rebuildPresetDropdown();
+          rebuildFavoritesList();
+        }
+      });
+      row.addEventListener('click', () => applyPreset({ config: fav.config }));
+      row.appendChild(name);
+      row.appendChild(count);
+      row.appendChild(del);
+      list.appendChild(row);
+    }
+  }
+
+  document.getElementById('presetSelect').addEventListener('change', (e) => {
+    const v = e.target.value;
+    if (!v) return;
+    const [kind, idxStr] = v.split(':');
+    const idx = parseInt(idxStr, 10);
+    if (kind === 'b') applyPreset(builtinPresets[idx]);
+    else if (kind === 'f') applyPreset({ config: loadFavorites()[idx].config });
+    e.target.value = '';
+  });
+
+  document.getElementById('favSave').addEventListener('click', () => {
+    const inp = document.getElementById('favName');
+    const name = inp.value.trim();
+    if (!name) { inp.focus(); return; }
+    const favs = loadFavorites();
+    // Replace existing favorite with the same name, or append
+    const existing = favs.findIndex(f => f.name === name);
+    const entry = {
+      name,
+      savedAt: new Date().toISOString(),
+      config: serializeConfig()
+    };
+    if (existing >= 0) {
+      if (!confirm(`A favorite named "${name}" already exists. Overwrite?`)) return;
+      favs[existing] = entry;
+    } else {
+      favs.push(entry);
+    }
+    persistFavorites(favs);
+    inp.value = '';
+    rebuildPresetDropdown();
+    rebuildFavoritesList();
+  });
+  document.getElementById('favName').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('favSave').click();
+  });
+
+  // Load built-in presets from JSON file
+  fetch('presets.json')
+    .then(r => r.json())
+    .then(data => {
+      builtinPresets = Array.isArray(data?.presets) ? data.presets : [];
+      rebuildPresetDropdown();
+    })
+    .catch(err => {
+      console.warn('Could not load presets.json:', err);
+      rebuildPresetDropdown();
+    });
+  rebuildFavoritesList();
+
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false;
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // ============================================================
+  // STARTUP — first piece
+  // ============================================================
+  const firstMatrix = new THREE.Matrix4(); // identity
+  addPiece(firstMatrix, PALETTE[0]);
+  updateUI();
+
+  // ============================================================
+  // ANIMATION LOOP
+  // ============================================================
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    controls.update();
+
+    // Subtle pulse on highlights
+    const t = performance.now() * 0.003;
+    const pulse = 0.85 + Math.sin(t) * 0.15;
+    if (targetHL.visible) targetHL.material.opacity = 0.45 * pulse;
+    if (sourceHL.visible) sourceHL.material.opacity = 0.5 * pulse;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+  </script>
+</body>
+</html>

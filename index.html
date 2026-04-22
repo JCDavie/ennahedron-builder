@@ -1467,10 +1467,50 @@
   }
 
   function onPointerDown(e) {
+    if (e.button === 2) {
+      // Stash position to detect click vs drag for right-click delete
+      canvas._rDownX = e.clientX;
+      canvas._rDownY = e.clientY;
+      return;
+    }
     if (e.button !== 0) return;
     // Stash position to detect click vs drag
     canvas._downX = e.clientX;
     canvas._downY = e.clientY;
+  }
+
+  // Delete a piece and free up any faces that were bonded to it.
+  function deletePiece(id) {
+    if (pieces.length <= 1) return; // keep at least one piece on the canvas
+    if (mode === 'placing') cancelPlacement();
+
+    // Free the target face on the piece this one was attached to, and any
+    // source faces on children that were attached via this piece.
+    for (const entry of undoStack) {
+      if (entry.newPieceId === id) {
+        const target = getPiece(entry.targetPieceId);
+        if (target) target.connectedFaces.delete(entry.targetFaceIdx);
+      } else if (entry.targetPieceId === id) {
+        const child = getPiece(entry.newPieceId);
+        if (child) child.connectedFaces.delete(entry.sourceFaceIdx);
+      }
+    }
+    undoStack = undoStack.filter(e => e.newPieceId !== id && e.targetPieceId !== id);
+
+    removePiece(id);
+    hovered = null;
+    hoverHL.visible = false;
+    badge.style.opacity = '0';
+    updateUI();
+  }
+
+  function onContextMenu(e) {
+    e.preventDefault();
+    const dx = (canvas._rDownX ?? e.clientX) - e.clientX;
+    const dy = (canvas._rDownY ?? e.clientY) - e.clientY;
+    if (Math.hypot(dx, dy) > 4) return; // dragged, not clicked
+    const pick = pickFace(e.clientX, e.clientY);
+    if (pick) deletePiece(pick.pieceId);
   }
 
   function onPointerUp(e) {
@@ -1550,6 +1590,7 @@
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerdown', onPointerDown);
   canvas.addEventListener('pointerup', onPointerUp);
+  canvas.addEventListener('contextmenu', onContextMenu);
   canvas.addEventListener('pointerleave', () => {
     hovered = null;
     if (mode !== 'placing') hoverHL.visible = false;
@@ -2103,17 +2144,8 @@
     if (e.key === 'Enter') document.getElementById('favSave').click();
   });
 
-  // Load built-in presets from JSON file
-  fetch('presets.json')
-    .then(r => r.json())
-    .then(data => {
-      builtinPresets = Array.isArray(data?.presets) ? data.presets : [];
-      rebuildPresetDropdown();
-    })
-    .catch(err => {
-      console.warn('Could not load presets.json:', err);
-      rebuildPresetDropdown();
-    });
+  // Built-in presets disabled — the dropdown shows only user favorites.
+  rebuildPresetDropdown();
   rebuildFavoritesList();
 
   controls.addEventListener('start', () => {

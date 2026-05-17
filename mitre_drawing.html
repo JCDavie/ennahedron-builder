@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enneahedron — mitre cut drawing</title>
+<style>
+  :root {
+    --ink: #111;
+    --line: #222;
+    --dim: #777;
+    --accent: #b00020;
+    --bg: #fff;
+    --panel: #f6f6f4;
+  }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    margin: 0; padding: 24px;
+    font-size: 12px; line-height: 1.4;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; letter-spacing: 0.5px; }
+  h2 { font-size: 13px; margin: 16px 0 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .sub { color: var(--dim); margin-bottom: 16px; }
+  .row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .card {
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    background: var(--bg);
+    flex: 1 1 360px;
+    min-width: 360px;
+  }
+  .panel { background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { border: 1px solid #999; padding: 5px 8px; text-align: left; }
+  th { background: #eee; font-weight: 600; }
+  .big { font-size: 22px; font-weight: 700; }
+  .mono { font-family: "Menlo", "Courier New", monospace; }
+  .kvs { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; }
+  .kvs span:nth-child(odd) { color: var(--dim); }
+  .controls { margin: 8px 0 16px; display: flex; gap: 12px; align-items: center; }
+  input[type=number] { width: 90px; padding: 3px 5px; font-family: inherit; font-size: 12px; }
+  svg { display: block; width: 100%; height: auto; background: var(--bg); }
+  text { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 11px; fill: var(--ink); }
+  .dim-text { fill: var(--dim); font-size: 10px; }
+  .bevel-text { fill: var(--accent); font-weight: 600; font-size: 11px; }
+  .edge { stroke: var(--ink); stroke-width: 1.4; fill: none; }
+  .diagonal { stroke: var(--dim); stroke-width: 0.8; stroke-dasharray: 4 3; fill: none; }
+  .dim-line { stroke: var(--dim); stroke-width: 0.5; fill: none; }
+  .arc { stroke: var(--accent); stroke-width: 0.9; fill: none; }
+  .section-line { stroke: var(--accent); stroke-width: 0.6; stroke-dasharray: 6 3 1 3; fill: none; }
+  .profile { stroke: var(--ink); stroke-width: 1.2; fill: #f0f0ee; }
+  .profile-cut { stroke: var(--accent); stroke-width: 1.4; fill: none; }
+  @media print {
+    body { padding: 12mm; font-size: 10pt; }
+    .controls, .no-print { display: none; }
+    .card { break-inside: avoid; }
+    .row { gap: 12px; }
+    @page { size: A4; margin: 10mm; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Enneahedron — mitre cut mechanical drawing</h1>
+<div class="sub">9 panels: 3 squares + 6 kites. Two distinct bevel angles in the entire build.
+Source geometry: <span class="mono">files/sided_Enneahedron.obj</span></div>
+
+<div class="controls no-print">
+  <label>Long edge L (mm): <input id="lenInput" type="number" min="10" max="2000" step="1" value="200"></label>
+  <span class="dim-text">All other dimensions scale from this. Print at 100% scale to use as a template.</span>
+</div>
+
+<!-- ===== Cutting table ===== -->
+<div class="card panel">
+  <h2>The two cuts (the only numbers your saw needs)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Edge type</th>
+        <th>Where</th>
+        <th>Count</th>
+        <th>Dihedral θ</th>
+        <th>Mitre / side&nbsp;(θ/2)</th>
+        <th>Bevel from perpendicular&nbsp;(90°−θ/2)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Long&nbsp;(L)</b></td>
+        <td>square ↔ kite</td>
+        <td>12</td>
+        <td class="mono">acos(−1/√7) ≈ <b>112.207°</b></td>
+        <td class="big mono">56.10°</td>
+        <td class="big mono" style="color:var(--accent)">33.90°</td>
+      </tr>
+      <tr>
+        <td><b>Short&nbsp;(S)</b></td>
+        <td>kite ↔ kite</td>
+        <td>6</td>
+        <td class="mono">acos(−1/7) ≈ <b>98.213°</b></td>
+        <td class="big mono">49.11°</td>
+        <td class="big mono" style="color:var(--accent)">40.89°</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:8px" class="dim-text">
+    Convention: the table-saw "blade tilt" reading is the bevel-from-perpendicular column (red).
+    Each piece is cut with its face flat on the bed and the blade tilted to that angle.
+    Both pieces meeting at one edge get the same cut.
+  </div>
+</div>
+
+<!-- ===== Per-piece summary ===== -->
+<div class="card panel" style="margin-top:14px">
+  <h2>Per-piece rim</h2>
+  <div class="row">
+    <div style="flex:1">
+      <b>Square (×3)</b> — faces F0, F5, F8.<br>
+      All 4 edges are <b>L</b> → bevel <span class="mono" style="color:var(--accent)"><b>33.90°</b></span> on every edge.
+    </div>
+    <div style="flex:1">
+      <b>Kite (×6)</b> — faces F1, F2, F3, F4, F6, F7.<br>
+      2 short edges <b>S</b> → bevel <span class="mono" style="color:var(--accent)"><b>40.89°</b></span><br>
+      2 long edges <b>L</b> → bevel <span class="mono" style="color:var(--accent)"><b>33.90°</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Drawings ===== -->
+<div class="row" style="margin-top:14px">
+
+  <!-- Square -->
+  <div class="card">
+    <h2>Part A — Square (×3)</h2>
+    <div class="kvs">
+      <span>Edge length</span><span class="mono"><span id="sqL">200</span> mm (= L)</span>
+      <span>Diagonal</span><span class="mono"><span id="sqD">282.84</span> mm (= L·√2)</span>
+      <span>Interior corners</span><span class="mono">4 × 90.00°</span>
+      <span>Bevel — every edge</span><span class="mono bevel-text">33.90°</span>
+    </div>
+    <svg id="squareSVG" viewBox="0 0 360 320" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <!-- Kite -->
+  <div class="card">
+    <h2>Part B — Kite (×6)</h2>
+    <div class="kvs">
+      <span>Long edges (×2)</span><span class="mono"><span id="ktL">200.00</span> mm (= L)</span>
+      <span>Short edges (×2)</span><span class="mono"><span id="ktS">94.29</span> mm (= S, ratio S/L = 0.47140)</span>
+      <span>Interior corners</span><span class="mono">41.41° / 110.71° / 97.18° / 110.71° (Σ = 360°)</span>
+      <span>Bevel — long edges</span><span class="mono bevel-text">33.90°</span>
+      <span>Bevel — short edges</span><span class="mono bevel-text">40.89°</span>
+      <span>Symmetry</span><span>Mirror across the long diagonal — no left/right handedness</span>
+    </div>
+    <svg id="kiteSVG" viewBox="0 0 460 360" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+</div>
+
+<!-- ===== Edge profile sections ===== -->
+<div class="card panel" style="margin-top:14px">
+  <h2>Edge profiles (section view — bevel cut shape)</h2>
+  <div class="row">
+    <div style="flex:1; min-width:280px">
+      <b>Section A-A — long edge (L)</b><br>
+      <span class="dim-text">Square↔kite seam · dihedral 112.21°</span>
+      <svg viewBox="0 0 280 160" preserveAspectRatio="xMidYMid meet" id="sectAA"></svg>
+    </div>
+    <div style="flex:1; min-width:280px">
+      <b>Section B-B — short edge (S)</b><br>
+      <span class="dim-text">Kite↔kite seam · dihedral 98.21°</span>
+      <svg viewBox="0 0 280 160" preserveAspectRatio="xMidYMid meet" id="sectBB"></svg>
+    </div>
+  </div>
+  <div class="dim-text" style="margin-top:6px">
+    Each profile shows the cross-section through one panel: the bottom edge is the panel face, and the angled edge is the mitre cut.
+    When two panels are mated, their cuts are co-planar and the dihedral closes exactly.
+  </div>
+</div>
+
+<!-- ===== Verification panel ===== -->
+<div class="card panel" style="margin-top:14px">
+  <h2>Computed values (re-derived live from the OBJ data)</h2>
+  <div id="verify" class="mono" style="white-space:pre"></div>
+</div>
+
+<!-- ===== Notes ===== -->
+<div class="card" style="margin-top:14px">
+  <h2>Notes</h2>
+  <ul>
+    <li>The squares (faces F0, F5, F8) are mutually orthogonal — they form the three pairwise-perpendicular "wings" of the solid.</li>
+    <li>The kite is a 41.4°-pointed arrowhead. Its two short edges meet at the wide (≈97.2°) apex; its two long edges meet at the sharp (≈41.4°) apex.</li>
+    <li>Around any vertex of the assembled solid, edges of the same type (S or L) always meet edges of the same type — so the two-bevel scheme is closed under assembly. There is no edge in the polyhedron that needs a third angle.</li>
+    <li>Assembly is forced: the only way to mate panels with edges of equal length is the correct way. No mirrored kites needed.</li>
+  </ul>
+</div>
+
+<script>
+"use strict";
+/* ---------- Source geometry from sided_Enneahedron.obj ---------- */
+const VERTS = [
+  [-0.368391,  3.709133,  3.592102], // v1
+  [-2.164442,  0.598281,  0.000000], // v2
+  [-3.960493, -2.512571,  3.592102], // v3
+  [-2.164442,  0.598281,  7.184205], // v4
+  [-0.368391, -0.438670, -1.197367], // v5
+  [-0.368391, -2.512571,  0.000000], // v6
+  [ 1.427660,  0.598281,  0.000000], // v7
+  [-0.368391, -0.438670,  8.381572], // v8
+  [ 1.427660,  0.598281,  7.184205], // v9
+  [-0.368391, -2.512571,  7.184205], // v10
+  [ 3.223712, -2.512571,  3.592102], // v11
+];
+// 9 quads (1-indexed vertex IDs, in rim order)
+const QUADS = [
+  [2,3,4,1],   // F0 — square (left)
+  [2,5,6,3],   // F1 — kite
+  [2,1,7,5],   // F2 — kite
+  [4,8,9,1],   // F3 — kite
+  [4,3,10,8],  // F4 — kite
+  [6,11,10,3], // F5 — square (bottom)
+  [7,11,6,5],  // F6 — kite
+  [9,8,10,11], // F7 — kite
+  [7,1,9,11],  // F8 — square (right)
+];
+// Outward unit normals (one per face) from the OBJ
+const NORMALS = [
+  [-0.866025,  0.500000,  0.000000],
+  [-0.654654, -0.377964, -0.654654],
+  [ 0.000000,  0.755929, -0.654654],
+  [ 0.000000,  0.755929,  0.654654],
+  [-0.654654, -0.377964,  0.654654],
+  [ 0.000000, -1.000000,  0.000000],
+  [ 0.654654, -0.377964, -0.654654],
+  [ 0.654654, -0.377964,  0.654654],
+  [ 0.866025,  0.500000,  0.000000],
+];
+const SQUARE_FACES = [0, 5, 8];
+const KITE_FACES   = [1, 2, 3, 4, 6, 7];
+
+/* ---------- Vector helpers ---------- */
+const sub = (a,b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const add = (a,b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+const scl = (a,s) => [a[0]*s, a[1]*s, a[2]*s];
+const dot = (a,b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+const len = a => Math.hypot(a[0],a[1],a[2]);
+const norm = a => { const m = len(a); return [a[0]/m, a[1]/m, a[2]/m]; };
+const cross = (a,b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const v = i => VERTS[i-1];
+const deg = r => r * 180 / Math.PI;
+
+/* ---------- Edge / dihedral computation ---------- */
+function computeEdges() {
+  const edgeMap = new Map(); // key "a-b" (a<b) -> {faces:[i,j]}
+  QUADS.forEach((q, fi) => {
+    for (let i = 0; i < 4; i++) {
+      const a = q[i], b = q[(i+1)%4];
+      const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+      if (!edgeMap.has(key)) edgeMap.set(key, { faces: [], length: len(sub(v(a), v(b))) });
+      edgeMap.get(key).faces.push(fi);
+    }
+  });
+  return edgeMap;
+}
+function dihedral(fi, fj) {
+  return deg(Math.acos(-Math.max(-1, Math.min(1, dot(NORMALS[fi], NORMALS[fj])))));
+}
+
+/* ---------- Project a face into 2D ---------- */
+function projectFace(quad, faceIdx) {
+  const pts3 = quad.map(v);
+  const origin = pts3[0];
+  const eX = norm(sub(pts3[1], origin));
+  const eY = norm(cross(NORMALS[faceIdx], eX));
+  return pts3.map(p => {
+    const r = sub(p, origin);
+    return [dot(r, eX), dot(r, eY)];
+  });
+}
+
+/* ---------- Compute kite interior angles ---------- */
+function interiorAngles(pts2) {
+  const n = pts2.length;
+  return pts2.map((p, i) => {
+    const a = pts2[(i - 1 + n) % n];
+    const b = pts2[(i + 1) % n];
+    const u = [a[0]-p[0], a[1]-p[1]];
+    const w = [b[0]-p[0], b[1]-p[1]];
+    const cosA = (u[0]*w[0] + u[1]*w[1]) / (Math.hypot(...u) * Math.hypot(...w));
+    return deg(Math.acos(Math.max(-1, Math.min(1, cosA))));
+  });
+}
+
+/* ---------- Render ---------- */
+const EDGE_U = len(sub(v(2), v(3))); // ≈ 5.080 (any L edge)
+const SHORT_U = len(sub(v(2), v(5))); // ≈ 2.395 (any S edge)
+
+function fmt(n, d=2) { return n.toFixed(d); }
+
+function setText(id, t) { const el = document.getElementById(id); if (el) el.textContent = t; }
+
+function rebuild() {
+  const Lmm = parseFloat(document.getElementById('lenInput').value) || 200;
+  const mmPerU = Lmm / EDGE_U;
+  const Smm = SHORT_U * mmPerU;
+
+  setText('sqL', fmt(Lmm));
+  setText('sqD', fmt(Lmm * Math.SQRT2));
+  setText('ktL', fmt(Lmm));
+  setText('ktS', fmt(Smm));
+
+  drawSquare(Lmm);
+  drawKite(Lmm, Smm);
+  drawSection('sectAA', 112.207, 'A', '#b00020');
+  drawSection('sectBB',  98.213, 'B', '#b00020');
+  drawVerify();
+}
+
+/* --- Square SVG --- */
+function drawSquare(Lmm) {
+  const svg = document.getElementById('squareSVG');
+  const W = 360, H = 320;
+  const pad = 60;
+  const side = Math.min(W - 2*pad, H - 2*pad);
+  const x0 = (W - side) / 2;
+  const y0 = (H - side) / 2;
+  const e = '#222', d = '#888', a = '#b00020';
+  svg.innerHTML = `
+    <!-- diagonals -->
+    <line class="diagonal" x1="${x0}" y1="${y0}" x2="${x0+side}" y2="${y0+side}"/>
+    <line class="diagonal" x1="${x0+side}" y1="${y0}" x2="${x0}" y2="${y0+side}"/>
+    <!-- square -->
+    <rect class="edge" x="${x0}" y="${y0}" width="${side}" height="${side}"/>
+    <!-- corner angle dots -->
+    ${[[x0,y0],[x0+side,y0],[x0+side,y0+side],[x0,y0+side]].map(([cx,cy])=>{
+      // small right-angle marker
+      const s = 10;
+      const dx = cx === x0 ? s : -s;
+      const dy = cy === y0 ? s : -s;
+      return `<polyline class="dim-line" points="${cx+dx},${cy} ${cx+dx},${cy+dy} ${cx},${cy+dy}"/>`;
+    }).join('')}
+    <!-- edge labels (length + bevel) -->
+    <text x="${W/2}" y="${y0-22}" text-anchor="middle">L = ${fmt(Lmm)} mm</text>
+    <text x="${W/2}" y="${y0-8}" text-anchor="middle" class="bevel-text">bevel 33.90° (dihedral 112.21°)</text>
+
+    <text x="${W/2}" y="${y0+side+18}" text-anchor="middle">L = ${fmt(Lmm)} mm</text>
+    <text x="${W/2}" y="${y0+side+32}" text-anchor="middle" class="bevel-text">bevel 33.90°</text>
+
+    <text x="${x0-12}" y="${H/2}" text-anchor="middle" transform="rotate(-90 ${x0-12} ${H/2})">L = ${fmt(Lmm)} mm</text>
+    <text x="${x0-26}" y="${H/2}" text-anchor="middle" transform="rotate(-90 ${x0-26} ${H/2})" class="bevel-text">bevel 33.90°</text>
+
+    <text x="${x0+side+12}" y="${H/2}" text-anchor="middle" transform="rotate(90 ${x0+side+12} ${H/2})">L = ${fmt(Lmm)} mm</text>
+    <text x="${x0+side+26}" y="${H/2}" text-anchor="middle" transform="rotate(90 ${x0+side+26} ${H/2})" class="bevel-text">bevel 33.90°</text>
+
+    <!-- diagonal label -->
+    <text x="${W/2}" y="${H/2 + 4}" text-anchor="middle" class="dim-text">diagonal = ${fmt(Lmm*Math.SQRT2)} mm</text>
+
+    <!-- 90° markers note -->
+    <text x="${x0+8}" y="${y0+18}" class="dim-text">90°</text>
+    <text x="${x0+side-22}" y="${y0+18}" class="dim-text">90°</text>
+    <text x="${x0+side-22}" y="${y0+side-8}" class="dim-text">90°</text>
+    <text x="${x0+8}" y="${y0+side-8}" class="dim-text">90°</text>
+  `;
+}
+
+/* --- Kite SVG --- */
+function drawKite(Lmm, Smm) {
+  const svg = document.getElementById('kiteSVG');
+  const W = 460, H = 360;
+
+  // Project Face1 to true shape
+  const pts2 = projectFace(QUADS[1], 1); // [v3? no - QUADS[1]=[2,5,6,3]]
+  // Convert 2D coords to mm
+  const mmPerU = Lmm / EDGE_U;
+  let pts = pts2.map(p => [p[0]*mmPerU, p[1]*mmPerU]);
+
+  // Center & flip y for SVG
+  const xs = pts.map(p=>p[0]), ys = pts.map(p=>p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const w = maxX - minX, h = maxY - minY;
+  const padX = 90, padY = 90;
+  const sx = (W - 2*padX) / w;
+  const sy = (H - 2*padY) / h;
+  const s = Math.min(sx, sy);
+  const offX = padX + (W - 2*padX - w*s)/2;
+  const offY = padY + (H - 2*padY - h*s)/2;
+  const T = p => [offX + (p[0]-minX)*s, offY + (p[1]-minY)*s];
+  const P = pts.map(T);
+  // Quad order from QUADS[1]=[2,5,6,3]: pts2[0]=v2, pts2[1]=v5(apex S-S), pts2[2]=v6, pts2[3]=v3(narrow L-L)
+  const [Pv2, Pv5, Pv6, Pv3] = P;
+  const angles = interiorAngles(pts);
+
+  // Edges with labels (rim order P: 2->5 S, 5->6 S, 6->3 L, 3->2 L)
+  const polyPts = P.map(p => p.join(',')).join(' ');
+
+  // Diagonals: 2-6 and 5-3
+  const diagA = `<line class="diagonal" x1="${Pv2[0]}" y1="${Pv2[1]}" x2="${Pv6[0]}" y2="${Pv6[1]}"/>`;
+  const diagB = `<line class="diagonal" x1="${Pv5[0]}" y1="${Pv5[1]}" x2="${Pv3[0]}" y2="${Pv3[1]}"/>`;
+
+  // Edge midpoints + outward normals for label placement
+  function edgeLabel(A, B, line1, line2, side='out') {
+    const mx = (A[0]+B[0])/2, my = (A[1]+B[1])/2;
+    const dx = B[0]-A[0], dy = B[1]-A[1];
+    // outward normal (assume polygon CCW screen-space — pick by testing centroid)
+    const cx = (Pv2[0]+Pv5[0]+Pv6[0]+Pv3[0])/4;
+    const cy = (Pv2[1]+Pv5[1]+Pv6[1]+Pv3[1])/4;
+    let nx = -dy, ny = dx;
+    const nl = Math.hypot(nx,ny); nx/=nl; ny/=nl;
+    // flip if pointing inward
+    if ((mx + nx*5 - cx)**2 + (my + ny*5 - cy)**2 < (mx - cx)**2 + (my - cy)**2) {
+      nx = -nx; ny = -ny;
+    }
+    const off = 14;
+    const tx = mx + nx*off, ty = my + ny*off;
+    const angle = Math.atan2(dy,dx) * 180/Math.PI;
+    const flip = (angle > 90 || angle < -90) ? 180 : 0;
+    return `<g transform="translate(${tx},${ty}) rotate(${angle+flip})">
+      <text text-anchor="middle" y="-2">${line1}</text>
+      <text text-anchor="middle" y="11" class="bevel-text">${line2}</text>
+    </g>`;
+  }
+
+  const edgesLabels =
+    edgeLabel(Pv2, Pv5, `S = ${fmt(Smm)} mm`,  `bevel 40.89°`) +
+    edgeLabel(Pv5, Pv6, `S = ${fmt(Smm)} mm`,  `bevel 40.89°`) +
+    edgeLabel(Pv6, Pv3, `L = ${fmt(Lmm)} mm`,  `bevel 33.90°`) +
+    edgeLabel(Pv3, Pv2, `L = ${fmt(Lmm)} mm`,  `bevel 33.90°`);
+
+  // Interior angle labels just inside each vertex
+  function angleLabel(p, val) {
+    const cx = (Pv2[0]+Pv5[0]+Pv6[0]+Pv3[0])/4;
+    const cy = (Pv2[1]+Pv5[1]+Pv6[1]+Pv3[1])/4;
+    let dx = cx - p[0], dy = cy - p[1];
+    const m = Math.hypot(dx,dy); dx/=m; dy/=m;
+    const off = 22;
+    return `<text x="${p[0]+dx*off}" y="${p[1]+dy*off+3}" text-anchor="middle" class="dim-text">${fmt(val,1)}°</text>`;
+  }
+
+  svg.innerHTML = `
+    ${diagA}
+    ${diagB}
+    <polygon class="edge" points="${polyPts}"/>
+    ${edgesLabels}
+    ${angleLabel(Pv2, angles[0])}
+    ${angleLabel(Pv5, angles[1])}
+    ${angleLabel(Pv6, angles[2])}
+    ${angleLabel(Pv3, angles[3])}
+    <text x="${Pv3[0]}" y="${Pv3[1]-8}" text-anchor="middle" class="dim-text">narrow apex</text>
+    <text x="${Pv5[0]+18}" y="${Pv5[1]+4}" class="dim-text">wide apex (S–S)</text>
+  `;
+}
+
+/* --- Section view (edge profile) --- */
+function drawSection(id, dihedralDeg, label, color) {
+  const svg = document.getElementById(id);
+  const W = 280, H = 160;
+  const cx = W/2, baseY = H - 40;
+  const halfDihedral = dihedralDeg/2;
+  const bevelFromPerp = 90 - halfDihedral; // matches column in table
+  const t = 22; // material thickness for visualisation
+  const w = 110; // panel half-width visualised
+
+  // Panel cross-section: a parallelogram. Bottom face is the panel face (length w).
+  // The right edge is the mitre cut, tilted by bevelFromPerp from vertical.
+  const tilt = bevelFromPerp * Math.PI / 180;
+  const dx = t * Math.tan(tilt);
+  const x0 = cx - w;       // left edge bottom
+  const x1 = cx;           // right edge bottom (the mitred edge)
+  const y0 = baseY;        // bottom (face)
+  const y1 = baseY - t;    // top
+  // top corners: top-left at (x0, y1); top-right at (x1 - dx, y1) for an outward-leaning bevel
+  // Actually, for two pieces to mate at the edge with internal dihedral θ, each cut tilts inward by 90 - θ/2
+  // Visualise the cut:  bottom-right at (x1, y0); top-right at (x1 + dx, y1)  — leaning outward at the top
+  const tlx = x0,           tly = y1;
+  const trx = x1 + dx,      try_ = y1;
+  const brx = x1,           bry = y0;
+  const blx = x0,           bly = y0;
+
+  svg.innerHTML = `
+    <text x="${cx}" y="18" text-anchor="middle" class="dim-text">cross-section through edge — material thickness t</text>
+    <polygon class="profile" points="${tlx},${tly} ${trx},${try_} ${brx},${bry} ${blx},${bly}"/>
+    <line class="profile-cut" x1="${brx}" y1="${bry}" x2="${trx}" y2="${try_}"/>
+    <!-- vertical reference at the cut -->
+    <line class="dim-line" x1="${brx}" y1="${bry}" x2="${brx}" y2="${try_}"/>
+    <!-- angle arc -->
+    <path class="arc" d="M ${brx} ${bry - 26} A 26 26 0 0 1 ${brx + 26*Math.sin(tilt)} ${bry - 26*Math.cos(tilt)}"/>
+    <text x="${brx + 30}" y="${bry - 18}" class="bevel-text">${fmt(bevelFromPerp,2)}°</text>
+    <text x="${brx + 30}" y="${bry - 5}" class="dim-text">from perpendicular</text>
+    <text x="${cx - 10}" y="${y0 + 15}" class="dim-text">panel face</text>
+    <text x="${tlx - 4}" y="${y1 - 4}" class="dim-text">back</text>
+    <text x="${cx - 80}" y="${(y0+y1)/2 + 3}" class="dim-text">t</text>
+    <text x="${cx}" y="${H - 8}" text-anchor="middle">Section ${label}–${label} · dihedral ${fmt(dihedralDeg,2)}°</text>
+  `;
+}
+
+/* --- Live verification panel --- */
+function drawVerify() {
+  const edges = computeEdges();
+  let txt = '';
+  txt += `Vertices: ${VERTS.length}    Faces: ${QUADS.length}    Edges: ${edges.size}    `;
+  txt += `Euler V−E+F = ${VERTS.length - edges.size + QUADS.length}\n\n`;
+  txt += `Edge length L (long) = ${EDGE_U.toFixed(6)} u\n`;
+  txt += `Edge length S (short) = ${SHORT_U.toFixed(6)} u\n`;
+  txt += `Ratio S/L = ${(SHORT_U/EDGE_U).toFixed(6)}\n\n`;
+  // Tally dihedrals
+  const groups = new Map();
+  for (const [key, info] of edges) {
+    if (info.faces.length !== 2) continue;
+    const d = dihedral(info.faces[0], info.faces[1]);
+    const lenLabel = info.length > 4 ? 'L' : 'S';
+    const k = `${lenLabel}:${d.toFixed(3)}`;
+    if (!groups.has(k)) groups.set(k, { count: 0, length: info.length, d, type: lenLabel, sample: [] });
+    const g = groups.get(k);
+    g.count++; g.sample.push(`${key}(F${info.faces[0]}-F${info.faces[1]})`);
+  }
+  txt += `Distinct dihedrals:\n`;
+  for (const g of groups.values()) {
+    txt += `  ${g.type} edges  ×${g.count}   dihedral = ${g.d.toFixed(3)}°   `;
+    txt += `mitre/side = ${(g.d/2).toFixed(3)}°   bevel-from-perp = ${(90 - g.d/2).toFixed(3)}°\n`;
+  }
+  txt += `\nKite interior angles (face F1, sum should be 360°):\n`;
+  const kpts = projectFace(QUADS[1], 1);
+  const kang = interiorAngles(kpts);
+  txt += `  ${kang.map(a => a.toFixed(3) + '°').join('  ')}   Σ = ${kang.reduce((a,b)=>a+b,0).toFixed(3)}°\n`;
+  txt += `\nSquare interior angles (face F0, sum should be 360°):\n`;
+  const spts = projectFace(QUADS[0], 0);
+  const sang = interiorAngles(spts);
+  txt += `  ${sang.map(a => a.toFixed(3) + '°').join('  ')}   Σ = ${sang.reduce((a,b)=>a+b,0).toFixed(3)}°\n`;
+  document.getElementById('verify').textContent = txt;
+}
+
+document.getElementById('lenInput').addEventListener('input', rebuild);
+rebuild();
+</script>
+
+</body>
+</html>

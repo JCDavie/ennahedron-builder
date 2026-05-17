@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enneahedron homes — buildable configurations & cost catalog</title>
+<style>
+  :root { --ink:#111; --line:#222; --dim:#777; --accent:#b00020; --bg:#fff; --panel:#f6f6f4; --warm:#c47d2a; }
+  body {
+    font-family:"Helvetica Neue",Arial,sans-serif; color:var(--ink); background:var(--bg);
+    margin:0; padding:24px; font-size:12px; line-height:1.45;
+  }
+  h1 { font-size:21px; margin:0 0 4px; }
+  h2 { font-size:13px; margin:18px 0 6px; letter-spacing:1px; text-transform:uppercase; }
+  h3 { font-size:12px; margin:14px 0 6px; }
+  .sub { color:var(--dim); margin-bottom:14px; }
+  .card { border:1px solid var(--line); padding:14px 16px; margin-bottom:14px; background:var(--bg); }
+  .panel { background:var(--panel); }
+  .row { display:flex; gap:14px; flex-wrap:wrap; }
+  table { border-collapse:collapse; width:100%; font-size:11.5px; }
+  th, td { border:1px solid #999; padding:4px 7px; text-align:left; vertical-align:top; }
+  th { background:#eee; font-weight:600; cursor:pointer; user-select:none; }
+  td.num, .num { text-align:right; font-family:"Menlo","Courier New",monospace; }
+  .mono { font-family:"Menlo","Courier New",monospace; }
+  .accent { color:var(--accent); }
+  .total { background:#fffbe6; font-weight:700; }
+  .cat-tag {
+    display:inline-block; padding:1px 7px; border-radius:9px; font-size:10px;
+    background:#dbe6f4; color:#234; margin-right:4px;
+  }
+  .controls { margin-bottom:10px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  input[type=number],input[type=text] { width:130px; padding:3px 6px; font:inherit; }
+  select { padding:3px 6px; font:inherit; }
+  .cost-cell { font-weight:700; }
+  ul.tight { margin:4px 0 4px 18px; padding:0; }
+  ul.tight li { margin:2px 0; }
+  @media print {
+    body { padding:10mm; font-size:10pt; }
+    .controls { display:none; }
+    .card { break-inside:avoid; }
+    @page { size:A4 landscape; margin:8mm; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Enneahedron homes — buildable configurations & cost catalog</h1>
+<div class="sub">
+  57 home presets from <span class="mono">presets.json</span>, costed using the panel system from
+  <a href="home_panel_design.html"><span class="mono">home_panel_design.html</span></a>
+  (insulated timber-cassette panels, solid pine bevel edges, M16 demountable bolted joints).
+  All homes are flat-pack and re-locatable.
+</div>
+
+<!-- ===== Settings ===== -->
+<div class="card panel">
+  <h2>Settings (recompute live)</h2>
+  <div class="controls">
+    <label>Long edge L: <input id="L" type="number" min="2" max="12" step="0.5" value="6"> m</label>
+    <label>Square panel: <input id="ratesq" type="number" min="50" max="1000" step="5" value="380"> $/m²</label>
+    <label>Kite panel:   <input id="ratekt" type="number" min="50" max="1000" step="5" value="455"> $/m²</label>
+    <label>Pine edge:    <input id="ratepine" type="number" min="2" max="60" step="1" value="14"> $/lm</label>
+    <label>Bolt+insert:  <input id="ratebolt" type="number" min="1" max="60" step="1" value="25"> $/ea</label>
+    <label>Foundation:   <input id="ratefnd" type="number" min="50" max="1000" step="10" value="320"> $/m² ground</label>
+    <label>Filter: <input id="filter" type="text" placeholder="search name / category"></label>
+    <label>Category:
+      <select id="catSel"><option value="">all</option></select>
+    </label>
+  </div>
+  <div class="dim-text">
+    Square panel rate is the wall stack ($380); kite rate adds the roof premium ($75 → $455). Edit any value to refit your supplier quotes.
+    Foundation cost applies to <i>ground-floor footprint</i> only — heuristic estimate based on stacking pattern.
+  </div>
+</div>
+
+<!-- ===== Cost basis recap ===== -->
+<div class="card panel">
+  <h2>Cost basis (per home)</h2>
+  <table>
+    <tr><th>Item</th><th>Formula</th><th>Notes</th></tr>
+    <tr><td>Squares remaining</td><td class="mono">3·N − 2·sqJoins − mixedJoins</td><td>Each square↔square join removes the two facing square panels.</td></tr>
+    <tr><td>Kites remaining</td><td class="mono">6·N − 2·kiteJoins − mixedJoins</td><td>Each kite↔kite join removes the two facing kites.</td></tr>
+    <tr><td>L-edges (square↔kite)</td><td class="mono">2·squares + kites</td><td>Bevel 33.90°. Each L-edge runs 6.0 m (or your L).</td></tr>
+    <tr><td>S-edges (kite↔kite)</td><td class="mono">kites</td><td>Bevel 40.89°. Each S-edge runs 2.83 m (= 0.471·L).</td></tr>
+    <tr><td>Pine edge laminate</td><td class="mono">squares·24 m + kites·17.66 m</td><td>Solid radiata pine 90×90 dressed, glued to perimeter of every cassette.</td></tr>
+    <tr><td>M16 bolts (with inserts)</td><td class="mono">11·Ledges + 5·Sedges</td><td>600 mm centres on every edge. Same bolt for rim &amp; interior joins.</td></tr>
+    <tr><td>Foundation footprint</td><td class="mono">≈ groundModules · 36 m²</td><td>groundModules ≈ N − stackedAbove. Heuristic: assume each square↔square join with vertical stacking removes one ground module.</td></tr>
+  </table>
+</div>
+
+<!-- ===== Catalog ===== -->
+<div class="card">
+  <h2>Catalog</h2>
+  <table id="catalog">
+    <thead>
+      <tr>
+        <th data-sort="name">Name</th>
+        <th data-sort="cat">Category</th>
+        <th data-sort="mod" class="num">Mods</th>
+        <th data-sort="sq" class="num">Squares</th>
+        <th data-sort="kt" class="num">Kites</th>
+        <th data-sort="le" class="num">L-edges</th>
+        <th data-sort="se" class="num">S-edges</th>
+        <th data-sort="bolts" class="num">Bolts</th>
+        <th data-sort="pine" class="num">Pine (m)</th>
+        <th data-sort="env" class="num">Envelope m²</th>
+        <th data-sort="floor" class="num">Floor m²</th>
+        <th data-sort="cost" class="num">Shell $</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div class="dim-text" style="margin-top:6px">
+    Click any column header to sort. "Shell $" is materials + bolts + pine + foundation only — excludes glazing, doors, services, fit-out, design fees, consents, transport.
+  </div>
+</div>
+
+<!-- ===== Highlight: featured homes ===== -->
+<div class="card panel">
+  <h2>Featured cuts at a glance — typical homes</h2>
+  <table id="featured">
+    <thead><tr><th>Home</th><th class="num">Modules</th><th class="num">Floor m²</th><th class="num">Envelope m²</th><th class="num">Bolts</th><th class="num">Total shell $</th><th>Use case</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- ===== Notes ===== -->
+<div class="card">
+  <h2>Notes on this catalog</h2>
+  <ul class="tight">
+    <li><b>Counts are exact.</b> Squares, kites, L-edges, S-edges, bolts and pine totals are derived from the join structure of each preset and have no slack — they will match the on-site cut list once you choose L.</li>
+    <li><b>Foundation is heuristic.</b> The "ground modules" figure assumes vertical stacks (square↔square via the bottom face) put one module above another, removing it from the ground footprint. Walking around the actual preset in the builder will let you confirm; correct manually if your real layout differs.</li>
+    <li><b>Costs scale with your L.</b> Halving L drops material area by 4× and costs roughly with it; doubling L roughly quadruples them. The bevel angles (33.90° / 40.89°) <i>do not change</i> with L.</li>
+    <li><b>Same bolt scheme everywhere.</b> The demountable M16 join described in the panel design doc is used at <i>every</i> panel-to-panel edge — exterior rim and interior partitions alike — so any home in this catalog can be unbolted and moved.</li>
+    <li><b>Glazing and doors not in shell $.</b> Add ~$1,100/m² for triple-glazed wall panels and ~$5k per exterior door. A typical small home (3–5 modules) needs one door + ~10–20 m² of glazing.</li>
+  </ul>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================ */
+/*  Geometry constants (must match home_panel_design.html)       */
+/* ============================================================ */
+const SQUARE_AREA_FACTOR = 1.0;            // square area = L²
+const KITE_AREA_FACTOR   = 0.4411;          // kite area = 0.4411·L² (= 15.88 / 36 at L=6)
+const SHORT_EDGE_FACTOR  = 0.4714;          // S = 0.4714·L
+const SQ_PERIMETER_FACTOR = 4;              // square perimeter = 4·L
+const KT_PERIMETER_FACTOR = 2 + 2*0.4714;   // kite perimeter = 2L + 2S
+const BOLTS_PER_L = 11;   // ⌈L/0.6⌉ at L=6 → ceil(6/0.6) = 10, +1 for end. Use 11.
+const BOLTS_PER_S = 5;    // ⌈S/0.6⌉ at L=6, S=2.83 → ceil(2.83/0.6) = 5
+
+/* ============================================================ */
+/*  HOMES data (precomputed from presets.json)                   */
+/* ============================================================ */
+const HOMES = [
+ {"name":"High-Rise (24)","cat":"Apartments","desc":"Three-wide × eight-storey high-rise apartment block.","mod":24,"sq_joins":23,"kite_joins":0,"mixed_joins":0,"stacked":21},
+ {"name":"Skyscraper (60)","cat":"Apartments","desc":"Four wide × fifteen storeys.","mod":60,"sq_joins":59,"kite_joins":0,"mixed_joins":0,"stacked":56},
+ {"name":"L-Wing Home (5)","cat":"Architecture","desc":"Three-module main wing with a perpendicular two-module wing.","mod":5,"sq_joins":4,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Cathedral Row (6)","cat":"Architecture","desc":"3 ground + 3 peaked above via Upper-Front kites.","mod":6,"sq_joins":2,"kite_joins":3,"mixed_joins":0,"stacked":3},
+ {"name":"Bungalow Plus (6)","cat":"Architecture","desc":"5 wide single floor + 1 stacked over centre as loft.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":1},
+ {"name":"Greenhouse Row (8)","cat":"Architecture","desc":"4 ground + peaked Upper-Front and Upper-Back kite roofs.","mod":8,"sq_joins":5,"kite_joins":2,"mixed_joins":0,"stacked":2},
+ {"name":"Courtyard Home (8)","cat":"Architecture","desc":"Two parallel walls of 3 with connecting roof piece each end.","mod":8,"sq_joins":7,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Peaked Two-Storey (12)","cat":"Architecture","desc":"4-wide × 2 storeys + 4 kite peaks atop.","mod":12,"sq_joins":7,"kite_joins":4,"mixed_joins":0,"stacked":8},
+ {"name":"Two-Storey Row (14)","cat":"Architecture","desc":"7 wide × 2 storeys.","mod":14,"sq_joins":13,"kite_joins":0,"mixed_joins":0,"stacked":7},
+ {"name":"Cathedral Hall (16)","cat":"Architecture","desc":"8 ground + 8 Upper-Front kite peaks running full length.","mod":16,"sq_joins":7,"kite_joins":8,"mixed_joins":0,"stacked":8},
+ {"name":"Peaked Two-Storey (18)","cat":"Architecture","desc":"6-wide × 2 storeys + 6 kite peaks.","mod":18,"sq_joins":11,"kite_joins":6,"mixed_joins":0,"stacked":12},
+ {"name":"Cathedral Hall (20)","cat":"Architecture","desc":"10 ground + 10 Upper-Front kite peaks.","mod":20,"sq_joins":9,"kite_joins":10,"mixed_joins":0,"stacked":10},
+ {"name":"Peaked Two-Storey (24)","cat":"Architecture","desc":"8-wide × 2 storeys + 8 kite peaks.","mod":24,"sq_joins":15,"kite_joins":8,"mixed_joins":0,"stacked":16},
+ {"name":"Grand Arcade (24)","cat":"Architecture","desc":"12 wide ground + 12 kite peaks.","mod":24,"sq_joins":11,"kite_joins":12,"mixed_joins":0,"stacked":12},
+ {"name":"Cathedral Hall (30)","cat":"Architecture","desc":"15 ground + 15 Upper-Front kite peaks.","mod":30,"sq_joins":14,"kite_joins":15,"mixed_joins":0,"stacked":15},
+ {"name":"Peaked Two-Storey (30)","cat":"Architecture","desc":"10-wide × 2 storeys + 10 kite peaks.","mod":30,"sq_joins":19,"kite_joins":10,"mixed_joins":0,"stacked":20},
+ {"name":"Single Module","cat":"Basic","desc":"One enneahedron — minimal viable cabin.","mod":1,"sq_joins":0,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Square Pair","cat":"Basic","desc":"Two modules joined on right square faces.","mod":2,"sq_joins":1,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Bottom Stack","cat":"Basic","desc":"Two modules joined on bottom square faces.","mod":2,"sq_joins":1,"kite_joins":0,"mixed_joins":0,"stacked":1},
+ {"name":"Kite Pair (Front)","cat":"Basic","desc":"Two modules joined on Upper-Front kite faces.","mod":2,"sq_joins":0,"kite_joins":1,"mixed_joins":0,"stacked":0},
+ {"name":"Kite Pair (Back)","cat":"Basic","desc":"Two modules joined Upper-Back kite to Upper-Back kite.","mod":2,"sq_joins":0,"kite_joins":1,"mixed_joins":0,"stacked":0},
+ {"name":"Kite Pair (Lower-Front)","cat":"Basic","desc":"Two modules joined on Lower-Left-Front kite faces.","mod":2,"sq_joins":0,"kite_joins":1,"mixed_joins":0,"stacked":0},
+ {"name":"Kite Pair (Lower-Back)","cat":"Basic","desc":"Two modules joined on Lower-Right-Back kite faces.","mod":2,"sq_joins":0,"kite_joins":1,"mixed_joins":0,"stacked":0},
+ {"name":"Diagonal Tent","cat":"Basic","desc":"Front kite of one joined to back kite of another.","mod":2,"sq_joins":0,"kite_joins":1,"mixed_joins":0,"stacked":0},
+ {"name":"Log Cabin (4)","cat":"Cabins","desc":"4 modules in a row along a single ridge line.","mod":4,"sq_joins":3,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Lake Cabin (5)","cat":"Cabins","desc":"3 ground + centred loft module — gabled lakeside retreat.","mod":5,"sq_joins":3,"kite_joins":1,"mixed_joins":0,"stacked":1},
+ {"name":"Ski Chalet (6)","cat":"Cabins","desc":"2-module ground × 2 storeys + twin peaked roofs.","mod":6,"sq_joins":3,"kite_joins":2,"mixed_joins":0,"stacked":4},
+ {"name":"L-Shape","cat":"Composite","desc":"Three modules forming an L on the ground.","mod":3,"sq_joins":2,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Co-Housing Cluster (10)","cat":"Compounds","desc":"Two parallel rows of five.","mod":10,"sq_joins":9,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Eco Village (16)","cat":"Compounds","desc":"Four homes of 4 modules — village layout sharing edges.","mod":16,"sq_joins":15,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Container Studio (3)","cat":"Container Homes","desc":"Base + loft above + side extension.","mod":3,"sq_joins":2,"kite_joins":0,"mixed_joins":0,"stacked":1},
+ {"name":"Plus Container (4)","cat":"Container Homes","desc":"Plus-shape: 3-wide + one extension.","mod":4,"sq_joins":3,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"L-Shape Container (5)","cat":"Container Homes","desc":"3-container ground + 2 below one end.","mod":5,"sq_joins":4,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"L-Shape Container (6)","cat":"Container Homes","desc":"4-wide ground + 2 below short arm.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"U-Shape Container (6)","cat":"Container Homes","desc":"4-wide ground + arms below each end.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"T-Shape Container (6)","cat":"Container Homes","desc":"4-wide main wing + 2 below middle.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Stepped Container (7)","cat":"Container Homes","desc":"Staggered 4-wide ground + 3 offset below.","mod":7,"sq_joins":6,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"U-Shape Container (8)","cat":"Container Homes","desc":"6-wide ground + bottom-stacks both ends.","mod":8,"sq_joins":7,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Terraced Containers (8)","cat":"Container Homes","desc":"6-container row + 2 alternating clerestory peaks.","mod":8,"sq_joins":5,"kite_joins":2,"mixed_joins":0,"stacked":2},
+ {"name":"Cottage (3)","cat":"Cottages","desc":"2 ground + single Upper-Front peak roof.","mod":3,"sq_joins":1,"kite_joins":1,"mixed_joins":0,"stacked":1},
+ {"name":"Saltbox Cottage (4)","cat":"Cottages","desc":"2 ground + 2 Upper-Front peak roofs — saltbox profile.","mod":4,"sq_joins":1,"kite_joins":2,"mixed_joins":0,"stacked":2},
+ {"name":"Country Cottage (4)","cat":"Cottages","desc":"3 wide + single peaked dormer in middle.","mod":4,"sq_joins":2,"kite_joins":1,"mixed_joins":0,"stacked":1},
+ {"name":"Storybook Cottage (5)","cat":"Cottages","desc":"2 ground + peaks on both Upper-Front & Upper-Back.","mod":5,"sq_joins":1,"kite_joins":3,"mixed_joins":0,"stacked":3},
+ {"name":"Stone Cottage (5)","cat":"Cottages","desc":"3 ground + 2 stacked above one end.","mod":5,"sq_joins":4,"kite_joins":0,"mixed_joins":0,"stacked":2},
+ {"name":"Family Bungalow (5)","cat":"Family Homes","desc":"5 modules in a single row.","mod":5,"sq_joins":4,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Ranch House (6)","cat":"Family Homes","desc":"5 ground + 1 stacked module bedroom suite above.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":1},
+ {"name":"Suburban Home (7)","cat":"Family Homes","desc":"3 ground + 3 stacked + peaked attic in centre.","mod":7,"sq_joins":5,"kite_joins":1,"mixed_joins":0,"stacked":4},
+ {"name":"Colonial Home (8)","cat":"Family Homes","desc":"4-module ground × 2 storeys.","mod":8,"sq_joins":7,"kite_joins":0,"mixed_joins":0,"stacked":4},
+ {"name":"Tudor Home (8)","cat":"Family Homes","desc":"3-wide × 2-storey + 3 peaked dormers.","mod":8,"sq_joins":4,"kite_joins":3,"mixed_joins":0,"stacked":5},
+ {"name":"Farmhouse (9)","cat":"Family Homes","desc":"5 ground + 4 module upper storey.","mod":9,"sq_joins":8,"kite_joins":0,"mixed_joins":0,"stacked":4},
+ {"name":"Mansion (15)","cat":"Family Homes","desc":"5-wide × 3-storey grand mansion.","mod":15,"sq_joins":14,"kite_joins":0,"mixed_joins":0,"stacked":10},
+ {"name":"Triple Row","cat":"Linear","desc":"Three modules in a row, joined Left↔Right.","mod":3,"sq_joins":2,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Mountain Lodge (8)","cat":"Lodges","desc":"4-wide ground + 4 peaked roof modules.","mod":8,"sq_joins":3,"kite_joins":4,"mixed_joins":0,"stacked":4},
+ {"name":"Duplex (4)","cat":"Multi-Family","desc":"Two side-by-side two-storey units.","mod":4,"sq_joins":3,"kite_joins":0,"mixed_joins":0,"stacked":2},
+ {"name":"Couples Pod (2)","cat":"Tiny Homes","desc":"Two modules joined Left↔Right — main + sleep.","mod":2,"sq_joins":1,"kite_joins":0,"mixed_joins":0,"stacked":0},
+ {"name":"Tiny A-Frame (3)","cat":"Tiny Homes","desc":"Single base + twin Upper-Front and Upper-Back kite peaks.","mod":3,"sq_joins":0,"kite_joins":2,"mixed_joins":0,"stacked":2},
+ {"name":"Triplex (6)","cat":"Vertical","desc":"Three side-by-side two-storey units.","mod":6,"sq_joins":5,"kite_joins":0,"mixed_joins":0,"stacked":3},
+];
+
+const FEATURED_NAMES = [
+  "Single Module","Couples Pod (2)","Cottage (3)","Saltbox Cottage (4)",
+  "Family Bungalow (5)","Ranch House (6)","Colonial Home (8)","Farmhouse (9)",
+  "Mansion (15)","Eco Village (16)"
+];
+
+/* Populate category select */
+const cats = [...new Set(HOMES.map(h=>h.cat))].sort();
+const catSel = document.getElementById('catSel');
+for (const c of cats) {
+  const o = document.createElement('option'); o.value = c; o.textContent = c;
+  catSel.appendChild(o);
+}
+
+/* ============================================================ */
+/*  Per-home derivation                                          */
+/* ============================================================ */
+function derive(h, opt){
+  const N = h.mod;
+  const squares = 3*N - 2*h.sq_joins - h.mixed_joins;
+  const kites   = 6*N - 2*h.kite_joins - h.mixed_joins;
+  const Ledges  = 2*squares + kites;            // count of L-edges
+  const Sedges  = kites;                          // count of S-edges
+  const bolts   = BOLTS_PER_L*Ledges + BOLTS_PER_S*Sedges;
+  const pineM   = squares*SQ_PERIMETER_FACTOR*opt.L + kites*KT_PERIMETER_FACTOR*opt.L;
+  const sqArea  = squares * SQUARE_AREA_FACTOR * opt.L*opt.L;
+  const ktArea  = kites   * KITE_AREA_FACTOR   * opt.L*opt.L;
+  const envelope= sqArea + ktArea;
+  const groundMods = Math.max(1, N - h.stacked);
+  const floorM2 = groundMods * (opt.L*opt.L);
+  const matCost = sqArea*opt.rateSq + ktArea*opt.rateKt;
+  const pineCost= pineM * opt.ratePine;
+  const boltCost= bolts * opt.rateBolt;     // bolt+insert combined rate
+  const fndCost = floorM2 * opt.rateFnd;
+  const totCost = matCost + pineCost + boltCost + fndCost;
+  return {
+    squares, kites, Ledges, Sedges, bolts, pineM,
+    envelope, floorM2, sqArea, ktArea, matCost, pineCost, boltCost, fndCost, totCost
+  };
+}
+
+/* ============================================================ */
+/*  Render                                                       */
+/* ============================================================ */
+function num(n, d=0){ return n.toLocaleString(undefined,{maximumFractionDigits:d, minimumFractionDigits: d>0?d:0}); }
+function dollar(n){ return '$' + Math.round(n).toLocaleString(); }
+
+let sortKey = 'cost', sortDir = -1;
+function rebuild(){
+  const opt = {
+    L:        parseFloat(document.getElementById('L').value)||6,
+    rateSq:   parseFloat(document.getElementById('ratesq').value)||380,
+    rateKt:   parseFloat(document.getElementById('ratekt').value)||455,
+    ratePine: parseFloat(document.getElementById('ratepine').value)||14,
+    rateBolt: parseFloat(document.getElementById('ratebolt').value)||25,
+    rateFnd:  parseFloat(document.getElementById('ratefnd').value)||320,
+  };
+  const filt = (document.getElementById('filter').value||'').toLowerCase();
+  const catFilt = catSel.value;
+
+  const rows = HOMES
+    .filter(h => !catFilt || h.cat===catFilt)
+    .filter(h => !filt || (h.name+' '+h.cat+' '+h.desc).toLowerCase().includes(filt))
+    .map(h => ({h, d: derive(h, opt)}));
+
+  // sort
+  const sortMap = {
+    name: r=>r.h.name, cat: r=>r.h.cat, mod: r=>r.h.mod,
+    sq: r=>r.d.squares, kt: r=>r.d.kites, le: r=>r.d.Ledges, se: r=>r.d.Sedges,
+    bolts: r=>r.d.bolts, pine: r=>r.d.pineM,
+    env: r=>r.d.envelope, floor: r=>r.d.floorM2, cost: r=>r.d.totCost
+  };
+  rows.sort((a,b)=>{
+    const va = sortMap[sortKey](a), vb = sortMap[sortKey](b);
+    if (typeof va === 'string') return sortDir * va.localeCompare(vb);
+    return sortDir * (va-vb);
+  });
+
+  const tb = document.querySelector('#catalog tbody');
+  tb.innerHTML = rows.map(({h,d}) => `
+    <tr title="${h.desc}">
+      <td>${h.name}</td>
+      <td><span class="cat-tag">${h.cat}</span></td>
+      <td class="num">${h.mod}</td>
+      <td class="num">${d.squares}</td>
+      <td class="num">${d.kites}</td>
+      <td class="num">${d.Ledges}</td>
+      <td class="num">${d.Sedges}</td>
+      <td class="num">${num(d.bolts)}</td>
+      <td class="num">${num(d.pineM,0)}</td>
+      <td class="num">${num(d.envelope,0)}</td>
+      <td class="num">${num(d.floorM2,0)}</td>
+      <td class="num cost-cell">${dollar(d.totCost)}</td>
+    </tr>
+  `).join('');
+
+  // featured
+  const ftb = document.querySelector('#featured tbody');
+  const featRows = FEATURED_NAMES
+    .map(n => HOMES.find(h => h.name===n))
+    .filter(Boolean)
+    .map(h => ({h, d:derive(h,opt)}));
+  const useCases = {
+    "Single Module":"Off-grid solo cabin / studio",
+    "Couples Pod (2)":"Couples retreat / Airbnb",
+    "Cottage (3)":"Single-bedroom rural cottage",
+    "Saltbox Cottage (4)":"Two-bed + open-loft cottage",
+    "Family Bungalow (5)":"Single-storey family home",
+    "Ranch House (6)":"3-bed family + master suite up",
+    "Colonial Home (8)":"4-bed two-storey family",
+    "Farmhouse (9)":"Multi-generation rural farmhouse",
+    "Mansion (15)":"Large multi-family residence",
+    "Eco Village (16)":"4 cottages × 4 mods — community",
+  };
+  ftb.innerHTML = featRows.map(({h,d})=>`
+    <tr>
+      <td><b>${h.name}</b><br><span class="dim-text">${h.desc}</span></td>
+      <td class="num">${h.mod}</td>
+      <td class="num">${num(d.floorM2,0)}</td>
+      <td class="num">${num(d.envelope,0)}</td>
+      <td class="num">${num(d.bolts)}</td>
+      <td class="num cost-cell">${dollar(d.totCost)}</td>
+      <td>${useCases[h.name]||''}</td>
+    </tr>
+  `).join('');
+}
+
+document.querySelectorAll('#catalog thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const k = th.dataset.sort;
+    if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = (k==='name'||k==='cat')?1:-1; }
+    rebuild();
+  });
+});
+['L','ratesq','ratekt','ratepine','ratebolt','ratefnd','filter','catSel'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', rebuild);
+});
+rebuild();
+</script>
+
+</body>
+</html>

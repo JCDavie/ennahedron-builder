@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Connected pods — adjusted bevels at the doorway</title>
+<style>
+  :root { --ink:#111; --line:#222; --dim:#777; --accent:#b00020; --bg:#fff; --panel:#f6f6f4; --good:#0a7d36; --warn:#b35900; --doorway:#fdebcc; }
+  body {
+    font-family:"Helvetica Neue",Arial,sans-serif; color:var(--ink); background:var(--bg);
+    margin:0; padding:24px; font-size:12px; line-height:1.45;
+  }
+  h1 { font-size:21px; margin:0 0 4px; }
+  h2 { font-size:13px; margin:18px 0 6px; letter-spacing:1px; text-transform:uppercase; }
+  h3 { font-size:12.5px; margin:14px 0 4px; }
+  .sub { color:var(--dim); margin-bottom:14px; }
+  .card { border:1px solid var(--line); padding:14px 16px; margin-bottom:14px; background:var(--bg); }
+  .panel { background:var(--panel); }
+  .row { display:flex; gap:14px; flex-wrap:wrap; }
+  .col { flex:1 1 320px; min-width:320px; }
+  table { border-collapse:collapse; width:100%; font-size:11.5px; }
+  th, td { border:1px solid #999; padding:5px 8px; text-align:left; vertical-align:top; }
+  th { background:#eee; font-weight:600; }
+  td.num, .num { text-align:right; font-family:"Menlo","Courier New",monospace; }
+  .mono { font-family:"Menlo","Courier New",monospace; }
+  .accent { color:var(--accent); font-weight:700; }
+  .good { color:var(--good); font-weight:600; }
+  .formula {
+    font-family:"Menlo","Courier New",monospace;
+    background:#f0f0ec; padding:10px 12px; border-left:3px solid var(--accent);
+    margin:8px 0; white-space:pre;
+  }
+  svg { display:block; width:100%; height:auto; background:#fff; }
+  text { font-family:"Helvetica Neue",Arial,sans-serif; font-size:10.5px; fill:var(--ink); }
+  .dim-text { fill:var(--dim); font-size:10px; }
+  .bevel-text { fill:var(--accent); font-weight:600; font-size:11px; }
+  .face-square { fill:#eef4ec; stroke:#333; stroke-width:1; }
+  .face-kite   { fill:#fcf2dd; stroke:#333; stroke-width:1; }
+  .face-removed { fill:none; stroke:#b00020; stroke-width:1.5; stroke-dasharray:6 4; }
+  .doorway-edge { stroke:#b00020; stroke-width:2.2; }
+  .normal-edge { stroke:#333; stroke-width:1; }
+  .arrow { stroke:#888; stroke-width:0.7; fill:none; marker-end:url(#arr); }
+  ul.tight { margin:4px 0 4px 18px; padding:0; }
+  ul.tight li { margin:2px 0; }
+  .stamp {
+    display:inline-block; padding:1px 7px; border-radius:9px; font-size:10px;
+    background:#dff2e3; color:#0a5a2a;
+  }
+  @media print {
+    body { padding:10mm; font-size:10pt; }
+    .card { break-inside:avoid; }
+    @page { size:A4; margin:10mm; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Connected pods — adjusted bevels at the doorway</h1>
+<div class="sub">
+  When two enneahedron modules are joined face-to-face by removing a shared square wall (F8 of module A glued to F0 of module B), the perimeter of the new doorway needs <b>different bevels</b> on the kite panels that border it.
+  Companion to <a href="mitre_drawing.html">mitre_drawing.html</a> and <a href="home_panel_design.html">home_panel_design.html</a>.
+</div>
+
+<!-- ===== Headline ===== -->
+<div class="card panel">
+  <h2>Headline result</h2>
+  <table>
+    <tr><th>Edge type</th><th>Original (single module)</th><th>Doorway perimeter (joined modules)</th></tr>
+    <tr>
+      <td><b>Kite-to-square seam</b><br>(was 33.90° bevel for the L-edge)</td>
+      <td><b>Dihedral 112.21°</b><br>Bevel <span class="accent">33.90°</span> from perpendicular</td>
+      <td><b>Dihedral 135.57°</b><br>Bevel <span class="accent">22.21°</span> from perpendicular</td>
+    </tr>
+  </table>
+  <p style="margin-top:8px"><b>4 edges per doorway need re-bevelling</b> — the four perimeter edges of the removed square. They're the L-edges (6.0 m at L = 6 m) on the four kite panels that previously met the now-absent square (F2, F3, F6, F7 in module A, and the matching kites in module B).</p>
+  <p>All other edges of those kites and all edges of unchanged panels keep their original bevels (33.90° on long edges, 40.89° on short edges).</p>
+</div>
+
+<!-- ===== Why the new bevel = 22.21° ===== -->
+<div class="card">
+  <h2>Why the new bevel is 22.21°</h2>
+  <p>When module B is placed against module A by gluing B's F0 face to A's F8 face, B is the mirror image of A across that plane. So the kite from A and the matching kite from B at any one perimeter edge are mirror twins, joined along an edge that lies in the (now-removed) square's plane.</p>
+
+  <div class="formula">Each kite originally made dihedral 112.21° with the square it bordered.
+The angle between the kite's plane and the square's plane is therefore
+180° − 112.21° = 67.79°.
+
+After the square is removed and B's mirrored kite takes its place,
+the two kites flare 67.79° on each side of the (former) square's plane.
+
+New interior dihedral between the two kites:
+    θ_new  =  180° − 2 × (90° − 67.79°)
+           =  180° − 2 × 22.21°
+           =  135.57°
+
+New bevel from perpendicular (one side of the joint):
+    β_new  =  90° − θ_new / 2
+           =  90° − 67.79°
+           =  22.21°</div>
+
+  <p class="dim-text">Verified by computing the dot product of A's F2 outward normal with B's F2 outward normal (after reflection through the F8 plane): N·N′ = 0.7143, so the angle between normals is acos(0.7143) = 44.43°, giving an interior dihedral of 180° − 44.43° = 135.57°. All four perimeter edges of the doorway give the same answer by symmetry.</p>
+</div>
+
+<!-- ===== Geometry diagram ===== -->
+<div class="row">
+  <div class="card col">
+    <h2>Plan view — two pods joined</h2>
+    <svg id="planSvg" viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="dim-text" style="text-align:center">
+      Module A on the left, module B (mirrored) on the right. Red dashed square = removed walls. Red bold edges = doorway perimeter — the four edges that need the new <b>22.21°</b> bevel.
+    </div>
+  </div>
+
+  <div class="card col">
+    <h2>Section through doorway perimeter edge</h2>
+    <svg id="sectionSvg" viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="dim-text" style="text-align:center">
+      Kite from A (left) meets mirrored kite from B (right) at the new joint. Internal dihedral 135.57°. Each panel's bevel is <b>22.21°</b> from perpendicular.
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cut list update for connected pair ===== -->
+<div class="card">
+  <h2>Cut-list adjustment for a 2-module pod</h2>
+  <table>
+    <thead>
+      <tr><th>Module</th><th>Face</th><th>Status</th><th>Edges affected</th><th>Bevel change</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A</td><td><b>F8</b> (right square)</td><td class="accent">REMOVED — doorway</td><td>—</td><td>—</td>
+      </tr>
+      <tr>
+        <td>A</td><td><b>F2</b> (kite)</td><td>kept</td><td class="mono">edge 1-7 (the edge that met F8)</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>A</td><td><b>F3</b> (kite)</td><td>kept</td><td class="mono">edge 1-9</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>A</td><td><b>F6</b> (kite)</td><td>kept</td><td class="mono">edge 7-11</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>A</td><td><b>F7</b> (kite)</td><td>kept</td><td class="mono">edge 9-11</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr><td colspan="5" style="background:#eef">— same applies to module B with its F0 removed —</td></tr>
+      <tr>
+        <td>B</td><td><b>F0</b> (left square)</td><td class="accent">REMOVED — doorway</td><td>—</td><td>—</td>
+      </tr>
+      <tr>
+        <td>B</td><td><b>F2</b></td><td>kept</td><td class="mono">edge 1-2</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>B</td><td><b>F3</b></td><td>kept</td><td class="mono">edge 4-1</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>B</td><td><b>F1</b></td><td>kept</td><td class="mono">edge 2-3</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+      <tr>
+        <td>B</td><td><b>F4</b></td><td>kept</td><td class="mono">edge 3-4</td><td>33.90° → <b class="accent">22.21°</b></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="5">
+        <b>Total panels for a 2-pod home:</b> 9 + 9 − 2 = <b>16 panels</b><br>
+        <b>Total re-bevelled edges:</b> 8 (4 on each module, all of them L-edges that used to bevel at 33.90°)<br>
+        <b>Number of distinct bevel angles in the build:</b> still <b>3</b> total (33.90°, 40.89°, 22.21°)
+      </td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- ===== Re-bevelled kite drawing ===== -->
+<div class="card">
+  <h2>Re-bevelled kite — true-shape mark-out</h2>
+  <svg id="kiteSvg" viewBox="0 0 480 360" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="dim-text" style="text-align:center">
+    The single L-edge that used to meet the removed square gets the new <b>22.21°</b> bevel (red). The other three edges keep their original bevels (33.90° on the other long edge, 40.89° on the two short edges).
+  </div>
+</div>
+
+<!-- ===== Doorway dimensions ===== -->
+<div class="card panel">
+  <h2>Doorway opening dimensions (at L = 6 m)</h2>
+  <table>
+    <tr><th>Dimension</th><th class="num">Value</th><th>Notes</th></tr>
+    <tr><td>Doorway opening (raw — outer face of the missing square)</td><td class="num">6.000 m × 6.000 m</td><td>Equal to L. Plenty for human movement, machinery, or full-width vehicle access.</td></tr>
+    <tr><td>Inner face of the doorway (after panel thickness)</td><td class="num">5.34 m × 5.34 m</td><td>Each L-edge contracts by 0.673·t with t = 240 mm core (= 161 mm per side).</td></tr>
+    <tr><td>Headroom on the centreline (apex height of either module)</td><td class="num">7.35 m</td><td>The full inner height of the enneahedron — vaulted ceiling all the way through.</td></tr>
+    <tr><td>Effective floor span across both modules</td><td class="num">12.00 m</td><td>Two 6 m square floors butted together.</td></tr>
+  </table>
+  <p style="margin-top:6px"><span class="stamp">No lintel needed</span> &nbsp; The doorway is itself the perimeter of two structurally complete kite-edged openings — no separate header is required because the assembled solid is closed by the surrounding panels.</p>
+</div>
+
+<!-- ===== Practical notes ===== -->
+<div class="card">
+  <h2>Practical notes</h2>
+  <ul class="tight">
+    <li><b>Mark which kites are "doorway kites" before cutting.</b> They look identical to standard kites until bevelled — easy to mix up. Use a paint dot on the OUTSIDE face of any kite that needs the 22.21° bevel.</li>
+    <li><b>Same dial-in workflow as before.</b> Set the saw to 22.21° using the Wixey gauge, cut a test offcut, double-check the included angle (should be <b>2 × 22.21° = 44.43°</b> when two off-cuts are placed face-to-face).</li>
+    <li><b>Bolted joint detail unchanged.</b> The pine edge laminate, M16 bolts, EPDM gasket, Z-flashing and cover-strip from <a href="home_panel_design.html">home_panel_design.html</a> all work identically at the new dihedral. The gasket compresses the same; only the bevel angle of the cut changes.</li>
+    <li><b>Demountability preserved.</b> The doorway joint is just like any other rim joint — unbolt to separate the modules and move them independently.</li>
+    <li><b>Sealing.</b> The doorway perimeter is now an interior corner (135.57° looking from inside one module toward the other) rather than a joint between coplanar walls. EPDM bulb gasket along the new edges seals the wall transition; no additional flashing needed unless you're enclosing it for fire separation.</li>
+    <li><b>For 3+ modules in a row.</b> Each additional module adds another doorway with the same 4 re-bevelled edges. Joining via F0↔F8 (left↔right squares) is the most common — see "Triple Row" or "Family Bungalow (5)" in <a href="home_configurations.html">home_configurations.html</a>.</li>
+    <li><b>For different join faces.</b> If you join two modules via the bottom (F5↔F5 — two pods stacked) or via kite faces (the various "Kite Pair" presets), the new dihedral is different. Re-derive using the same formula:<br>
+      <span class="formula">θ_new = 180° − 2·(90° − ε)
+where ε = 180° − θ_original_with_removed_face</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ===== Live verification ===== -->
+<div class="card panel">
+  <h2>Live verification (re-derived from OBJ data)</h2>
+  <div id="verify" class="mono" style="white-space:pre"></div>
+</div>
+
+<script>
+"use strict";
+
+/* ==== OBJ data (same as other docs) ==== */
+const VERTS = [
+  [-0.368391, 3.709133, 3.592102],[-2.164442, 0.598281, 0.000000],[-3.960493,-2.512571, 3.592102],
+  [-2.164442, 0.598281, 7.184205],[-0.368391,-0.438670,-1.197367],[-0.368391,-2.512571, 0.000000],
+  [ 1.427660, 0.598281, 0.000000],[-0.368391,-0.438670, 8.381572],[ 1.427660, 0.598281, 7.184205],
+  [-0.368391,-2.512571, 7.184205],[ 3.223712,-2.512571, 3.592102],
+];
+const QUADS = [
+  [2,3,4,1],[2,5,6,3],[2,1,7,5],[4,8,9,1],[4,3,10,8],
+  [6,11,10,3],[7,11,6,5],[9,8,10,11],[7,1,9,11],
+];
+const NORMALS = [
+  [-0.866025, 0.5, 0],[-0.654654,-0.377964,-0.654654],[0,0.755929,-0.654654],
+  [0,0.755929,0.654654],[-0.654654,-0.377964,0.654654],[0,-1,0],
+  [0.654654,-0.377964,-0.654654],[0.654654,-0.377964,0.654654],[0.866025,0.5,0],
+];
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const len=a=>Math.hypot(a[0],a[1],a[2]);
+const norm=a=>{const m=len(a);return [a[0]/m,a[1]/m,a[2]/m];};
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const v=i=>VERTS[i-1];
+const deg=r=>r*180/Math.PI;
+const fmt=(n,d=2)=>n.toFixed(d);
+
+/* Reflect a normal vector through a plane with unit normal n̂ */
+function reflectNormal(v, n) {
+  const dn = dot(v, n);
+  return [v[0] - 2*dn*n[0], v[1] - 2*dn*n[1], v[2] - 2*dn*n[2]];
+}
+
+/* Compute new dihedral for kite-on-A meeting mirrored-kite-on-B across the F8 plane */
+function newDihedral(faceIdx_A, mirrorPlaneFaceIdx) {
+  const N_A = NORMALS[faceIdx_A];
+  const N_B = reflectNormal(N_A, NORMALS[mirrorPlaneFaceIdx]);
+  const d = Math.acos(Math.max(-1, Math.min(1, dot(N_A, N_B))));
+  return 180 - deg(d);
+}
+
+const NEW_DIHEDRAL = newDihedral(2, 8);   // F2 reflected through F8
+const NEW_BEVEL    = 90 - NEW_DIHEDRAL/2;
+
+/* ==== Plan-view SVG ==== */
+(function drawPlan(){
+  const svg = document.getElementById('planSvg');
+  const W=460, H=320;
+  const cx = W/2;
+  // Module A as a square outline on the left, B on the right, joined at the centre.
+  const sw=140, sh=200;
+  const xA = cx - sw, yA = (H-sh)/2;
+  const xB = cx,      yB = (H-sh)/2;
+  let html = '';
+  // Defs for arrowhead
+  html += '<defs><marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#888"/></marker></defs>';
+  // Module A outline
+  html += `<rect x="${xA}" y="${yA}" width="${sw}" height="${sh}" class="face-square"/>`;
+  html += `<text x="${xA + sw/2}" y="${yA + sh/2 - 6}" text-anchor="middle">Module A</text>`;
+  html += `<text x="${xA + sw/2}" y="${yA + sh/2 + 8}" text-anchor="middle" class="dim-text">F0 (left wall)</text>`;
+  // Module B outline
+  html += `<rect x="${xB}" y="${yB}" width="${sw}" height="${sh}" class="face-square"/>`;
+  html += `<text x="${xB + sw/2}" y="${yB + sh/2 - 6}" text-anchor="middle">Module B (mirrored)</text>`;
+  html += `<text x="${xB + sw/2}" y="${yB + sh/2 + 8}" text-anchor="middle" class="dim-text">F8 (right wall)</text>`;
+  // Doorway line in the middle (where F8 of A and F0 of B used to be)
+  html += `<line x1="${cx}" y1="${yA - 12}" x2="${cx}" y2="${yA + sh + 12}" class="face-removed"/>`;
+  html += `<text x="${cx}" y="${yA - 18}" text-anchor="middle" class="bevel-text">F8 (A) + F0 (B) — REMOVED</text>`;
+  html += `<text x="${cx}" y="${yA + sh + 28}" text-anchor="middle" class="dim-text">doorway opening — 6.0 m × 6.0 m</text>`;
+  // Doorway perimeter — top, bottom, front, back (we'll just show top and bottom in plan)
+  // Mark the four kites of A that meet F8: F2 (top-back), F3 (top-front), F6 (bottom-back), F7 (bottom-front)
+  // Place small kite labels around the central seam
+  const kiteCalls = [
+    { x: cx - 30, y: yA - 4, text: 'A·F2', adj: 'top-back kite' },
+    { x: cx + 30, y: yA - 4, text: 'B·F2', adj: '(mirror)' },
+    { x: cx - 30, y: yA + sh + 14, text: 'A·F7', adj: 'bottom-front kite' },
+    { x: cx + 30, y: yA + sh + 14, text: 'B·F4', adj: '(mirror)' },
+  ];
+  for (const k of kiteCalls) {
+    html += `<text x="${k.x}" y="${k.y}" text-anchor="middle" class="dim-text">${k.text}</text>`;
+  }
+  // Highlight one perimeter edge in red
+  html += `<line x1="${cx-6}" y1="${yA}" x2="${cx+6}" y2="${yA}" class="doorway-edge"/>`;
+  html += `<text x="${cx + 70}" y="${yA - 4}" class="bevel-text">new bevel: 22.21°</text>`;
+  html += `<line x1="${cx + 65}" y1="${yA - 8}" x2="${cx + 4}" y2="${yA - 1}" class="arrow"/>`;
+  // Compass north
+  html += `<text x="20" y="20" class="dim-text">plan view (looking down)</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ==== Section view of the new joint ==== */
+(function drawSection(){
+  const svg = document.getElementById('sectionSvg');
+  const W=460, H=320;
+  const cx = W/2, joinY = H/2 + 30;
+  const dihedral = NEW_DIHEDRAL;
+  const half = (dihedral/2) * Math.PI/180;       // half-dihedral in radians
+  const bevel = NEW_BEVEL;
+  const t = 30;             // visualised material thickness (px)
+  const Lpx = 150;
+  // Each kite extends from the joint at angle "half" from the joint axis (which we put vertical).
+  // Outside of the assembled structure is "up" in this section.
+  // Face direction unit vectors:
+  //   A side (left): face leans up-and-to-left at angle (90 - half) above horizontal
+  const ang = (90 - dihedral/2) * Math.PI/180;
+  const fxA = -Math.cos(ang), fyA = -Math.sin(ang);   // up-left
+  const fxB =  Math.cos(ang), fyB = -Math.sin(ang);   // up-right
+  const nxA =  Math.sin(ang), nyA = -Math.cos(ang);   // inward+down for A
+  const nxB = -Math.sin(ang), nyB = -Math.cos(ang);
+
+  function panelPoly(fx, fy, nx, ny){
+    const o1 = [cx, joinY];
+    const o2 = [cx + fx*Lpx, joinY + fy*Lpx];
+    const i2 = [o2[0] - nx*t, o2[1] - ny*t];
+    const i1 = [o1[0] - nx*t, o1[1] - ny*t];
+    return [o1, o2, i2, i1];
+  }
+  const PA = panelPoly(fxA, fyA, nxA, nyA);
+  const PB = panelPoly(fxB, fyB, nxB, nyB);
+
+  function poly(pts, cls){
+    return `<polygon points="${pts.map(p=>p[0]+','+p[1]).join(' ')}" class="${cls}"/>`;
+  }
+  let html = '';
+  html += `<text x="${cx}" y="20" text-anchor="middle" class="dim-text">section through doorway perimeter joint — outside up, inside down</text>`;
+  // Two kite cross-sections
+  html += poly(PA, 'face-kite');
+  html += poly(PB, 'face-kite');
+  // Joint axis (vertical line)
+  html += `<line x1="${cx}" y1="${joinY-t-12}" x2="${cx}" y2="${joinY+12}" stroke="#b00020" stroke-width="1" stroke-dasharray="4 3"/>`;
+  // Bevel angle marker — small arc near joint
+  const r=24;
+  html += `<path d="M ${cx} ${joinY - r} A ${r} ${r} 0 0 1 ${cx + r*Math.sin(half)} ${joinY - r*Math.cos(half)}" stroke="#b00020" stroke-width="0.9" fill="none"/>`;
+  html += `<text x="${cx + 30}" y="${joinY - r - 4}" class="bevel-text">θ/2 = ${fmt(dihedral/2)}°</text>`;
+  // Bevel from perpendicular labels on each side
+  html += `<text x="${cx - 90}" y="${joinY - 14}" class="bevel-text">bevel 22.21°</text>`;
+  html += `<text x="${cx + 50}" y="${joinY - 14}" class="bevel-text">bevel 22.21°</text>`;
+  // A and B labels
+  html += `<text x="${PA[1][0] - 8}" y="${PA[1][1] - 4}">A·kite</text>`;
+  html += `<text x="${PB[1][0] + 8}" y="${PB[1][1] - 4}">B·kite (mirror)</text>`;
+  // Inside / outside
+  html += `<text x="${cx}" y="${H - 12}" text-anchor="middle" class="dim-text">interior dihedral ${fmt(dihedral)}°</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ==== Re-bevelled kite mark-out ==== */
+(function drawKite(){
+  const svg = document.getElementById('kiteSvg');
+  const W=480, H=360;
+  // Same projection as cut_plan_6m kite but flag the F8-side L-edge as "new bevel"
+  // Project Face F2 (kite adjacent to F8 via edge 1-7)
+  // Quad order from QUADS[2] = [2,1,7,5], so verts are v2, v1, v7, v5
+  // Edges in quad order:
+  //  e0: v2 -> v1 (L = 5.08 u — this is the edge that joined F0 in single module)
+  //  e1: v1 -> v7 (L = 5.08 u — this is the edge that joined F8 — the one we re-bevel)
+  //  e2: v7 -> v5 (S = 2.39 u — joined F6, kite-kite)
+  //  e3: v5 -> v2 (S = 2.39 u — joined F1, kite-kite)
+  const qIdx = 2;
+  const quad = QUADS[qIdx];
+  const pts3 = quad.map(v);
+  const O = pts3[0];
+  const eX = norm(sub(pts3[1], O));
+  const eY = norm(cross(NORMALS[qIdx], eX));
+  const M_PER_U = 6.0 / len(sub(v(2), v(3)));   // L = 6 m
+  const pts2 = pts3.map(p => {
+    const r = sub(p, O);
+    return [dot(r, eX) * M_PER_U, dot(r, eY) * M_PER_U];
+  });
+  const xs = pts2.map(p=>p[0]), ys = pts2.map(p=>p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const w = maxX - minX, h = maxY - minY;
+  const padX = 90, padY = 60;
+  const s = Math.min((W - 2*padX)/w, (H - 2*padY)/h);
+  const offX = padX + (W - 2*padX - w*s)/2;
+  const offY = padY + (H - 2*padY - h*s)/2;
+  const T = p => [offX + (p[0]-minX)*s, offY + (p[1]-minY)*s];
+  const P = pts2.map(T);
+  const cx = P.reduce((a,b)=>a+b[0],0)/4, cy=P.reduce((a,b)=>a+b[1],0)/4;
+
+  // Edge metadata: index, label1, label2, isNew
+  const edgeMeta = [
+    { i:0, len:'L = 6.000 m', bevel:'bevel 33.90° (joined F0)', isNew:false },
+    { i:1, len:'L = 6.000 m', bevel:'bevel 22.21° (NEW — doorway)', isNew:true },
+    { i:2, len:'S = 2.829 m', bevel:'bevel 40.89° (joined F6)', isNew:false },
+    { i:3, len:'S = 2.829 m', bevel:'bevel 40.89° (joined F1)', isNew:false },
+  ];
+
+  function lblForEdge(i){
+    const A = P[i], B = P[(i+1)%4];
+    const meta = edgeMeta[i];
+    const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2;
+    let nx=-(B[1]-A[1]), ny=B[0]-A[0]; const nl=Math.hypot(nx,ny); nx/=nl; ny/=nl;
+    if (Math.hypot(mx+nx*5-cx, my+ny*5-cy) < Math.hypot(mx-cx, my-cy)) { nx=-nx; ny=-ny; }
+    const tx=mx+nx*18, ty=my+ny*18;
+    const ang=Math.atan2(B[1]-A[1], B[0]-A[0])*180/Math.PI;
+    const flip=(ang>90||ang<-90)?180:0;
+    const cls = meta.isNew ? 'bevel-text' : 'dim-text';
+    return `<g transform="translate(${tx},${ty}) rotate(${ang+flip})">
+      <text text-anchor="middle" y="-2">${meta.len}</text>
+      <text text-anchor="middle" y="11" class="${cls}">${meta.bevel}</text></g>`;
+  }
+
+  // Highlight the "new" edge in red
+  function edgeLine(i){
+    const A=P[i], B=P[(i+1)%4];
+    const stroke = edgeMeta[i].isNew ? '#b00020' : '#333';
+    const sw = edgeMeta[i].isNew ? 2.4 : 1.4;
+    return `<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${stroke}" stroke-width="${sw}"/>`;
+  }
+  let html = '';
+  html += `<polygon points="${P.map(p=>p.join(',')).join(' ')}" fill="#fcf2dd" stroke="none"/>`;
+  for (let i=0;i<4;i++) html += edgeLine(i);
+  for (let i=0;i<4;i++) html += lblForEdge(i);
+  // Vertex labels
+  ['v2','v1','v7','v5'].forEach((lbl,i)=>{
+    html += `<text x="${P[i][0]}" y="${P[i][1]-6}" text-anchor="middle" class="dim-text">${lbl}</text>`;
+  });
+  // Title
+  html += `<text x="${W/2}" y="20" text-anchor="middle">Kite F2 — re-bevelled for two-pod join</text>`;
+  html += `<text x="${W/2}" y="34" text-anchor="middle" class="dim-text">red edge = re-bevelled to 22.21° · others unchanged</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ==== Live verification ==== */
+(function verify(){
+  let txt = '';
+  // Walk through all 4 kites adjacent to F8 and confirm same dihedral
+  const kitesAdjacentToF8 = [2,3,6,7]; // F2, F3, F6, F7
+  const kiteAdjacentToF0 = [1,2,3,4];  // F1, F2, F3, F4
+
+  txt += `Original dihedral (kite ↔ square, single module):\n`;
+  txt += `  F8 ↔ F2 = ${fmt(180 - deg(Math.acos(dot(NORMALS[8], NORMALS[2]))))}° → bevel ${fmt(90 - (180 - deg(Math.acos(dot(NORMALS[8], NORMALS[2]))))/2)}°\n\n`;
+
+  txt += `Reflected through F8 plane → new dihedrals at the doorway perimeter:\n`;
+  for (const k of kitesAdjacentToF8) {
+    const nd = newDihedral(k, 8);
+    txt += `  A·F${k} ↔ B·(mirror of F${k})  dihedral = ${fmt(nd)}°  bevel = ${fmt(90 - nd/2)}°\n`;
+  }
+
+  txt += `\nReflected through F0 plane (when joining via left wall instead of right):\n`;
+  for (const k of kiteAdjacentToF0) {
+    const nd = newDihedral(k, 0);
+    txt += `  A·F${k} ↔ B·(mirror of F${k})  dihedral = ${fmt(nd)}°  bevel = ${fmt(90 - nd/2)}°\n`;
+  }
+
+  txt += `\nReflected through F5 plane (when joining bottom-to-bottom — vertical stack):\n`;
+  for (const k of [1,4,6,7]) {
+    const nd = newDihedral(k, 5);
+    txt += `  A·F${k} ↔ B·(mirror of F${k})  dihedral = ${fmt(nd)}°  bevel = ${fmt(90 - nd/2)}°\n`;
+  }
+
+  txt += `\nKey result for side-wall doorway (F8↔F0 join):\n`;
+  txt += `  NEW dihedral = ${fmt(NEW_DIHEDRAL)}°\n`;
+  txt += `  NEW bevel from perpendicular = ${fmt(NEW_BEVEL)}°\n`;
+  txt += `  (vs. original 33.90° when the square was still in place)\n`;
+  document.getElementById('verify').textContent = txt;
+})();
+</script>
+
+</body>
+</html>

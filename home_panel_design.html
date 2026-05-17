@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enneahedron home — insulated panel & cost sheet</title>
+<style>
+  :root { --ink:#111; --line:#222; --dim:#777; --accent:#b00020; --bg:#fff; --panel:#f6f6f4; --warm:#c47d2a; }
+  body {
+    font-family:"Helvetica Neue",Arial,sans-serif; color:var(--ink); background:var(--bg);
+    margin:0; padding:24px; font-size:12px; line-height:1.45;
+  }
+  h1 { font-size:21px; margin:0 0 4px; }
+  h2 { font-size:13px; margin:18px 0 6px; letter-spacing:1px; text-transform:uppercase; }
+  h3 { font-size:12px; margin:12px 0 4px; }
+  .sub { color:var(--dim); margin-bottom:14px; }
+  .card { border:1px solid var(--line); padding:14px 16px; margin-bottom:14px; background:var(--bg); }
+  .panel { background:var(--panel); }
+  .row { display:flex; gap:18px; flex-wrap:wrap; }
+  .col { flex:1 1 320px; min-width:320px; }
+  table { border-collapse:collapse; width:100%; font-size:12px; }
+  th,td { border:1px solid #999; padding:5px 8px; text-align:left; vertical-align:top; }
+  th { background:#eee; font-weight:600; }
+  td.num, .num { text-align:right; font-family:"Menlo","Courier New",monospace; }
+  .mono { font-family:"Menlo","Courier New",monospace; }
+  .accent { color:var(--accent); }
+  .warm { color:var(--warm); }
+  .total { background:#fffbe6; font-weight:700; }
+  .assume { color:var(--dim); font-style:italic; }
+  ul.tight { margin:4px 0 4px 18px; padding:0; }
+  ul.tight li { margin:2px 0; }
+  svg { display:block; width:100%; height:auto; }
+  text { font-family:"Helvetica Neue",Arial,sans-serif; font-size:10px; fill:var(--ink); }
+  .layer-rect { stroke:#333; stroke-width:0.6; }
+  .lbl { font-size:10px; }
+  .dim-text { fill:var(--dim); font-size:10px; }
+  .edge { stroke:var(--ink); stroke-width:1.4; fill:#fafaf6; }
+  .diagonal { stroke:var(--dim); stroke-width:0.7; stroke-dasharray:4 3; fill:none; }
+  @media print {
+    body { padding:10mm; font-size:10pt; }
+    .card { break-inside:avoid; }
+    @page { size:A4; margin:10mm; }
+    .no-print { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Enneahedron home — insulated panel system & cost sheet</h1>
+<div class="sub">Turning the 9 enneahedron faces (3 squares + 6 kites, L = 6 m) into a habitable shell.
+Companion to <span class="mono">mitre_drawing.html</span> and <span class="mono">cut_plan_6m.html</span>.</div>
+
+<!-- ===== Note on assumptions ===== -->
+<div class="card panel">
+  <h2>Read me first — assumptions in this document</h2>
+  <ul class="tight">
+    <li>No prior cost sheets exist in the repo. Every price below is a <b class="warm">2026 indicative</b> figure for a temperate-climate self-build, in <b>NZD/AUD-equivalent</b> ranges. Edit the <code>UNIT_RATES</code> object in the script to fit your supplier quotes.</li>
+    <li>The wall stack is a <b>structural timber-cassette panel</b> (not foam-core SIP) — easier to fabricate at 6 m edges, repairable, and compatible with the mitre cuts already drawn.</li>
+    <li>One enneahedron module = one habitable cell. The bottom square (F5) is the floor; the two upright squares (F0, F8) host the door and a feature window; the 6 kites form the canted roof/walls.</li>
+    <li>All bevel angles from the mitre drawing are unchanged — they apply to the <b>structural core</b> of the panel. Inner and outer skins are applied after the core is cut.</li>
+  </ul>
+</div>
+
+<!-- ===== Headline geometry (recap) ===== -->
+<div class="card panel">
+  <h2>Geometry recap (L = 6.000 m)</h2>
+  <div class="row">
+    <div class="col">
+      <table>
+        <tr><th>Long edge L</th><td class="num">6.000 m</td></tr>
+        <tr><th>Short edge S</th><td class="num">2.829 m</td></tr>
+        <tr><th>Floor (F5) gross area</th><td class="num">36.000 m²</td></tr>
+        <tr><th>Total envelope (face) area</th><td class="num">203.28 m²</td></tr>
+        <tr><th>Internal volume (approx.)</th><td class="num"><span id="volEst">…</span> m³</td></tr>
+        <tr><th>Ridge / apex height</th><td class="num"><span id="apexH">…</span> m</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <table>
+        <tr><th>L-edge bevel (sq↔kite)</th><td class="num accent">33.90°</td></tr>
+        <tr><th>S-edge bevel (kite↔kite)</th><td class="num accent">40.89°</td></tr>
+        <tr><th>Panel core thickness <code>t</code></th><td class="num">240 mm <span class="assume">(I-joist depth, editable)</span></td></tr>
+        <tr><th>Total stack thickness</th><td class="num">331 mm</td></tr>
+        <tr><th>Target wall U-value</th><td class="num">≈ 0.18 W/m²K  (R ≈ 5.6 m²K/W)</td></tr>
+        <tr><th>Target roof / kite U-value</th><td class="num">≈ 0.15 W/m²K  (R ≈ 6.7 m²K/W)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Wall stack (section) ===== -->
+<div class="row">
+  <div class="card col">
+    <h2>Insulated panel — section through wall</h2>
+    <svg viewBox="0 0 460 300" preserveAspectRatio="xMidYMid meet" id="stackSvg"></svg>
+    <div class="dim-text" style="text-align:center">Outside on the left, inside on the right. Layers labelled with thickness and unit cost (NZD/m²).</div>
+  </div>
+
+  <div class="card col">
+    <h2>Layer schedule</h2>
+    <table id="layerTable">
+      <thead><tr><th>Layer (out → in)</th><th>Material</th><th class="num">Thickness</th><th class="num">R-value (m²K/W)</th><th class="num">$/m²</th></tr></thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr class="total"><td colspan="2">Stack totals</td><td class="num" id="stackThick"></td><td class="num" id="stackR"></td><td class="num" id="stackCost"></td></tr>
+      </tfoot>
+    </table>
+    <div class="dim-text" style="margin-top:6px">
+      Roof (kite) panel uses an enhanced stack: 300 mm I-joist + sheep wool — see <i>Roof variant</i> below.
+    </div>
+  </div>
+</div>
+
+<!-- ===== Roof variant ===== -->
+<div class="card panel">
+  <h2>Roof / kite variant (enhanced)</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Change vs wall</th><th class="num">Δ thickness</th><th class="num">Δ R-value</th><th class="num">Δ $/m²</th></tr></thead>
+    <tbody>
+      <tr><td>Structural cassette</td><td>240 mm I-joist → 300 mm I-joist</td><td class="num">+60 mm</td><td class="num">+1.50</td><td class="num">+18</td></tr>
+      <tr><td>Insulation infill</td><td>fill enlarged cavity (sheep wool)</td><td class="num">—</td><td class="num">+1.50</td><td class="num">+12</td></tr>
+      <tr><td>External cladding</td><td>standing-seam zinc instead of board cladding (weather-exposed)</td><td class="num">—</td><td class="num">—</td><td class="num">+45</td></tr>
+      <tr class="total"><td colspan="2">Net for kite faces</td><td class="num">+60 mm</td><td class="num">+3.0</td><td class="num">+75</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== Panel schedule (per piece) ===== -->
+<div class="card">
+  <h2>Panel schedule — 9 pieces</h2>
+  <table id="panelTable">
+    <thead>
+      <tr>
+        <th>#</th><th>Face</th><th>Role</th><th>Shape</th>
+        <th class="num">Outer face area</th><th class="num">Inner face area</th>
+        <th>Edge bevels</th><th class="num">Stock blank (outer)</th>
+        <th class="num">Material $</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr class="total"><td colspan="4">Total panel materials</td>
+        <td class="num" id="totOut"></td><td class="num" id="totIn"></td>
+        <td></td><td></td>
+        <td class="num" id="totCost"></td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="dim-text" style="margin-top:6px">
+    "Outer face area" = area of the visible exterior face. "Inner face area" = the smaller interior face after the bevel run-out (each L-edge contracts by 0.673·t, each S-edge by 0.866·t — at t = 240 mm core that is 161 mm and 208 mm respectively).
+    Stock blank lists the rectangle the outer face fits inside (true-shape bounding box plus 100 mm margin for handling).
+  </div>
+</div>
+
+<!-- ===== Floor plan (gross) ===== -->
+<div class="row">
+  <div class="card col">
+    <h2>Floor plan — bottom square F5 (looking down)</h2>
+    <svg viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" id="floorSvg"></svg>
+    <div class="dim-text">
+      Solid line = outer floor edge (6.0 m). Dashed line = inner usable floor edge after wall stack (~5.34 m).
+      Walls splay outward above the floor, so usable floor is the smallest cross-section.
+    </div>
+  </div>
+
+  <div class="card col">
+    <h2>Suggested home configuration</h2>
+    <table>
+      <tr><th>Element</th><th>Face</th><th>Notes</th></tr>
+      <tr><td>Floor slab</td><td>F5 (bottom square)</td><td>Cassette over insulated raft or screw piles. 6×6 m gross / ~28.5 m² net habitable.</td></tr>
+      <tr><td>Entry wall</td><td>F0 (left square)</td><td>Front door + sidelight. Square lets you fit a standard 2.1 m door.</td></tr>
+      <tr><td>Feature glazing</td><td>F8 (right square)</td><td>Full square triple-glazed unit (6×6 m IGU is a special order — typically split into 2 m × 3 m sub-frames).</td></tr>
+      <tr><td>Bedroom loft</td><td>F2, F3 (upper kites flanking apex)</td><td>Mezzanine at ~3.0 m above the floor; kites give a cathedral ceiling above bed.</td></tr>
+      <tr><td>Wet wall</td><td>F1 or F4 (lower kites)</td><td>Houses bathroom + kitchen back-to-back; vent stack exits at the kite peak.</td></tr>
+      <tr><td>Roof drainage</td><td>F6, F7 (upper kites)</td><td>Standing-seam zinc, hidden gutter at the F0/F6 and F8/F7 seams (S-edges on the apex side).</td></tr>
+    </table>
+    <div class="dim-text" style="margin-top:6px">
+      Roles are illustrative — every face is structurally identical, so you can rotate the home freely about its vertical axis to suit the site.
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cost sheet ===== -->
+<div class="card panel">
+  <h2>Cost sheet — single-module home (ex. land, services connection, fit-out)</h2>
+  <table id="costTable">
+    <thead><tr><th>Group</th><th>Item</th><th class="num">Qty</th><th>Unit</th><th class="num">Rate $</th><th class="num">Total $</th></tr></thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr class="total"><td colspan="5" style="text-align:right">Construction subtotal</td><td class="num" id="costSubtotal"></td></tr>
+      <tr><td colspan="5" style="text-align:right">Contingency (15%)</td><td class="num" id="costContingency"></td></tr>
+      <tr class="total"><td colspan="5" style="text-align:right">All-in turnkey shell estimate</td><td class="num" id="costGrand"></td></tr>
+    </tfoot>
+  </table>
+  <div class="dim-text" style="margin-top:6px">
+    All rates editable in the page script (<code>UNIT_RATES</code>). Excludes: land, design fees, council consents, water/sewer/power connections, final fit-out (joinery, white-goods, soft furnishings).
+  </div>
+</div>
+
+<!-- ===== Edge framing & bolted connection ===== -->
+<div class="card panel">
+  <h2>Edge framing — clean bevels without splintering</h2>
+  <div class="row">
+    <div class="col">
+      <p>OSB and I-joist webs <b>tear</b> when run across a bevel cut, and the chipped edge prevents two panels seating tightly. The fix is to laminate a continuous strip of <b>solid pine</b> (or <b>knot-free Douglas fir / LVL</b>) along the perimeter of the cassette core <i>before</i> bevelling. The saw cuts only this clean timber, leaving a sharp, splinter-free, paintable edge.</p>
+
+      <table>
+        <tr><th>Spec</th><th>Value</th></tr>
+        <tr><td>Edge laminate stock</td><td><b>Solid radiata pine</b>, FJ-clear grade, KD 12% MC. (Equivalent: knot-free Douglas fir, or LVL when budget allows.)</td></tr>
+        <tr><td>Section</td><td><b>90 × 90 mm</b> (wall) / <b>90 × 120 mm</b> (kite roof) — full thickness of the I-joist + 5 mm proud either side, planed flush after gluing</td></tr>
+        <tr><td>Length per panel</td><td>Square: 4 × 6.0 m = <b>24 m</b>. Kite: 2 × 6.0 m + 2 × 2.83 m = <b>17.66 m</b></td></tr>
+        <tr><td>Total pine for 9 panels</td><td>3 × 24 + 6 × 17.66 = <b>178 m</b> linear (≈ <b>1.6 m³</b> of dressed pine)</td></tr>
+        <tr><td>Adhesive</td><td>1-part PUR (Purbond / Titebond Polyurethane) — gap-filling, structural, weather-tolerant</td></tr>
+        <tr><td>Cut order</td><td>1) Build I-joist cassette to inner-skin shape&nbsp;&nbsp;2) Mitre the pine strips at the corner angles (use the kite interior angles 41.4° / 110.7° / 97.2° / 110.7°)&nbsp;&nbsp;3) Glue + clamp pine to all four edges&nbsp;&nbsp;4) Plane flush&nbsp;&nbsp;5) Run the bevel cut through the pine on the mitre saw</td></tr>
+        <tr><td>Why pine specifically</td><td>Closed, even grain → cuts cleanly across grain at the 33.90° / 40.89° bevel without fibre tear-out. Soft enough to compress slightly under the EPDM gasket for an airtight seal. Holds threaded inserts well. Paint- or oil-finishable.</td></tr>
+        <tr><td>Edge cost allowance</td><td>178 m × $14/m dressed pine ≈ <b>$2,500</b> + adhesive $400 + labour 8 h ≈ <b>$3,500 total</b></td></tr>
+      </table>
+    </div>
+
+    <div class="col">
+      <h3>Section through a panel edge (after bevel)</h3>
+      <svg viewBox="0 0 460 260" id="edgeSvg"></svg>
+      <div class="dim-text" style="text-align:center">
+        Pink = solid pine edge laminate. The bevel is cut <i>through the pine</i>, so the OSB skins and the I-joist web are never exposed at the cut edge.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Bolted demountable connection ===== -->
+<div class="card panel">
+  <h2>Demountable bolt-together connection</h2>
+  <div class="row">
+    <div class="col">
+      <p>The connection has to be <b>structurally tight</b> for life-safety and weatherproofing, but <b>fully reversible</b> so the home can be unbolted, flat-packed, and re-erected on a different site. The detail below uses no glue or sealant on the structural fasteners — only on the EPDM gasket (which is replaceable).</p>
+
+      <table>
+        <tr><th>Component</th><th>Spec</th></tr>
+        <tr><td>Through-bolt</td><td><b>M16 × 220 mm grade 8.8</b> hot-dip galvanised, hex head, with hardened washer + nyloc nut</td></tr>
+        <tr><td>Threaded insert</td><td><b>M16 brass insert (E-Z LOK 400-016)</b> epoxied into pre-drilled 28 mm hole in the pine edge laminate</td></tr>
+        <tr><td>Spacing</td><td><b>600 mm centres</b> on every edge (every 4th I-joist bay), staggered between adjacent panels so bolts don't clash</td></tr>
+        <tr><td>Bolt count per home</td><td>(12 × L-edges × ⌈6000/600⌉) + (6 × S-edges × ⌈2829/600⌉) = 120 + 30 = <b>150 bolts</b></td></tr>
+        <tr><td>Gasket</td><td><b>EPDM closed-cell, 25 × 12 mm bulb section</b>, continuous around every edge — compresses to ~6 mm at design clamping force</td></tr>
+        <tr><td>Tightening torque</td><td><b>110 Nm</b> (≈80 ft·lb) — gives ~30 kN clamp per bolt without crushing the pine</td></tr>
+        <tr><td>Tools</td><td>One ½″ drive impact wrench + 24 mm socket. Assemble or disassemble in <b>~3 hours</b> per panel pair (2-person crew).</td></tr>
+        <tr><td>Cover strip</td><td>Removable 60 × 6 mm aluminium "Z-flashing" snaps over each external seam, hiding bolt heads and shedding rain. Held by self-drilling screws into the pine — also removable.</td></tr>
+      </table>
+    </div>
+
+    <div class="col">
+      <h3>Joint cross-section (two panels meeting at an L-edge)</h3>
+      <svg viewBox="0 0 520 360" id="boltSvg"></svg>
+      <div class="dim-text" style="text-align:center">
+        Outside on top, inside on the bottom. Bolt + insert sits in the solid pine edge laminate of both panels. EPDM gasket between, Z-flashing over, plasterboard removable cover-strip on the inside.
+      </div>
+    </div>
+  </div>
+
+  <h3>Move-and-rebuild procedure (whole home)</h3>
+  <ol>
+    <li><b>Strip removable items.</b> Inner plasterboard cover strips (clip-out), Z-flashings outside (unscrew), interior trim.</li>
+    <li><b>Disconnect services.</b> Plumbing, electrical, gas at module-edge unions designed for it (left as future work).</li>
+    <li><b>Disassembly order — top down.</b> Roof kites first (F2, F3, F6, F7), then upright squares (F0, F8) and remaining lower kites (F1, F4), then floor (F5) last. Crane required for square panels (~280 kg each); kites (~190 kg) can be carried by 4 people.</li>
+    <li><b>Inspect &amp; replace gaskets.</b> EPDM has a 10-year service life under UV — assume one full re-gasket per relocation.</li>
+    <li><b>Transport.</b> All 9 panels stack flat to about <b>1.0 m total</b> on a 7 × 4 m flatbed trailer (kites within square footprint). Pine edges face inward to protect them.</li>
+    <li><b>Re-erection.</b> Reverse order. Same 6-day crane schedule listed in the cost sheet. Allow a fresh blower-door test at the new site.</li>
+  </ol>
+</div>
+
+<!-- ===== Notes ===== -->
+<div class="card">
+  <h2>Notes for the build</h2>
+  <ul class="tight">
+    <li><b>Sequence.</b> Cut all 9 cassette cores (timber I-joist frame in plan-view shape) on the mitre saw → fit OSB skins → fit insulation → close inner skin → assemble into shell on site → apply external cladding last (over the joints).</li>
+    <li><b>Joints.</b> Butt the cores along the bevels per the mitre drawing. Seal continuously with a vapour-tight tape on the inside skin, and a UV-stable EPDM gasket compressed between cladding battens on the outside.</li>
+    <li><b>Structural sizing.</b> 240 mm I-joists @ 600 mm centres are adequate for the wall faces; 300 mm @ 400 mm centres for the kite roof faces given snow + access loads. Validate with a structural engineer for your jurisdiction; the canted geometry transfers most lateral load through the rim diagonal of each kite.</li>
+    <li><b>Glazing the F8 square.</b> A single 6 × 6 m IGU is impractical. Split into a 2 × 3 grid of 2.0 × 3.0 m triple-glazed panes carried by a steel cruciform mullion. The mullion sits on the inside face; the bevels at the rim are unchanged.</li>
+    <li><b>Fire/escape.</b> The F0 entry door is one egress; add a roof-light hatch in F2 or F3 (kite face) as second egress per most residential codes.</li>
+    <li><b>Bevel direction (critical).</b> Outer skin is the LONG side of the bevel; inner skin is the SHORT side. Mark the OUTSIDE face on every cassette before cutting.</li>
+  </ul>
+</div>
+
+<!-- ===== Live verify ===== -->
+<div class="card panel">
+  <h2>Live verification</h2>
+  <div id="verify" class="mono" style="white-space:pre"></div>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================ */
+/*  Geometry — same source data as the other docs                */
+/* ============================================================ */
+const VERTS = [
+  [-0.368391, 3.709133, 3.592102],[-2.164442, 0.598281, 0.000000],[-3.960493,-2.512571, 3.592102],
+  [-2.164442, 0.598281, 7.184205],[-0.368391,-0.438670,-1.197367],[-0.368391,-2.512571, 0.000000],
+  [ 1.427660, 0.598281, 0.000000],[-0.368391,-0.438670, 8.381572],[ 1.427660, 0.598281, 7.184205],
+  [-0.368391,-2.512571, 7.184205],[ 3.223712,-2.512571, 3.592102],
+];
+const QUADS = [
+  [2,3,4,1],[2,5,6,3],[2,1,7,5],[4,8,9,1],[4,3,10,8],
+  [6,11,10,3],[7,11,6,5],[9,8,10,11],[7,1,9,11],
+];
+const NORMALS = [
+  [-0.866025, 0.5, 0],[-0.654654,-0.377964,-0.654654],[0,0.755929,-0.654654],
+  [0,0.755929,0.654654],[-0.654654,-0.377964,0.654654],[0,-1,0],
+  [0.654654,-0.377964,-0.654654],[0.654654,-0.377964,0.654654],[0.866025,0.5,0],
+];
+const FACE_ROLES = [
+  { name:'F0 — Left square (entry wall)',  shape:'Square', role:'Entry / front door' },
+  { name:'F1 — Lower-back kite',           shape:'Kite',   role:'Wet-wall / kitchen' },
+  { name:'F2 — Upper-back kite',           shape:'Kite',   role:'Roof + bedroom loft' },
+  { name:'F3 — Upper-front kite',          shape:'Kite',   role:'Roof + bedroom loft' },
+  { name:'F4 — Lower-front kite',          shape:'Kite',   role:'Living / bookcase wall' },
+  { name:'F5 — Bottom square (floor)',     shape:'Square', role:'Floor cassette' },
+  { name:'F6 — Right-back kite',           shape:'Kite',   role:'Roof drainage face' },
+  { name:'F7 — Right-front kite',          shape:'Kite',   role:'Roof drainage face' },
+  { name:'F8 — Right square (window)',     shape:'Square', role:'Feature glazing wall' },
+];
+
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const len=a=>Math.hypot(a[0],a[1],a[2]);
+const norm=a=>{const m=len(a);return [a[0]/m,a[1]/m,a[2]/m];};
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const v=i=>VERTS[i-1];
+const deg=r=>r*180/Math.PI;
+const fmt=(n,d=2)=>n.toFixed(d);
+
+const L_U = len(sub(v(2),v(3)));
+const S_U = len(sub(v(2),v(5)));
+const L_M = 6.000;
+const M_PER_U = L_M / L_U;
+const S_M = S_U * M_PER_U;
+
+function projectFace(quad, fi){
+  const pts=quad.map(v);
+  const O=pts[0], eX=norm(sub(pts[1],O)), eY=norm(cross(NORMALS[fi],eX));
+  return pts.map(p=>[dot(sub(p,O),eX),dot(sub(p,O),eY)]);
+}
+function polygonArea(pts){
+  let a=0;
+  for(let i=0;i<pts.length;i++){
+    const [x1,y1]=pts[i], [x2,y2]=pts[(i+1)%pts.length];
+    a += x1*y2 - x2*y1;
+  }
+  return Math.abs(a)/2;
+}
+function bbox(pts){
+  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
+  return { w: Math.max(...xs)-Math.min(...xs), h: Math.max(...ys)-Math.min(...ys) };
+}
+function edgeLengthsOfFace(quad){
+  const lens=[];
+  for(let i=0;i<4;i++){
+    const a=quad[i], b=quad[(i+1)%4];
+    lens.push(len(sub(v(a),v(b))) * M_PER_U);
+  }
+  return lens;
+}
+
+/* ============================================================ */
+/*  Wall stack & rates  (EDIT HERE for your supplier quotes)     */
+/* ============================================================ */
+const WALL_STACK = [
+  { name:'External cladding',    mat:'Vertical cedar weatherboard, 20 mm', t:20,  r:0.13, cost:85 },
+  { name:'Cavity / battens',     mat:'45×45 mm H3 timber, 25 mm net cavity', t:45, r:0.18, cost:18 },
+  { name:'Breather membrane',    mat:'Pro Clima Solitex Mento 1000',         t:1,  r:0.00, cost:6  },
+  { name:'External skin',        mat:'OSB/3, 11 mm',                          t:11, r:0.09, cost:14 },
+  { name:'Structural cassette',  mat:'240 mm timber I-joist @ 600 c/c, sheep-wool fill', t:240, r:5.10, cost:115 },
+  { name:'Vapour control',       mat:'Pro Clima Intello Plus airtightness layer', t:1, r:0.00, cost:8 },
+  { name:'Internal skin',        mat:'OSB/3, 11 mm',                          t:11, r:0.09, cost:14 },
+  { name:'Service cavity',       mat:'45 mm battens, mineral wool fill',      t:45, r:1.00, cost:22 },
+  { name:'Internal lining',      mat:'12.5 mm plasterboard + 2 coats',        t:12, r:0.06, cost:25 },
+];
+// Surface-resistance constants
+const Rsi = 0.13, Rse = 0.04;
+
+const ROOF_DELTA_COST = 75;   // $/m² premium for kite (roof) faces vs wall stack
+const ROOF_DELTA_R = 3.0;
+const ROOF_DELTA_T = 60;       // mm
+
+const UNIT_RATES = {
+  squareWall_perM2: 0,           // filled below from stack total
+  kiteRoof_perM2: 0,             // filled below
+  glazingF8_perM2: 1100,         // triple-glazed IGU + steel cruciform mullion (allow)
+  doorF0: 4800,                  // exterior insulated door + sidelight
+  raftFoundation_perM2: 320,     // insulated concrete raft, 36 m²
+  steelTie_each: 280,            // hidden steel ties at each polyhedron vertex (×11)
+  airtightnessTest: 850,         // single blower-door test
+  membraneTapesAllow: 1400,      // tapes / sealants / acoustic mastic
+  craneAndAssembly_days: 6,
+  craneRate_perDay: 1450,        // 12 t spider crane + operator
+  laborCrew_perPanel: 950,       // 4-person crew, day to fit each panel
+  scaffoldHire_weeks: 6,
+  scaffoldRate_perWeek: 380,
+  rainwaterDownpipes: 1200,
+  flashings_perM: 32,            // linear flashing run length on the rim seams
+  rimSeamLengthAllow_m: 110,     // total exposed seam length (12 L + 6 S)
+  pineEdgeLam_perM: 14,          // 90×90 mm dressed pine, $/lm
+  pineEdgeAdhesive_lot: 400,
+  pineEdgeLabour_lot: 700,
+  m16BoltAssembly_each: 11,      // M16 bolt + 2 washers + nyloc
+  m16BrassInsert_each: 7,        // E-Z LOK 400-016
+  epdmGasket_perM: 9,            // 25×12 mm bulb gasket
+  zFlashingExt_perM: 22,         // 60×6 alu Z-flashing + screws
+  pineEdgePerHome_m: 178,        // 3 squares × 24 m + 6 kites × 17.66 m
+  boltsPerHome: 150,             // 12 L-edges × 11 + 6 S-edges × 5
+  gasketPerHome_m: 90,           // total perimeter sealed
+  flashingExtPerHome_m: 90,
+};
+
+/* ============================================================ */
+/*  Derived totals                                               */
+/* ============================================================ */
+const stackTotals = WALL_STACK.reduce((acc,l)=>{
+  acc.t += l.t; acc.r += l.r; acc.cost += l.cost; return acc;
+},{t:0,r:0,cost:0});
+stackTotals.r += Rsi + Rse;          // include surface resistances
+const wallU = 1/stackTotals.r;
+UNIT_RATES.squareWall_perM2 = stackTotals.cost;
+UNIT_RATES.kiteRoof_perM2  = stackTotals.cost + ROOF_DELTA_COST;
+const roofR = stackTotals.r + ROOF_DELTA_R;
+const roofU = 1/roofR;
+
+const T_CORE_M  = 0.240;
+const T_TOTAL_M = stackTotals.t / 1000;
+const SHRINK_L  = 0.673 * T_CORE_M;   // tan(33.90°)
+const SHRINK_S  = 0.866 * T_CORE_M;   // tan(40.89°)
+
+/* Internal volume estimate from convex hull of the OBJ vertices, scaled */
+function tetraVolume(a,b,c,d){
+  const ab=sub(b,a), ac=sub(c,a), ad=sub(d,a);
+  return Math.abs(dot(ab, cross(ac, ad))) / 6;
+}
+function approxVolume(){
+  const c=[0,0,0]; for(const p of VERTS){c[0]+=p[0];c[1]+=p[1];c[2]+=p[2];}
+  c[0]/=VERTS.length; c[1]/=VERTS.length; c[2]/=VERTS.length;
+  let vol=0;
+  for(let i=0;i<QUADS.length;i++){
+    const [a,b,d,e]=QUADS[i].map(v);
+    vol += tetraVolume(c,a,b,d) + tetraVolume(c,a,d,e);
+  }
+  return vol;
+}
+const VOLUME_M3 = approxVolume() * Math.pow(M_PER_U,3);
+const APEX_HEIGHT_M = (Math.max(...VERTS.map(p=>p[1])) - Math.min(...VERTS.map(p=>p[1]))) * M_PER_U;
+document.getElementById('volEst').textContent = VOLUME_M3.toFixed(1);
+document.getElementById('apexH').textContent = APEX_HEIGHT_M.toFixed(2);
+
+/* ============================================================ */
+/*  Render the wall-stack section diagram                        */
+/* ============================================================ */
+(function drawStack(){
+  const svg = document.getElementById('stackSvg');
+  const W=460, H=300, x0=20, y0=40, totalT = stackTotals.t;
+  const innerH = 220;
+  const palette = ['#a37b4f','#c2a878','#dfdfdf','#e0c98f','#f4e29a','#dfdfdf','#e0c98f','#bcd6c4','#f5f5f5'];
+  let x = x0;
+  const xspan = W - 2*x0;
+  let html = `<text x="${W/2}" y="20" text-anchor="middle" class="lbl">Wall section · 1 mm = ${(xspan/totalT).toFixed(2)} px</text>`;
+  html += `<text x="${x0}" y="36" class="dim-text">outside</text><text x="${W-x0}" y="36" text-anchor="end" class="dim-text">inside</text>`;
+  WALL_STACK.forEach((L,i) => {
+    const w = (L.t / totalT) * xspan;
+    html += `<rect class="layer-rect" x="${x}" y="${y0}" width="${w}" height="${innerH}" fill="${palette[i%palette.length]}"/>`;
+    const lblY = y0 + innerH + 14 + (i%2)*22;
+    html += `<line stroke="#888" stroke-width="0.5" x1="${x+w/2}" y1="${y0+innerH}" x2="${x+w/2}" y2="${lblY-3}"/>`;
+    html += `<text x="${x+w/2}" y="${lblY}" text-anchor="middle" class="lbl">${L.name}</text>`;
+    html += `<text x="${x+w/2}" y="${lblY+11}" text-anchor="middle" class="dim-text">${L.t} mm · $${L.cost}</text>`;
+    x += w;
+  });
+  svg.innerHTML = html;
+})();
+
+/* ============================================================ */
+/*  Layer table                                                  */
+/* ============================================================ */
+(function fillLayerTable(){
+  const tb = document.querySelector('#layerTable tbody');
+  tb.innerHTML = WALL_STACK.map(L=>`
+    <tr><td>${L.name}</td><td>${L.mat}</td><td class="num">${L.t} mm</td>
+        <td class="num">${L.r.toFixed(2)}</td><td class="num">${L.cost.toFixed(0)}</td></tr>`).join('');
+  document.getElementById('stackThick').textContent = stackTotals.t + ' mm';
+  document.getElementById('stackR').textContent = stackTotals.r.toFixed(2) + '  (U = ' + wallU.toFixed(2) + ')';
+  document.getElementById('stackCost').textContent = stackTotals.cost.toFixed(0);
+})();
+
+/* ============================================================ */
+/*  Panel schedule                                               */
+/* ============================================================ */
+(function fillPanelTable(){
+  const tb = document.querySelector('#panelTable tbody');
+  let totOut=0, totIn=0, totCost=0;
+  let html = '';
+  for (let fi=0; fi<QUADS.length; fi++) {
+    const role = FACE_ROLES[fi];
+    const isSquare = role.shape === 'Square';
+    const pts2 = projectFace(QUADS[fi], fi).map(p=>[p[0]*M_PER_U, p[1]*M_PER_U]);
+    const outerArea = polygonArea(pts2);
+    const bb = bbox(pts2);
+    const lens = edgeLengthsOfFace(QUADS[fi]);
+    // Inner face: shrink each edge by its corresponding bevel run-out from BOTH ends.
+    const innerLens = lens.map(L => {
+      // For a quad with adjacent edges, each edge shrinks by half the run-out at each end.
+      // Simpler proxy: scale area by (innerL/L)^2 average. But we'll compute inner polygon properly.
+      return L; // placeholder — will compute area via offset below
+    });
+    // Approximate inner face area by inset-offsetting the polygon by t·tan(bevel)/2 perpendicular to each edge.
+    // For a kite/square, this is the correct geometric inner-face on the back of the bevelled cassette.
+    function offsetPolygon(pts, edgeOffsets) {
+      // edgeOffsets[i] applies to edge pts[i] -> pts[i+1]
+      const n = pts.length;
+      // For each edge, build the line offset inward by edgeOffsets[i]
+      // Inward normal = rotate edge direction +90° if polygon is CCW, else -90°
+      // Determine winding
+      let signed = 0;
+      for (let i=0;i<n;i++){
+        const [x1,y1]=pts[i], [x2,y2]=pts[(i+1)%n];
+        signed += x1*y2 - x2*y1;
+      }
+      const ccw = signed > 0;
+      const lines = [];
+      for (let i=0;i<n;i++){
+        const a = pts[i], b = pts[(i+1)%n];
+        const dx = b[0]-a[0], dy = b[1]-a[1];
+        const m = Math.hypot(dx,dy);
+        const nx = ccw ? -dy/m :  dy/m;
+        const ny = ccw ?  dx/m : -dx/m;
+        const off = edgeOffsets[i];
+        const ax = a[0] + nx*off, ay = a[1] + ny*off;
+        const bx = b[0] + nx*off, by = b[1] + ny*off;
+        lines.push([[ax,ay],[bx,by]]);
+      }
+      // Intersect successive lines to get new vertices
+      function intersect(L1,L2){
+        const [p1,p2]=L1, [p3,p4]=L2;
+        const x1=p1[0],y1=p1[1],x2=p2[0],y2=p2[1],x3=p3[0],y3=p3[1],x4=p4[0],y4=p4[1];
+        const den = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
+        if (Math.abs(den) < 1e-9) return p2;
+        const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / den;
+        return [x1 + t*(x2-x1), y1 + t*(y2-y1)];
+      }
+      const newPts = [];
+      for (let i=0;i<n;i++){
+        const prev = lines[(i-1+n)%n];
+        const cur  = lines[i];
+        newPts.push(intersect(prev, cur));
+      }
+      return newPts;
+    }
+    // Edge offsets: 0.673·t for L edges (≥4 m), 0.866·t for S edges (<4 m)
+    const offsets = lens.map(L => (L > 4 ? SHRINK_L : SHRINK_S));
+    const innerPts = offsetPolygon(pts2, offsets);
+    const innerArea = polygonArea(innerPts);
+    const isRoof = !isSquare;
+    const stockBlankW = bb.w + 0.1, stockBlankH = bb.h + 0.1; // 100 mm margin
+    const rate = isRoof ? UNIT_RATES.kiteRoof_perM2 : UNIT_RATES.squareWall_perM2;
+    const matCost = outerArea * rate;
+    totOut += outerArea; totIn += innerArea; totCost += matCost;
+    const bevelText = isSquare
+      ? '4 × L: 33.90°'
+      : '2 × L: 33.90°<br>2 × S: 40.89°';
+    html += `<tr>
+      <td>${fi+1}</td>
+      <td class="mono">F${fi}</td>
+      <td>${role.role}</td>
+      <td>${role.shape}</td>
+      <td class="num">${outerArea.toFixed(2)} m²</td>
+      <td class="num">${innerArea.toFixed(2)} m²</td>
+      <td>${bevelText}</td>
+      <td class="num">${stockBlankW.toFixed(2)} × ${stockBlankH.toFixed(2)} m</td>
+      <td class="num">${matCost.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+    </tr>`;
+  }
+  tb.innerHTML = html;
+  document.getElementById('totOut').textContent  = totOut.toFixed(2)+' m²';
+  document.getElementById('totIn').textContent   = totIn.toFixed(2)+' m²';
+  document.getElementById('totCost').textContent = totCost.toLocaleString(undefined,{maximumFractionDigits:0});
+  window.__totals = { totOut, totIn, totCost };
+})();
+
+/* ============================================================ */
+/*  Floor plan (looking down on F5)                              */
+/* ============================================================ */
+(function drawFloor(){
+  const svg = document.getElementById('floorSvg');
+  const W=360, H=360, m=40;
+  const innerShrink = SHRINK_L * 1000; // mm — wall stack contracts the floor on each side
+  const inset = (innerShrink / 6000) * (W-2*m);
+  let html = '';
+  // Outer floor square
+  html += `<rect x="${m}" y="${m}" width="${W-2*m}" height="${H-2*m}" class="edge" fill="#fff8ee"/>`;
+  // Inner usable floor
+  html += `<rect x="${m+inset}" y="${m+inset}" width="${W-2*m-2*inset}" height="${H-2*m-2*inset}"
+              fill="#fbe7c4" stroke="#b00020" stroke-width="0.9" stroke-dasharray="5 3"/>`;
+  // Dimensions
+  html += `<text x="${W/2}" y="${m-8}" text-anchor="middle">6.000 m  (gross outer)</text>`;
+  html += `<text x="${W/2}" y="${H/2}" text-anchor="middle" class="accent" font-weight="600">net usable ≈ ${(6 - 2*SHRINK_L).toFixed(2)} m × ${(6 - 2*SHRINK_L).toFixed(2)} m  ≈ ${((6 - 2*SHRINK_L)*(6 - 2*SHRINK_L)).toFixed(1)} m²</text>`;
+  // Cardinal labels
+  html += `<text x="${m+10}" y="${H/2+4}" class="dim-text">F0</text>`;
+  html += `<text x="${W-m-18}" y="${H/2+4}" class="dim-text">F8</text>`;
+  html += `<text x="${W/2}" y="${m+12}" text-anchor="middle" class="dim-text">F1/F2 wall above</text>`;
+  html += `<text x="${W/2}" y="${H-m-2}" text-anchor="middle" class="dim-text">F3/F4 wall above</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ============================================================ */
+/*  Cost sheet                                                   */
+/* ============================================================ */
+(function fillCost(){
+  const T = window.__totals;
+  // Group panel costs by wall vs roof
+  let wallM2=0, roofM2=0, wallCost=0, roofCost=0;
+  for (let fi=0; fi<QUADS.length; fi++) {
+    const isSquare = FACE_ROLES[fi].shape === 'Square';
+    const pts2 = projectFace(QUADS[fi], fi).map(p=>[p[0]*M_PER_U, p[1]*M_PER_U]);
+    const a = polygonArea(pts2);
+    if (isSquare) { wallM2 += a; wallCost += a * UNIT_RATES.squareWall_perM2; }
+    else          { roofM2 += a; roofCost += a * UNIT_RATES.kiteRoof_perM2; }
+  }
+  // F8 is the glazed square — replace its panel cost with glazing
+  const f8Area = polygonArea(projectFace(QUADS[8],8).map(p=>[p[0]*M_PER_U, p[1]*M_PER_U]));
+  wallM2 -= f8Area;
+  wallCost -= f8Area * UNIT_RATES.squareWall_perM2;
+  const glazingCost = f8Area * UNIT_RATES.glazingF8_perM2;
+
+  const rows = [
+    ['Foundations', 'Insulated raft slab under F5',    36,                 'm²', UNIT_RATES.raftFoundation_perM2],
+    ['Foundations', 'Steel ties at polyhedron vertices', 11,               'ea', UNIT_RATES.steelTie_each],
+    ['Panels',      'Square wall cassettes (F0)',       wallM2,            'm²', UNIT_RATES.squareWall_perM2],
+    ['Panels',      'Floor cassette (F5) — same stack', f8Area,            'm²', UNIT_RATES.squareWall_perM2],   // F5 reuses square stack
+    ['Panels',      'Kite roof cassettes (F1–F4, F6, F7)', roofM2,         'm²', UNIT_RATES.kiteRoof_perM2],
+    ['Openings',    'F8 feature glazing (incl. mullions)', f8Area,         'm²', UNIT_RATES.glazingF8_perM2],
+    ['Openings',    'F0 entry door + sidelight',        1,                 'ea', UNIT_RATES.doorF0],
+    ['Sealing',     'Membrane tapes / sealants allowance',1,               'lot',UNIT_RATES.membraneTapesAllow],
+    ['Sealing',     'Blower-door airtightness test',    1,                 'ea', UNIT_RATES.airtightnessTest],
+    ['Site',        'Crane + assembly days',            UNIT_RATES.craneAndAssembly_days, 'day', UNIT_RATES.craneRate_perDay],
+    ['Site',        'Labour crew (per panel)',          9,                 'panel', UNIT_RATES.laborCrew_perPanel],
+    ['Site',        'Scaffold hire',                    UNIT_RATES.scaffoldHire_weeks, 'wk', UNIT_RATES.scaffoldRate_perWeek],
+    ['Weatherproofing','Rim flashings (S + L seams)',   UNIT_RATES.rimSeamLengthAllow_m, 'lm', UNIT_RATES.flashings_perM],
+    ['Weatherproofing','Rainwater downpipes + outlets', 1,                 'lot', UNIT_RATES.rainwaterDownpipes],
+    ['Edge framing',  'Solid pine edge laminate (90×90 dressed)', UNIT_RATES.pineEdgePerHome_m, 'lm', UNIT_RATES.pineEdgeLam_perM],
+    ['Edge framing',  'PUR adhesive + clamps consumables', 1,             'lot', UNIT_RATES.pineEdgeAdhesive_lot],
+    ['Edge framing',  'Pine edge install labour',         1,               'lot', UNIT_RATES.pineEdgeLabour_lot],
+    ['Bolted joint',  'M16×220 8.8 HDG through-bolt assembly', UNIT_RATES.boltsPerHome, 'ea', UNIT_RATES.m16BoltAssembly_each],
+    ['Bolted joint',  'M16 brass threaded inserts',       UNIT_RATES.boltsPerHome*2,    'ea', UNIT_RATES.m16BrassInsert_each],
+    ['Bolted joint',  'EPDM bulb gasket (25×12 mm)',      UNIT_RATES.gasketPerHome_m,   'lm', UNIT_RATES.epdmGasket_perM],
+    ['Bolted joint',  'External Z-flashing cover-strip',  UNIT_RATES.flashingExtPerHome_m, 'lm', UNIT_RATES.zFlashingExt_perM],
+  ];
+  // Re-fix: F5 line above used f8Area mistakenly — recompute for F5 actual area
+  const f5Area = polygonArea(projectFace(QUADS[5],5).map(p=>[p[0]*M_PER_U, p[1]*M_PER_U]));
+  rows[3][2] = f5Area;
+
+  const tb = document.querySelector('#costTable tbody');
+  let subtotal = 0;
+  tb.innerHTML = rows.map(r => {
+    const [g,i,q,u,rate] = r;
+    const total = q * rate;
+    subtotal += total;
+    return `<tr><td>${g}</td><td>${i}</td><td class="num">${(typeof q === 'number' ? (q < 100 ? q.toFixed(2) : q.toFixed(0)) : q)}</td><td>${u}</td><td class="num">${rate.toLocaleString()}</td><td class="num">${total.toLocaleString(undefined,{maximumFractionDigits:0})}</td></tr>`;
+  }).join('');
+  const contingency = subtotal * 0.15;
+  document.getElementById('costSubtotal').textContent   = '$ ' + subtotal.toLocaleString(undefined,{maximumFractionDigits:0});
+  document.getElementById('costContingency').textContent= '$ ' + contingency.toLocaleString(undefined,{maximumFractionDigits:0});
+  document.getElementById('costGrand').textContent      = '$ ' + (subtotal+contingency).toLocaleString(undefined,{maximumFractionDigits:0});
+  window.__costTotals = { subtotal, contingency, grand: subtotal+contingency };
+})();
+
+/* ============================================================ */
+/*  Edge-detail SVG (single-panel section through bevelled edge) */
+/* ============================================================ */
+(function drawEdge(){
+  const svg = document.getElementById('edgeSvg');
+  if (!svg) return;
+  // Show the panel from above (in plan), with the bevel cut on the right.
+  // Layers: cladding | cavity | OSB | I-joist+pine edge | OSB | service | plasterboard
+  // Bevel is on the rightmost edge — runs through the pine.
+  const W=460, H=260, x0=20, y0=40, panelH=170;
+  const totalT = stackTotals.t;
+  const xspan = W - 2*x0 - 60; // leave room on the right for bevel run-off
+  const cx = x => x0 + (x/totalT) * xspan;
+  // Layer x positions
+  let pos = 0;
+  const layers = WALL_STACK.map(L=>{
+    const o = { ...L, x:pos, w:L.t };
+    pos += L.t;
+    return o;
+  });
+  const palette = ['#a37b4f','#c2a878','#dfdfdf','#e0c98f','#f4e29a','#dfdfdf','#e0c98f','#bcd6c4','#f5f5f5'];
+  let html = '';
+  // Draw layers as horizontal strips
+  layers.forEach((L,i)=>{
+    html += `<rect class="layer-rect" x="${cx(L.x)}" y="${y0}" width="${cx(L.x+L.w)-cx(L.x)}" height="${panelH}" fill="${palette[i%palette.length]}"/>`;
+  });
+  // Highlight the I-joist core layer (index 4 in stack — "Structural cassette")
+  const coreIdx = 4;
+  const core = layers[coreIdx];
+  // Draw a pine edge laminate as a pink strip overlaid INSIDE the core layer at the right end (90 mm wide)
+  const pineWidth_mm = 90;
+  const pineX = core.x + core.w - pineWidth_mm;
+  html += `<rect x="${cx(pineX)}" y="${y0}" width="${cx(pineX+pineWidth_mm)-cx(pineX)}" height="${panelH}" fill="#f7c1b8" stroke="#a23"/>`;
+  html += `<text x="${cx(pineX + pineWidth_mm/2)}" y="${y0 + panelH/2 - 4}" text-anchor="middle" class="lbl">solid pine</text>`;
+  html += `<text x="${cx(pineX + pineWidth_mm/2)}" y="${y0 + panelH/2 + 8}" text-anchor="middle" class="lbl">90×90 mm</text>`;
+
+  // Bevel cut on the right edge: 33.90° from perpendicular, leaning OUT at the top (outside)
+  // Outside is left → so bevel leans OUT from outside-skin face, so the right edge tilts
+  // such that outer side (top of section, but here "top" is unused — let's reorient).
+  // Actually the section is in plan: outside on left, inside on right. The bevel runs through
+  // the panel face top/bottom; visualise as the right edge leaning. Use 33.90° as drawn.
+  const bevelDeg = 33.90;
+  const tilt = bevelDeg * Math.PI/180;
+  const dx_mm = totalT * Math.tan(tilt);
+  // Cut polygon: chop the right edge of the panel from x = pos at top to x = pos - 0 at bottom — it's flat in plan.
+  // Better: show the bevel as a section angle line through the panel from top-front-right to bottom-back-right.
+  // Draw a red diagonal across the panel right edge from (cx(pos), y0) to (cx(pos)-... , y0+panelH)
+  // The bevel cut viewed in plan is just the cut face. Draw it on the side as a dashed call-out.
+  html += `<line x1="${cx(pos)}" y1="${y0}" x2="${cx(pos)}" y2="${y0+panelH}" stroke="#b00020" stroke-width="1.4"/>`;
+  // Section-A view to the right
+  const sx = cx(pos) + 30, sy = y0 + 10;
+  const sH = panelH - 20, sW = 90;
+  // Material body
+  const sBevel = sH * Math.tan(tilt) * 0.7;
+  html += `<polygon points="${sx},${sy} ${sx+sW},${sy} ${sx+sW},${sy+sH} ${sx-sBevel},${sy+sH}" fill="#fbe0d8" stroke="#a23" stroke-width="1"/>`;
+  html += `<line x1="${sx}" y1="${sy}" x2="${sx-sBevel}" y2="${sy+sH}" stroke="#b00020" stroke-width="1.4"/>`;
+  html += `<text x="${sx+sW/2}" y="${sy-4}" text-anchor="middle" class="lbl">pine bevel detail</text>`;
+  html += `<text x="${sx-sBevel-4}" y="${sy+sH+12}" class="bevel-text" fill="#b00020">${bevelDeg}°</text>`;
+  // Top labels
+  html += `<text x="${cx(0)}" y="${y0-8}" class="dim-text">outside ←</text>`;
+  html += `<text x="${cx(pos)}" y="${y0-8}" text-anchor="end" class="dim-text">→ inside</text>`;
+  html += `<text x="${cx(pos/2)}" y="${y0+panelH+24}" text-anchor="middle" class="lbl">panel section in plan — bevel cut shown in red</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ============================================================ */
+/*  Bolted-joint SVG (two panels meeting at an L-edge)           */
+/* ============================================================ */
+(function drawBolt(){
+  const svg = document.getElementById('boltSvg');
+  if (!svg) return;
+  const W=520, H=360;
+  // Two panels meeting at an L-edge. Dihedral 112.21° → each panel face leans 56.10° off the joint plane.
+  // Draw the joint plane vertical down the middle. Each panel extends out at +/- 56.10° from vertical.
+  const cx = W/2, topY = 30, botY = H - 30;
+  const halfDihedral = 56.104 * Math.PI/180;
+  const t = stackTotals.t; // total panel stack thickness (mm)
+  // Panel length on screen
+  const Lpx = 200;
+  // Panel direction unit vectors from joint axis. The joint axis is vertical (down the middle).
+  // Each panel extends to one side. The face normal of the panel lies in the horizontal plane.
+  // Panel "outward face" direction: rotate from vertical by halfDihedral toward outside (top of view).
+  // For drawing, treat the panel as a rectangle extending from the joint axis outward.
+  // We'll draw a horizontal section through the joint with outside at top.
+  const sin = Math.sin(halfDihedral), cos = Math.cos(halfDihedral);
+  // Joint vertical line from topY to botY at x=cx
+  // Panel A extends left+up at angle. Panel B extends right+up at angle. The faces "open" upward (outside) by dihedral.
+  // For each panel, define face direction (along panel surface, away from joint) and thickness direction (into panel)
+  function panel(side, color){
+    // side = -1 left, +1 right
+    // Surface direction: (side*sin, -cos) — points outward and downward into "outside"... let's rotate so outside is up.
+    // I'll use: outside on top → face direction goes from joint outward and slightly upward.
+    // Use angle from horizontal: 90 - halfDihedral = 33.896° below horizontal? Let's just place by rotation.
+    // Simpler: draw panel as a parallelogram from joint axis.
+    const ang = side * (Math.PI/2 - halfDihedral); // angle from vertical
+    // Face direction
+    const fx = side * cos, fy = sin;  // surface direction outward
+    const nx = -side * sin, ny = cos; // thickness direction (into panel, away from outside surface)
+    // Outside-surface points along the joint
+    const oTop = [cx, topY + 80];
+    const oBot = [cx, botY - 80];
+    // Panel outer-face polygon: along outside surface, then back along inside surface
+    const o1 = oTop;
+    const o2 = [cx + fx*Lpx, topY + 80 + fy*Lpx];
+    const i2 = [o2[0] + nx*t*0.5, o2[1] + ny*t*0.5];
+    const i1 = [oTop[0] + nx*t*0.5, oTop[1] + ny*t*0.5];
+    // Pine edge laminate — at the joint end, 90×90 mm
+    const pinePts = [
+      o1, [cx + fx*60, topY + 80 + fy*60],
+      [cx + fx*60 + nx*t*0.5, topY + 80 + fy*60 + ny*t*0.5], i1
+    ];
+    return { o1, o2, i2, i1, pinePts, fx, fy, nx, ny };
+  }
+  const A = panel(-1, '#fce6c0');
+  const B = panel(+1, '#fce6c0');
+  // The view is rotated: I want OUTSIDE on TOP. Need to invert y for the surface points.
+  // Easier: just rotate the construction. Recompute with outside at top.
+  function panelTop(side){
+    // Panel surface lies along (side*cos(α), -sin(α)) where α = 33.896° from horizontal
+    const alpha = (90 - 56.104) * Math.PI/180; // 33.896°
+    const fx = side * Math.cos(alpha);
+    const fy = -Math.sin(alpha); // upward (outside)
+    // Inner-surface offset (toward the centre of the polyhedron) is downward+inward
+    const nx = -side * Math.sin(alpha);
+    const ny = -Math.cos(alpha);
+    const joint = [cx, H/2];
+    const outerJoint = joint;
+    const outerEnd  = [joint[0] + fx*Lpx, joint[1] + fy*Lpx];
+    const innerEnd  = [outerEnd[0] - nx*t*0.5, outerEnd[1] - ny*t*0.5];
+    const innerJoint= [joint[0] - nx*t*0.5, joint[1] - ny*t*0.5];
+    // Pine block 90 mm long along surface, full thickness
+    const pineEndOuter = [joint[0] + fx*90, joint[1] + fy*90];
+    const pineEndInner = [pineEndOuter[0] - nx*t*0.5, pineEndOuter[1] - ny*t*0.5];
+    return { outerJoint, outerEnd, innerEnd, innerJoint, pineEndOuter, pineEndInner, fx, fy, nx, ny };
+  }
+  const PA = panelTop(-1), PB = panelTop(+1);
+  const polyStr = pts => pts.map(p=>`${p[0]},${p[1]}`).join(' ');
+
+  let html = '';
+  // Outside label
+  html += `<text x="${cx}" y="20" text-anchor="middle" class="dim-text">OUTSIDE</text>`;
+  html += `<text x="${cx}" y="${H-10}" text-anchor="middle" class="dim-text">INSIDE</text>`;
+  // Each panel main body (light tan)
+  html += `<polygon points="${polyStr([PA.outerJoint, PA.outerEnd, PA.innerEnd, PA.innerJoint])}" fill="#f4e29a" stroke="#333"/>`;
+  html += `<polygon points="${polyStr([PB.outerJoint, PB.outerEnd, PB.innerEnd, PB.innerJoint])}" fill="#f4e29a" stroke="#333"/>`;
+  // Pine edge laminate at the joint end of each panel (pink)
+  html += `<polygon points="${polyStr([PA.outerJoint, PA.pineEndOuter, PA.pineEndInner, PA.innerJoint])}" fill="#f7c1b8" stroke="#a23"/>`;
+  html += `<polygon points="${polyStr([PB.outerJoint, PB.pineEndOuter, PB.pineEndInner, PB.innerJoint])}" fill="#f7c1b8" stroke="#a23"/>`;
+  // EPDM gasket (small grey-green ellipse along the joint axis)
+  const midOuter = [(PA.outerJoint[0]+PB.outerJoint[0])/2, (PA.outerJoint[1]+PB.outerJoint[1])/2];
+  const midInner = [(PA.innerJoint[0]+PB.innerJoint[0])/2, (PA.innerJoint[1]+PB.innerJoint[1])/2];
+  // The joint runs from midOuter to midInner — but they're identical (both at (cx, H/2) and the inner offset is along ny... actually different)
+  // Draw a thin black line along the joint axis
+  html += `<line x1="${midOuter[0]}" y1="${midOuter[1]}" x2="${midInner[0]}" y2="${midInner[1]}" stroke="#222" stroke-width="0.6" stroke-dasharray="3 2"/>`;
+  // Gasket at the outside end (a pill shape)
+  html += `<ellipse cx="${midOuter[0]}" cy="${midOuter[1] - 6}" rx="14" ry="6" fill="#5a6e58" stroke="#222"/>`;
+  html += `<text x="${midOuter[0] + 24}" y="${midOuter[1] - 8}" class="lbl">EPDM gasket</text>`;
+  // Through-bolt — a horizontal line crossing both pine blocks at mid-thickness
+  const boltY = midOuter[1] + (midInner[1]-midOuter[1])*0.5;
+  // The bolt passes perpendicular to the joint plane through the pine on both sides.
+  // The pine end of A is at PA.pineEndOuter; midpoint of pine ≈ along the surface 45 mm in.
+  const Apine = [(PA.outerJoint[0]+PA.pineEndInner[0])/2, (PA.outerJoint[1]+PA.pineEndInner[1])/2];
+  const Bpine = [(PB.outerJoint[0]+PB.pineEndInner[0])/2, (PB.outerJoint[1]+PB.pineEndInner[1])/2];
+  // Bolt shaft from far side of A pine, through joint, to far side of B pine
+  // Extend along the line A→B
+  const dx = Bpine[0]-Apine[0], dy = Bpine[1]-Apine[1];
+  const m = Math.hypot(dx,dy);
+  const ux = dx/m, uy = dy/m;
+  const shaftA = [Apine[0]-ux*70, Apine[1]-uy*70];
+  const shaftB = [Bpine[0]+ux*70, Bpine[1]+uy*70];
+  html += `<line x1="${shaftA[0]}" y1="${shaftA[1]}" x2="${shaftB[0]}" y2="${shaftB[1]}" stroke="#222" stroke-width="2"/>`;
+  // Hex head + nut
+  html += `<rect x="${shaftA[0]-12}" y="${shaftA[1]-6}" width="12" height="12" fill="#999" stroke="#222" transform="rotate(${Math.atan2(uy,ux)*180/Math.PI} ${shaftA[0]} ${shaftA[1]})"/>`;
+  html += `<rect x="${shaftB[0]}" y="${shaftB[1]-6}" width="12" height="12" fill="#999" stroke="#222" transform="rotate(${Math.atan2(uy,ux)*180/Math.PI} ${shaftB[0]} ${shaftB[1]})"/>`;
+  html += `<text x="${(shaftA[0]+shaftB[0])/2}" y="${(shaftA[1]+shaftB[1])/2 + 14}" text-anchor="middle" class="bevel-text" fill="#b00020">M16 × 220 8.8 HDG</text>`;
+  // Threaded insert markers (small circles in pine of each panel)
+  html += `<circle cx="${Apine[0]}" cy="${Apine[1]}" r="3" fill="#bfa14b" stroke="#333"/>`;
+  html += `<circle cx="${Bpine[0]}" cy="${Bpine[1]}" r="3" fill="#bfa14b" stroke="#333"/>`;
+  html += `<text x="${Apine[0]-30}" y="${Apine[1]+18}" class="lbl">brass insert</text>`;
+  // External Z-flashing — an angled line outside the gasket
+  html += `<polyline points="${midOuter[0]-30},${midOuter[1]-22} ${midOuter[0]},${midOuter[1]-18} ${midOuter[0]+30},${midOuter[1]-22}" fill="none" stroke="#666" stroke-width="2"/>`;
+  html += `<text x="${midOuter[0]+34}" y="${midOuter[1]-22}" class="lbl">Z-flashing</text>`;
+  // Internal cover strip
+  html += `<polyline points="${midInner[0]-26},${midInner[1]+18} ${midInner[0]+26},${midInner[1]+18}" fill="none" stroke="#666" stroke-width="2"/>`;
+  html += `<text x="${midInner[0]+30}" y="${midInner[1]+22}" class="lbl">PB cover-strip</text>`;
+  // Dihedral arc
+  html += `<text x="${cx}" y="${H/2 + 80}" text-anchor="middle" class="dim-text">internal dihedral 112.21° (L-edge: square ↔ kite)</text>`;
+  svg.innerHTML = html;
+})();
+
+/* ============================================================ */
+/*  Verify panel                                                 */
+/* ============================================================ */
+(function verify(){
+  const T = window.__totals, C = window.__costTotals;
+  let txt = '';
+  txt += `Geometry: L=${L_M.toFixed(3)} m   S=${S_M.toFixed(3)} m   gross envelope ${T.totOut.toFixed(2)} m²   inner-face ${T.totIn.toFixed(2)} m²\n`;
+  txt += `Volume: ${VOLUME_M3.toFixed(2)} m³   apex height: ${APEX_HEIGHT_M.toFixed(2)} m\n`;
+  txt += `Wall stack: ${stackTotals.t} mm  R=${stackTotals.r.toFixed(2)} m²K/W (incl. surface)  U=${wallU.toFixed(2)} W/m²K\n`;
+  txt += `Roof stack: ${stackTotals.t + ROOF_DELTA_T} mm  R=${roofR.toFixed(2)} m²K/W  U=${roofU.toFixed(2)} W/m²K\n`;
+  txt += `Bevel run-out at t=${T_CORE_M*1000} mm core:\n`;
+  txt += `  L-edge contracts by 0.673·t = ${(SHRINK_L*1000).toFixed(0)} mm per side\n`;
+  txt += `  S-edge contracts by 0.866·t = ${(SHRINK_S*1000).toFixed(0)} mm per side\n`;
+  txt += `Bevel angles unchanged: L=33.90°  S=40.89°  (these depend on dihedral, not panel thickness)\n`;
+  txt += `\nCost summary:\n`;
+  txt += `  Construction subtotal: $${C.subtotal.toLocaleString(undefined,{maximumFractionDigits:0})}\n`;
+  txt += `  Contingency (15%):     $${C.contingency.toLocaleString(undefined,{maximumFractionDigits:0})}\n`;
+  txt += `  Turnkey shell estimate $${C.grand.toLocaleString(undefined,{maximumFractionDigits:0})}\n`;
+  txt += `\n(Edit UNIT_RATES and WALL_STACK in the script to match supplier quotes.)`;
+  document.getElementById('verify').textContent = txt;
+})();
+</script>
+
+</body>
+</html>
